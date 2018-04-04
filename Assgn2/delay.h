@@ -9,7 +9,7 @@
 #define DELAY_H_INCLUDED
 #include "stdint.h"
 
-#define MHZ_IN_HZ 1000000
+#define KHZ_IN_HZ 1000
 #define MS_IN_S 1000
 #define US_IN_S 1000000
 
