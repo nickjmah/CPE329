@@ -11,6 +11,6 @@
 #include "msp.h"
 #include "freq.h"
 
-void set_DCO(uint32_t freq);
+//void set_DCO(uint32_t freq);
 
 #endif /* SET_DCO_H_ */

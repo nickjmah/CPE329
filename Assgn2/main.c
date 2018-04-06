@@ -1,6 +1,6 @@
 #include "msp.h"
 #include "delay.h"
-#include "set_DCO.h"
+#include "dco.h"
 #include "freq.h"
 
 int main(void) {
