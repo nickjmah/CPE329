@@ -2,33 +2,35 @@
  * delay.c
  *
  *  Created on: Apr 4, 2018
- *      Author: Nick
+ *      Author: Jason Zhou
+ *
+ *  *speed optimization must be level 5
  */
+
 #include "delay.h"
-#include "dco.h"
 
-int delay_ms(int ms, uint32_t freq_set)
+void delay_ms(uint32_t ms, uint32_t freq)
 {
-    int i, ticks;
-    int freq = 3; //frequency in khz
-    if(ms<0){//returns -1 if there is an invalid clock frequency or a negative time
-        return -1;
+    uint32_t cycle; //define clock cycle
+    cycle = (ms * freq) * 10 / (109); //# of ms * frequency in kHz * 10 / 109
+    while(cycle)
+    {
+        cycle--;
     }
-    ticks = (ms * freq) * KHZ_IN_HZ / MS_IN_S / CYC_PER_LOOP;//conversion to ticks
-    for (i = 0; i < ticks; i ++);
-
-    return void;
+    return;
 }
 
-int delay_us(int us, uint32_t freq_set)
+void delay_us(uint32_t us, uint32_t freq)
 {
-    int i, ticks;
-    int freq = 3;
-    if(us<0){//TODO: add in some sort of thing to say that the loop is not fast enough
-        return -1;
+    uint32_t i, cycle; //define clock cycle
+    //i = (us * freq);
+//    if (i < 80000)
+//        return;
+    cycle = (us * freq - 40000) / (10900); //# of us * frequency in kHz - 40000 /10900
+    while(cycle)
+    {
+        cycle--;
     }
-    ticks = (us * freq) * KHZ_IN_HZ / US_IN_S / CYC_PER_LOOP;
-    for (i = 0; i < ticks; i++);
-    return void;
+    return;
 }
 
