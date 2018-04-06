@@ -8,11 +8,12 @@
 #ifndef FREQ_H_INCLUDED
 #define FREQ_H_INCLUDED
 
-#define FREQ_1_5_MHz 1500
-#define FREQ_3_MHz 3000
-#define FREQ_6_MHz 6000
-#define FREQ_12_MHz 12000
-#define FREQ_24_MHz 24000
-#define FREQ_48_MHz 48000
+#include <stdint.h>
+#define FREQ_1_5_MHz    (uint32_t)1500 // in units of kHz
+#define FREQ_3_MHz      (uint32_t)3000
+#define FREQ_6_MHz      (uint32_t)6000
+#define FREQ_12_MHz     (uint32_t)12000
+#define FREQ_24_MHz     (uint32_t)24000
+#define FREQ_48_MHz     (uint32_t)48000
 
 #endif /* FREQ_H_ */
