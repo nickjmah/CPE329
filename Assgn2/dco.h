@@ -11,7 +11,7 @@
 #include "msp.h"
 #include <stdint.h>
 //list of potential frequencies for DCO
-void set_DCO(uint32_t freqSet);
+//void set_DCO(uint32_t freqSet);
 
 
 
