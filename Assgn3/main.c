@@ -1,6 +1,5 @@
 #include "msp.h"
-
-
+#include "lcd.h"
 /**
  * main.c
  */

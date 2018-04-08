@@ -16,10 +16,7 @@ main.obj: C:/ti/ccsv8/ccs_base/arm/include/CMSIS/core_cm4.h
 main.obj: C:/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_compiler.h
 main.obj: C:/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_ccs.h
 main.obj: C:/ti/ccsv8/ccs_base/arm/include/system_msp432p401r.h
-main.obj: ../delay.h
-main.obj: C:/Users/Nick/Documents/GitHub/CPE329/msp432/dco.h
-main.obj: C:/Users/Nick/Documents/GitHub/CPE329/msp432/freq.h
-main.obj: ../freq.h
+main.obj: ../lcd.h
 
 ../main.c: 
 C:/ti/ccsv8/ccs_base/arm/include/msp.h: 
@@ -37,7 +34,4 @@ C:/ti/ccsv8/ccs_base/arm/include/CMSIS/core_cm4.h:
 C:/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_compiler.h: 
 C:/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_ccs.h: 
 C:/ti/ccsv8/ccs_base/arm/include/system_msp432p401r.h: 
-../delay.h: 
-C:/Users/Nick/Documents/GitHub/CPE329/msp432/dco.h: 
-C:/Users/Nick/Documents/GitHub/CPE329/msp432/freq.h: 
-../freq.h: 
+../lcd.h: 
