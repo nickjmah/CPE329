@@ -21,3 +21,4 @@ uint32_t checkBusy();
 void writeData(uint32_t data);
 uint32_t readData();
 #endif /* LCD_H_ */
+//
