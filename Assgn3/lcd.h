@@ -11,12 +11,13 @@
 #include "msp.h"
 #include "delay.h"
 
-#DEFINE RS BIT5
-#DEFINE RW BIT6
-#DEFINE EN BIT7
-
-void writeCommand();
-uint32_t readCommand();
+#define RS BIT5
+#define RW BIT6
+#define EN BIT7
+#define FUNCSET 0x20
+#define CGRAM 0x40
+#define DDRAM 0x80
+void writeCommand(uint8_t cmd); //sends a command to the lcd
 void clearDisplay();
 void returnHome();
 void setEntryMode(uint32_t direction, uint32_t dispShift);
