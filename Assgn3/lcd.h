@@ -7,6 +7,14 @@
 #include <stdint.h>
 #ifndef LCD_H_
 #define LCD_H_
+
+#include "msp.h"
+#include "delay.h"
+
+#DEFINE RS BIT5
+#DEFINE RW BIT6
+#DEFINE EN BIT7
+
 void writeCommand();
 uint32_t readCommand();
 void clearDisplay();
