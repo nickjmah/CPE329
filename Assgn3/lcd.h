@@ -20,9 +20,11 @@
 #define ENTRY_MODE_SET 0x04
 #define DISP_CTRL 0x08
 #define CURS_DISP_SHFT 0x10
+#define FUNCSET 0x20
+#define CGRAM 0x40
+#define DDRAM 0x80
 
-void writeCommand();
-uint32_t readCommand();
+void writeCommand(uint8_t cmd); //sends a command to the lcd
 void clearDisplay();
 void returnHome();
 void setEntryMode(uint32_t direction, uint32_t dispShift);
