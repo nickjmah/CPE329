@@ -15,11 +15,11 @@ void clearDisplay()
 }
 void returnHome()
 {
-
+    writeCommand(RET_HOME);
 }
 void setEntryMode(uint32_t direction, uint32_t dispShift)
 {
-
+    writeCommand(ENTRY_MODE_SET | direction | dispShift);
 }
 void dispOnSet(uint32_t disp, uint32_t cursor, uint32_t cursorBlink)
 {
