@@ -7,6 +7,8 @@
 #include <stdint.h>
 #ifndef LCD_H_
 #define LCD_H_
+void writeCommand();
+uint32_t readCommand();
 void clearDisplay();
 void returnHome();
 void setEntryMode(uint32_t direction, uint32_t dispShift);
