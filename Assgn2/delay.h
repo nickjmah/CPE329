@@ -9,7 +9,6 @@
 #define DELAY_H_INCLUDED
 
 #include "stdint.h"
-#include <dco.h>
 
 #define KHZ (uint32_t)1000 //Multiplying frequency in kHz by 1000 for MHz
 #define US (uint32_t)1000000 //Converting seconds to us
