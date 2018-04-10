@@ -17,6 +17,9 @@ main.obj: C:/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_compiler.h
 main.obj: C:/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_ccs.h
 main.obj: C:/ti/ccsv8/ccs_base/arm/include/system_msp432p401r.h
 main.obj: ../lcd.h
+main.obj: ../../Assgn2/delay.h
+main.obj: ../../Assgn2/dco.h
+main.obj: ../../Assgn2/freq.h
 
 ../main.c: 
 C:/ti/ccsv8/ccs_base/arm/include/msp.h: 
@@ -35,3 +38,6 @@ C:/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_compiler.h:
 C:/ti/ccsv8/ccs_base/arm/include/CMSIS/cmsis_ccs.h: 
 C:/ti/ccsv8/ccs_base/arm/include/system_msp432p401r.h: 
 ../lcd.h: 
+../../Assgn2/delay.h: 
+../../Assgn2/dco.h: 
+../../Assgn2/freq.h: 

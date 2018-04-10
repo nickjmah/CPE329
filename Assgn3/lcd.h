@@ -9,7 +9,8 @@
 #define LCD_H_
 
 #include "msp.h"
-#include "delay.h"
+#include "../Assgn2/delay.h"
+#include "../Assgn2/dco.h"
 
 #define RS BIT5
 #define RW BIT6
