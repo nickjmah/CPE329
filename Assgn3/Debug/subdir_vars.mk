@@ -9,8 +9,8 @@ CMD_SRCS += \
 ../msp432p401r.cmd 
 
 C_SRCS += \
-../dco.c \
-../delay.c \
+C:/Users/Nick/Documents/GitHub/CPE329/Assgn2/dco.c \
+C:/Users/Nick/Documents/GitHub/CPE329/Assgn2/delay.c \
 ../lcd.c \
 ../main.c \
 ../startup_msp432p401r_ccs.c \
@@ -49,8 +49,8 @@ C_DEPS__QUOTED += \
 "system_msp432p401r.d" 
 
 C_SRCS__QUOTED += \
-"../dco.c" \
-"../delay.c" \
+"C:/Users/Nick/Documents/GitHub/CPE329/Assgn2/dco.c" \
+"C:/Users/Nick/Documents/GitHub/CPE329/Assgn2/delay.c" \
 "../lcd.c" \
 "../main.c" \
 "../startup_msp432p401r_ccs.c" \

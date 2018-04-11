@@ -1,7 +1,7 @@
 # FIXED
 
-delay.obj: ../delay.c
-delay.obj: ../delay.h
+delay.obj: C:/Users/Nick/Documents/GitHub/CPE329/Assgn2/delay.c
+delay.obj: C:/Users/Nick/Documents/GitHub/CPE329/Assgn2/delay.h
 delay.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdint.h
 delay.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/stdint.h
 delay.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/cdefs.h
@@ -10,8 +10,8 @@ delay.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/machine/_typ
 delay.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/machine/_stdint.h
 delay.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/_stdint.h
 
-../delay.c: 
-../delay.h: 
+C:/Users/Nick/Documents/GitHub/CPE329/Assgn2/delay.c: 
+C:/Users/Nick/Documents/GitHub/CPE329/Assgn2/delay.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/stdint.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/stdint.h: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/sys/cdefs.h: 

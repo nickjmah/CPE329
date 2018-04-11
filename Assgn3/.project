@@ -24,4 +24,31 @@
 		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>dco.c</name>
+			<type>1</type>
+			<locationURI>WORKSPACE_LOC/Assgn2/dco.c</locationURI>
+		</link>
+		<link>
+			<name>dco.h</name>
+			<type>1</type>
+			<locationURI>WORKSPACE_LOC/Assgn2/dco.h</locationURI>
+		</link>
+		<link>
+			<name>delay.c</name>
+			<type>1</type>
+			<locationURI>WORKSPACE_LOC/Assgn2/delay.c</locationURI>
+		</link>
+		<link>
+			<name>delay.h</name>
+			<type>1</type>
+			<locationURI>WORKSPACE_LOC/Assgn2/delay.h</locationURI>
+		</link>
+		<link>
+			<name>freq.h</name>
+			<type>1</type>
+			<locationURI>WORKSPACE_LOC/Assgn2/freq.h</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

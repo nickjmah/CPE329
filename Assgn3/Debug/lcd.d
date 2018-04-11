@@ -20,6 +20,9 @@ lcd.obj: C:/ti/ccsv8/ccs_base/arm/include/system_msp432p401r.h
 lcd.obj: ../../Assgn2/delay.h
 lcd.obj: ../../Assgn2/dco.h
 lcd.obj: ../../Assgn2/freq.h
+lcd.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/string.h
+lcd.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/_ti_config.h
+lcd.obj: C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/linkage.h
 
 ../lcd.c: 
 ../lcd.h: 
@@ -41,3 +44,6 @@ C:/ti/ccsv8/ccs_base/arm/include/system_msp432p401r.h:
 ../../Assgn2/delay.h: 
 ../../Assgn2/dco.h: 
 ../../Assgn2/freq.h: 
+C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/string.h: 
+C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/_ti_config.h: 
+C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.1.LTS/include/linkage.h: 
