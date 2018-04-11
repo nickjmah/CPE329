@@ -99,10 +99,15 @@ void halfBitInit()
 void writeString(char string[])
 {
     //TODO:Add in location select to start the string
-    int i;
-    for(i = 0; i <strlen(string); i++)
+    char character = string[0];
+    int  i;
+    i=0;
+    while(character !='\0')
     {
+
         writeData(string[i]);
+        i++;
+        char = string[i]
     }
     return;
 }
