@@ -69,7 +69,9 @@ uint32_t checkBusy()
 }
 void writeData(uint32_t data)
 {
-
+    P3->OUT |= RS;
+    writeCommand(data);
+    P3->OUT &= ~RS;
 }
 uint32_t readData()
 {
