@@ -9,24 +9,27 @@
 
 void writeCommand(uint8_t cmd)
 {
+    uint8_t reader;
     P3->DIR |= (RS|RW|EN);
     P4->DIR = 0xf0;
 
     P3->OUT &= ~(BIT5|BIT6|BIT7); //clearing enable port?
     P4->OUT = 0x00; //reset output
     P3->OUT |= EN; //set enable
-    P4->OUT = cmd & (0x0f); //set output port to cmd
+    P4->OUT = cmd & (0xf0); //set output port to cmd
     delay_us(100, FREQ_48000_KHZ); //enable pulsewidth
-    P3->OUT &= ~EN; //clear enable
 
+    P3->OUT &= ~EN; //clear enable
+    P4->OUT = cmd & (0x00); //set output port to cmd
     delay_us(100, FREQ_48000_KHZ); //enable pulsewidth
 
 //    cmd = cmd<<4; //shift over by 4 bits
     P3->OUT |= EN; //set enable
-    P4->OUT = (cmd<<4) & (0x0f); //set output port to cmd
+    P4->OUT = (cmd<<4); //set output port to cmd
     delay_us(100, FREQ_48000_KHZ); //enable pulsewidth
     P3->OUT &= ~EN; //clear enable
     P4->OUT = 0x00; //reset output
+    delay_us(1000, FREQ_48000_KHZ);
     //sends a command to the lcd
 }
 void clearDisplay()

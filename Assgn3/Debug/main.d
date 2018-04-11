@@ -20,6 +20,7 @@ main.obj: ../lcd.h
 main.obj: ../../Assgn2/delay.h
 main.obj: ../../Assgn2/dco.h
 main.obj: ../../Assgn2/freq.h
+main.obj: ../dco.h
 
 ../main.c: 
 C:/ti/ccsv8/ccs_base/arm/include/msp.h: 
@@ -41,3 +42,4 @@ C:/ti/ccsv8/ccs_base/arm/include/system_msp432p401r.h:
 ../../Assgn2/delay.h: 
 ../../Assgn2/dco.h: 
 ../../Assgn2/freq.h: 
+../dco.h: 

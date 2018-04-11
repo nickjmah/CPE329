@@ -29,6 +29,9 @@
 #define ENABLE2LINE 0x08
 #define ENABLE1LINE 0x00
 #define NORMALFONT 0x04
+#define DISPLAY_ON 0x04
+#define CURSOR_ON 0x02
+#define CURSOR_BLINK 0x01
 void writeCommand(uint8_t cmd); //sends a command to the lcd
 void clearDisplay();
 void returnHome();
