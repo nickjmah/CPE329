@@ -15,8 +15,5 @@ void main(void)
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 	halfBitInit();
 	writeString("Hello World");
-	delay_ms(1000,FREQ_48000_KHZ);
-	returnHome();
-	writeString("Goodbye Moonmen");
 	return;
 }
