@@ -78,6 +78,7 @@ uint32_t readData()
 void halfBitInit()
 {
     //sending func set, but only half
+    delay_ms(150, FREQ_48000_KHZ);
     P4->OUT = 0x00; //reset output
     P3->OUT |= EN; //set enable
     P4->OUT = FUNCSET | ENABLE4BIT; //set output port to cmd
@@ -107,7 +108,7 @@ void writeString(char string[])
 
         writeData(string[i]);
         i++;
-        char = string[i]
+        character = string[i];
     }
     return;
 }
