@@ -9,11 +9,7 @@
 
 void writeCommand(uint8_t cmd)
 {
-    uint8_t reader;
-    P3->DIR |= (RS|RW|EN);
-    P4->DIR = 0xf0;
 
-    P3->OUT &= ~(BIT5|BIT6|BIT7); //clearing enable port?
     P4->OUT = 0x00; //reset output
     P3->OUT |= EN; //set enable
     P4->OUT = cmd & (0xf0); //set output port to cmd
@@ -66,7 +62,7 @@ void setDDRAM(uint32_t address)
 }
 uint32_t checkBusy()
 {
-
+return;
 }
 void writeData(uint32_t data)
 {
@@ -76,6 +72,18 @@ void writeData(uint32_t data)
 }
 uint32_t readData()
 {
+return;
+}
+void halfBitInit()
+{
+    P4->OUT = 0x00; //reset output
+    P3->OUT |= EN; //set enable
+    P4->OUT = FUNCSET | ENABLE4BIT; //set output port to cmd
+    delay_us(100, FREQ_48000_KHZ); //enable pulsewidth
+
+    P3->OUT &= ~EN; //clear enable
+    P4->OUT = (0x00); //set output port to cmd
+    delay_us(100, FREQ_48000_KHZ); //enable pulsewidth
 
 }
 

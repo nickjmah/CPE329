@@ -32,6 +32,7 @@
 #define DISPLAY_ON 0x04
 #define CURSOR_ON 0x02
 #define CURSOR_BLINK 0x01
+void halfBitInit();
 void writeCommand(uint8_t cmd); //sends a command to the lcd
 void clearDisplay();
 void returnHome();
