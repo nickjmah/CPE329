@@ -9,8 +9,8 @@
 
 void writeCommand(uint8_t cmd)
 {
-    P3->DIR |= (BIT5|BIT6|BIT7);
-    P4->DIR = 0xff;
+    P3->DIR |= (RS|RW|EN);
+    P4->DIR = 0xf0;
 
     uint32_t freq = FREQ_48000_KHZ;
     set_DCO(freq);
@@ -70,7 +70,9 @@ uint32_t checkBusy()
 }
 void writeData(uint32_t data)
 {
-
+    P3->OUT |= RS;
+    writeCommand(data);
+    P3->OUT &= ~RS;
 }
 uint32_t readData()
 {
