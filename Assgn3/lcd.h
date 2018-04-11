@@ -24,7 +24,11 @@
 #define FUNCSET 0x20
 #define CGRAM 0x40
 #define DDRAM 0x80
-
+#define ENABLE4BIT 0x00
+#define ENABLE8BIT 0x10
+#define ENABLE2LINE 0x08
+#define ENABLE1LINE 0x00
+#define NORMALFONT 0x04
 void writeCommand(uint8_t cmd); //sends a command to the lcd
 void clearDisplay();
 void returnHome();
