@@ -62,7 +62,7 @@ void setDDRAM(uint32_t address)
 }
 uint32_t checkBusy()
 {
-return;
+    return 0;
 }
 void writeData(uint32_t data)
 {
@@ -72,10 +72,11 @@ void writeData(uint32_t data)
 }
 uint32_t readData()
 {
-return;
+    return 0 ;
 }
 void halfBitInit()
 {
+    //sending func set, but only half
     P4->OUT = 0x00; //reset output
     P3->OUT |= EN; //set enable
     P4->OUT = FUNCSET | ENABLE4BIT; //set output port to cmd
@@ -84,7 +85,26 @@ void halfBitInit()
     P3->OUT &= ~EN; //clear enable
     P4->OUT = (0x00); //set output port to cmd
     delay_us(100, FREQ_48000_KHZ); //enable pulsewidth
+    //resending func set, which needs to be sent twice for some reason
+    funcSet(ENABLE4BIT,ENABLE2LINE,NORMALFONT);
+    funcSet(ENABLE4BIT,ENABLE2LINE,NORMALFONT);
+    dispOnSet(DISPLAY_ON, CURSOR_ON, CURSOR_BLINK);
 
+    clearDisplay();
+    delay_ms(3, FREQ_48000_KHZ);
+    setEntryMode(0x02, 0);
+    delay_ms(1, FREQ_48000_KHZ);
 }
-
+void writeString(char string[])
+{
+    int i;
+    int tmp;
+    tmp = strlen(string);
+    tmp = sizeof(char);
+    for(i = 0; i <strlen(string); i++)
+    {
+        writeData(string[i]);
+    }
+    return;
+}
 

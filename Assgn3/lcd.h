@@ -11,7 +11,7 @@
 #include "msp.h"
 #include "../Assgn2/delay.h"
 #include "../Assgn2/dco.h"
-
+#include "string.h"
 #define RS BIT5
 #define RW BIT6
 #define EN BIT7
@@ -33,6 +33,7 @@
 #define CURSOR_ON 0x02
 #define CURSOR_BLINK 0x01
 void halfBitInit();
+void writeString(char string[]);
 void writeCommand(uint8_t cmd); //sends a command to the lcd
 void clearDisplay();
 void returnHome();
