@@ -9,7 +9,8 @@
 
 void writeCommand(uint8_t cmd)
 {
-
+    //TODO: fix all of the timings to be more reasonable
+    //TODO: perform a check if busy first(warning might not be compatible with init function as it currently is)
     P4->OUT = 0x00; //reset output
     P3->OUT |= EN; //set enable
     P4->OUT = cmd & (0xf0); //set output port to cmd
@@ -97,10 +98,8 @@ void halfBitInit()
 }
 void writeString(char string[])
 {
+    //TODO:Add in location select to start the string
     int i;
-    int tmp;
-    tmp = strlen(string);
-    tmp = sizeof(char);
     for(i = 0; i <strlen(string); i++)
     {
         writeData(string[i]);
