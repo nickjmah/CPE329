@@ -14,16 +14,16 @@ void writeCommand(uint8_t cmd)
     P4->OUT = 0x00; //reset output
     P3->OUT |= EN; //set enable
     P4->OUT = cmd & (0xf0); //set output port to cmd
-    delay_us(100, FREQ_48000_KHZ); //enable pulsewidth
+    delay_us(40, FREQ_48000_KHZ); //enable pulsewidth
 
     P3->OUT &= ~EN; //clear enable
     P4->OUT = cmd & (0x00); //set output port to cmd
-    delay_us(100, FREQ_48000_KHZ); //enable pulsewidth
+    delay_us(40, FREQ_48000_KHZ); //enable pulsewidth
 
 //    cmd = cmd<<4; //shift over by 4 bits
     P3->OUT |= EN; //set enable
     P4->OUT = (cmd<<4); //set output port to cmd
-    delay_us(100, FREQ_48000_KHZ); //enable pulsewidth
+    delay_us(40, FREQ_48000_KHZ); //enable pulsewidth
     P3->OUT &= ~EN; //clear enable
     P4->OUT = 0x00; //reset output
     delay_us(1000, FREQ_48000_KHZ);
@@ -82,11 +82,11 @@ void halfBitInit()
     P4->OUT = 0x00; //reset output
     P3->OUT |= EN; //set enable
     P4->OUT = FUNCSET | ENABLE4BIT; //set output port to cmd
-    delay_us(100, FREQ_48000_KHZ); //enable pulsewidth
+    delay_us(40, FREQ_48000_KHZ); //enable pulsewidth
 
     P3->OUT &= ~EN; //clear enable
     P4->OUT = (0x00); //set output port to cmd
-    delay_us(100, FREQ_48000_KHZ); //enable pulsewidth
+    delay_us(40, FREQ_48000_KHZ); //enable pulsewidth
     //resending func set, which needs to be sent twice for some reason
     funcSet(ENABLE4BIT,ENABLE2LINE,NORMALFONT);
     funcSet(ENABLE4BIT,ENABLE2LINE,NORMALFONT);

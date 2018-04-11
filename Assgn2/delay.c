@@ -12,10 +12,11 @@
 void delay_ms(uint32_t ms, uint32_t freq)
 {
     uint32_t cycle; //define clock cycle
-    cycle = (ms * freq) * 10 / (109); //# of ms * frequency in kHz * 10 / 109 (while loop clock division)
+    cycle = (ms * freq) * 10 / (40); //# of ms * frequency in kHz * 10 / 109 (while loop clock division)
     while(cycle)
     {
         cycle--;
+        asm("");
     }
     return;
 }
@@ -23,11 +24,11 @@ void delay_ms(uint32_t ms, uint32_t freq)
 void delay_us(uint32_t us, uint32_t freq)
 {
     uint32_t cycle; //define clock cycle
-    cycle = (us * freq - 40000) / (10900); //# of us * frequency in kHz - 40000 /10900
+    cycle = (us * freq - 25800) / (3950); //# of us * frequency in kHz - 40000 /10900
     while(cycle)
     {
         cycle--;
+        asm("");
     }
     return;
 }
-
