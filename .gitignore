@@ -1,12 +1,5 @@
 /.metadata/
 Assgn3/.cproject
-Assgn3/.cproject
-Assgn3/.cproject
-Assgn3/Debug/Assgn3.map
-Assgn3/Debug/Assgn3_linkInfo.xml
-Assgn3/Debug/Assgn3_linkInfo.xml
+
+Assgn3/Debug/*
 *.obj
-Assgn3/Debug/main.d
-Assgn3/Debug/makefile
-Assgn3/Debug/subdir_rules.mk
-Assgn3/Debug/system_msp432p401r.obj
