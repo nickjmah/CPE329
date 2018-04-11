@@ -1,7 +1,6 @@
 #include "msp.h"
 #include "lcd.h"
 #include "dco.h"
-#include "delay.h"
 #include "stdint.h"
 /**
  * main.c
@@ -18,7 +17,6 @@ void main(void)
 	writeString("Hello World");
 	delay_ms(1000,FREQ_48000_KHZ);
 	returnHome();
-//	delay_ms(1,FREQ_48000_KHZ);
 	writeString("Goodbye Moonmen");
 	return;
 }
