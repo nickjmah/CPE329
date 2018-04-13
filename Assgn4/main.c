@@ -4,7 +4,11 @@
 /**
  * main.c
  */
+
+#include "keypad.h"
+
 void main(void)
 {
-	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
+	key_init();
+    WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 }
