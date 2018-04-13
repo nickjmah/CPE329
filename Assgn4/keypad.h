@@ -7,11 +7,11 @@
 
 #ifndef KEYPAD_H_
 #define KEYPAD_H_
-#define COL_DIR P4->DIR
+#define COL_STRUCT P4
 #define C0 BIT0
 #define C1 BIT1
 #define C2 BIT2
-#define ROW_DIR P2->DIR
+#define ROW_STRUCT P2
 #define R0 BIT4
 #define R1 BIT5
 #define R2 BIT6
