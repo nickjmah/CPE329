@@ -14,7 +14,6 @@
 #define RS BIT5
 #define RW BIT6
 #define EN BIT7
-
 #define CLEAR_DISP 0x01
 #define RET_HOME 0x02
 #define ENTRY_MODE_SET 0x04
