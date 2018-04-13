@@ -1,9 +1,10 @@
+#include "msp.h"
 
 
 /**
  * main.c
  */
-int main(void)
+void main(void)
 {
-	return 0;
+	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 }
