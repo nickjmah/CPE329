@@ -3,3 +3,11 @@ Assgn3/.cproject
 
 Assgn3/Debug/*
 *.obj
+*.map
+*.out
+*.d
+*.opt
+*.mk
+Assgn4/Debug/makefile
+Assgn4/Debug/Assgn4_linkInfo.xml
+*.obj
