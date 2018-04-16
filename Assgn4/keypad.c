@@ -35,18 +35,18 @@ uint16_t checkKP(){
 
 uint8_t bitConvert(uint16_t bitIndex){
     switch(bitIndex){
-    case 1: return '#';
+    case 1: return '*';
     case 2: return '0';
-    case 4: return '*';
-    case 8: return '9';
+    case 4: return '#';
+    case 8: return '7';
     case 16: return '8';
-    case 32: return '7';
-    case 64: return '6';
+    case 32: return '9';
+    case 64: return '4';
     case 128: return '5';
-    case 256: return '4';
-    case 512: return '3';
+    case 256: return '6';
+    case 512: return '1';
     case 1024: return '2';
-    case 2048: return '1';
+    case 2048: return '3';
     default: return '\0';
     }
 }
