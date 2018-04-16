@@ -24,7 +24,7 @@ uint8_t checkRow(uint8_t row){
 
 uint16_t checkKP(){
     uint8_t i;
-    uint16_t result;
+    uint16_t result=0;
     for(i=0; i<4; i++){
         result |= checkRow(R0<<i);
         result = result << 3;
