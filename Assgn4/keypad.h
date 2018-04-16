@@ -19,18 +19,18 @@
 #define R1 BIT5
 #define R2 BIT6
 #define R3 BIT7
-#define ONE BIT0
-#define TWO BIT1
-#define THREE BIT2
-#define FOUR BIT3
-#define FIVE BIT4
-#define SIX BIT5
-#define SEVEN BIT6
-#define EIGHT BIT7
-#define NINE BIT8
-#define STAR BIT9
-#define ZERO BIT10
-#define POUND BIT11
+#define ONE BIT9
+#define TWO BITA
+#define THREE BITB
+#define FOUR BIT6
+#define FIVE BIT7
+#define SIX BIT8
+#define SEVEN BIT3
+#define EIGHT BIT4
+#define NINE BIT5
+#define STAR BIT0
+#define ZERO BIT1
+#define POUND BIT2
 void key_init();
 uint16_t checkKP();//returns a 16 bit integer stuffed with booleans representing each key that's pressed
 uint8_t checkRow(uint8_t row);//returns 3 bits of bools of all col numbers in a row
