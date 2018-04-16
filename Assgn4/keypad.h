@@ -34,6 +34,7 @@
 void key_init();
 uint16_t checkKP();//returns a 16 bit integer stuffed with booleans representing each key that's pressed
 uint8_t checkRow(uint8_t row);//returns 3 bits of bools of all col numbers in a row
+uint8_t bitConvert(uint16_t bitIndex);//converts 16 bit index into keypad values
 
 
 
