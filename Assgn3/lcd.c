@@ -99,6 +99,9 @@ uint8_t readData()
     }
 void halfBitInit()
 {
+    P3->DIR |= (RS|RW|EN);
+    P4->DIR = 0xf0;
+    P3->OUT &= ~(RS|RW|EN);
     //sending func set, in 8 bit mode
     delay_ms(50, FREQ_48000_KHZ);
     P4->OUT = 0x00; //reset output
@@ -112,7 +115,7 @@ void halfBitInit()
     //resending func set, which needs to be sent twice for some reason
     funcSet(ENABLE4BIT,ENABLE2LINE,NORMALFONT);
     funcSet(ENABLE4BIT,ENABLE2LINE,NORMALFONT);
-    dispOnSet(DISPLAY_ON, CURSOR_ON, CURSOR_BLINK);
+    dispOnSet(DISPLAY_ON, CURSOR_OFF, CURSOR_NO_BLINK);
 
     clearDisplay();
     delay_ms(3, FREQ_48000_KHZ);

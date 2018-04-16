@@ -29,7 +29,9 @@
 #define NORMALFONT 0x04
 #define DISPLAY_ON 0x04
 #define CURSOR_ON 0x02
+#define CURSOR_OFF 0x00
 #define CURSOR_BLINK 0x01
+#define CURSOR_NO_BLINK 0x00
 void halfBitInit();
 void writeString(char string[]);
 void writeCommand(uint8_t cmd, uint8_t init); //sends a command to the lcd

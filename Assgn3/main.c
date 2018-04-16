@@ -8,9 +8,7 @@
  */
 void main(void)
 {
-    P3->DIR |= (RS|RW|EN);
-    P4->DIR = 0xf0;
-    P3->OUT &= ~(RS|RW|EN);
+
     uint32_t freq = FREQ_48000_KHZ;
     set_DCO(freq);
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;     // stop watchdog timer
