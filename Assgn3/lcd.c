@@ -30,15 +30,15 @@ void writeCommand(uint8_t cmd, uint8_t init)
 }
 void clearDisplay()
 {
-    writeCommand(CLEAR_DISP, 0);
+    writeCommand(CLEAR_DISP, 0);//clears display
 }
 void returnHome()
 {
-    writeCommand(RET_HOME, 0);
+    writeCommand(RET_HOME, 0);//returns home
 }
 void setEntryMode(uint32_t direction, uint32_t dispShift)
 {
-    writeCommand(ENTRY_MODE_SET | direction | dispShift, 0);
+    writeCommand(ENTRY_MODE_SET | direction | dispShift, 0);//sets entry mode based off of parameters
 }
 void dispOnSet(uint32_t disp, uint32_t cursor, uint32_t cursorBlink)
 {
@@ -122,13 +122,13 @@ void halfBitInit()
     setEntryMode(0x02, 0);
     delay_ms(1, FREQ_48000_KHZ);
 }
-void writeString(char* string)
+void writeString(char* string)//takes in a pointer to a string
 {
     //TODO:Add in location select to start the string
     while(*string)
     {
-        writeData(*string);
-        string++;
+        writeData(*string);//send in character at string address
+        string++;//increment string address. Is this legal?
     }
     return;
 }
