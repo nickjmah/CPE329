@@ -47,6 +47,6 @@ uint8_t bitConvert(uint16_t bitIndex){
     case 512: return '1';
     case 1024: return '2';
     case 2048: return '3';
-    default: return '\0';
+    default: return '?';
     }
 }
