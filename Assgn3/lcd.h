@@ -33,7 +33,7 @@
 #define CURSOR_BLINK 0x01
 #define CURSOR_NO_BLINK 0x00
 void halfBitInit();
-void writeString(char string[]);
+void writeString(char* string);
 void writeCommand(uint8_t cmd, uint8_t init); //sends a command to the lcd
 void clearDisplay();
 void returnHome();

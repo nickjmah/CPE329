@@ -122,18 +122,13 @@ void halfBitInit()
     setEntryMode(0x02, 0);
     delay_ms(1, FREQ_48000_KHZ);
 }
-void writeString(char string[])
+void writeString(char* string)
 {
     //TODO:Add in location select to start the string
-    char character = string[0];
-    int  i;
-    i=0;
-    while(character !='\0')
+    while(*string)
     {
-
-        writeData(string[i]);
-        i++;
-        character = string[i];
+        writeData(*string);
+        string++;
     }
     return;
 }
