@@ -23,6 +23,13 @@ uint8_t checkRow(uint8_t row){
 }
 
 uint16_t checkKP(){
-
+    uint8_t i;
+    uint16_t result;
+    for(i=0; i<4; i++){
+        result |= checkRow(R0<<i);
+        result = result << 3;
+    }
+    result = result >> 3;
+    return result;
 }
 
