@@ -17,6 +17,7 @@ void key_init(){
 uint8_t checkRow(uint8_t row){
     ROW_STRUCT->OUT |= row;
     uint8_t col = COL_STRUCT->IN;
+    col &= (C0|C1|C2);
     ROW_STRUCT->OUT &= ~row;
     return col;
 }
