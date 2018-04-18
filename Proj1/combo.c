@@ -5,6 +5,18 @@
  *      Author: Nick
  */
 
+void displayLockedScreen(void)
+{
+    returnHome();
+    writeString("Locked");
+    rowShiftDown();
+    writeString("Enter Key")
+}
+void displayUnlockedScreen(void);
+{
+    returnHome();
+    writeString("Hello World");
 
+}
 
 

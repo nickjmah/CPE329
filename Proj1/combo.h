@@ -8,7 +8,11 @@
 #ifndef COMBO_H_
 #define COMBO_H_
 
-#define WOMBO_COMBO '*'
+#define WOMBO_COMBO '1234'
+
+void displayLockedScreen(void);
+void displayUnlockedScreen(void);
+
 
 
 
