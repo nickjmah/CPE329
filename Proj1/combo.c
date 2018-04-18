@@ -4,7 +4,9 @@
  *  Created on: Apr 17, 2018
  *      Author: Nick
  */
-
+/**
+ * This is a test
+ */
 void displayLockedScreen(void)
 {
     returnHome();
