@@ -15,7 +15,7 @@ void displayLockedScreen(void)
     rowShiftDown();
     writeString("Enter Key ");
 }
-void displayUnlockedScreen(void);
+void displayUnlockedScreen(void)
 {
     returnHome();
     writeString("Hello World");

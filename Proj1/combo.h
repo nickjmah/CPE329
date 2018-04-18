@@ -8,6 +8,8 @@
 #ifndef COMBO_H_
 #define COMBO_H_
 
+#include "lcd.h"
+
 #define WOMBO_COMBO '1234'
 /**
  * @brief displays a locked screen

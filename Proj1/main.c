@@ -3,6 +3,7 @@
 #include "delay.h"
 #include "dco.h"
 #include "lcd.h"
+#include "combo.h"
 #define FREQ FREQ_48000_KHZ
 
 /**
