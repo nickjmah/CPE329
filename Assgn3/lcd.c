@@ -132,4 +132,6 @@ void writeString(char* string)//takes in a pointer to a string
     }
     return;
 }
-
+void rowShiftDown(){
+    setDDRAM(ROW_SHFT);
+}

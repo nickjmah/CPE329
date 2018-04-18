@@ -19,9 +19,14 @@
 #define ENTRY_MODE_SET 0x04
 #define DISP_CTRL 0x08
 #define CURS_DISP_SHFT 0x10
+#define CURS_SHFT 0x00
+#define DISP_SHFT 0x08
+#define RIGHT_SHFT 0x04
+#define LEFT_SHFT 0x00
 #define FUNCSET 0x20
 #define CGRAM 0x40
 #define DDRAM 0x80
+#define ROW_SHFT 0x40
 #define ENABLE4BIT 0x00
 #define ENABLE8BIT 0x10
 #define ENABLE2LINE 0x08
@@ -46,5 +51,6 @@ void setDDRAM(uint32_t address);
 uint8_t checkBusy();
 void writeData(uint32_t data);
 uint8_t readData();
+void rowShiftDown();
 #endif /* LCD_H_ */
 //
