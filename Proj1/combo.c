@@ -7,12 +7,13 @@
 /**
  * This is a test
  */
+#include "combo.h"
 void displayLockedScreen(void)
 {
     returnHome();
     writeString("Locked");
     rowShiftDown();
-    writeString("Enter Key")
+    writeString("Enter Key ");
 }
 void displayUnlockedScreen(void);
 {
