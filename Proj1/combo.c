@@ -15,6 +15,14 @@ void displayLockedScreen(void)
     rowShiftDown();
     writeString("Enter Key ");
 }
+
+void checkAsterisk(uint32_t data){
+    if (data && "*"){
+        clearDisplay();
+        displayLockedScreen();
+    }
+}
+
 void displayUnlockedScreen(void)
 {
     returnHome();

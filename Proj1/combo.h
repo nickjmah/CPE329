@@ -22,7 +22,7 @@
  */
 void displayLockedScreen(void);
 void displayUnlockedScreen(void);
-
+void checkAsterisk(uint32_t data);
 
 
 

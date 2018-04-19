@@ -30,6 +30,7 @@ void main(void)
         keysPressed = checkKP();//check to see if any keys are pressed
         if((keysPressed != prev)&&keysPressed)//if the key pressed is different from before and on the rising edge
         {
+            checkAsterisk(keysPressed);
             writeData(bitConvert(keysPressed));//write the key position
 //            returnHome();//return cursor so it next press erases it
 
