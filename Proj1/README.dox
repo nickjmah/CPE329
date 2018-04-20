@@ -1,0 +1,11 @@
+/**
+
+@mainpage Projects 1
+
+@author Nick Mah
+@author Jason Zhou
+
+This is the main code for a keypad locking system for the MSP432. An initial 4 number code is 
+chosen. After typing in the code, the user may change the code, which will remain changed
+until it is changed again, or the system is reset. 
+*/
