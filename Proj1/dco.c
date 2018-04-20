@@ -1,4 +1,4 @@
-/** \file dco.h
+/** \file dco.c
  * \brief Enables changing of the DCO
  *
  * This file contains one function that can change the frequency to be one of any of the

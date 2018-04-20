@@ -1,11 +1,12 @@
-/**
- * combo.c
- * @file combo.h
- *  Created on: Apr 17, 2018
- *      Author: Nick
- */
-/**
- * This is a test
+/** \file combo.c
+ * \brief Helper functions to enable the combo lock
+ *
+ * This file contains helper functions to control the operation of the display and check
+ * for specific key presses. This code could be moved into main without much difficulty
+ *
+ * \author Nick Mah
+ * \author Jason Zhou
+ *
  */
 #include "combo.h"
 void displayLockedScreen(void)

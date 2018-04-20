@@ -1,15 +1,35 @@
+/** \file main.c
+ * \brief Runs a combination lock for MSP432
+ *
+ * This file contains the main function used to operate the combination lock. The file can
+ * initializes all of the pre-requisite features and then polls for key changes. If there
+ * is a key change, then the loop checks to see if it detected a rising or falling edge
+ * In the event of a rising edge, then the loop will add number to an array of key presses.
+ * Once the number of key presses hits COMBO_SIZE, main will check to see whether or not
+ * the code matches. If the code matches, then an unlocked screen will appear and the loop
+ * restarts. If the number of key presses hits COMBO_SIZE again, then comboWombo will be updated
+ * If at any point, '*' the lock will lock again and the keyArray will reset.
+ *
+ * \author Nick Mah
+ * \author Jason Zhou
+ *
+ */
 #include "msp.h"
 #include "keypad.h"
 #include "delay.h"
 #include "dco.h"
 #include "lcd.h"
 #include "combo.h"
+
+/// Sets the operating frequency of the system
 #define FREQ FREQ_48000_KHZ
 
-/**
- * main.c
+/** \brief initializes all peripherals required for the MSP432
+ *
+ * This function initializes the DCO to FREQ, initilalizes the LCD, and initializes the keypad
+ *
+ * \return void
  */
-
 void init(void)
 {
     set_DCO(FREQ);//setting DCO frequency
@@ -17,6 +37,11 @@ void init(void)
     key_init();//Initialize keypad
 
 }
+
+/** \brief Main function
+ *
+ *  \return void
+ */
 void main(void)
 {
     uint8_t womboCombo[4] = "1234";
