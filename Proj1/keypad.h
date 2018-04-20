@@ -18,44 +18,70 @@
 
 ///Struct that the column pins were chosen to be ons
 #define COL_STRUCT P4
+
 ///Pin map for Column 0
 #define C0 BIT0
+
 ///Pin map for Column 1
 #define C1 BIT1
+
 ///Pin map for Column 2
 #define C2 BIT2
+
+///Mask for column pins
+#define COL_MASK C0|C1|C2
+
 ///Struct that the row pins were chosen to be ons
 #define ROW_STRUCT P2
+
 ///Pin map for Row 0
 #define R0 BIT4
+
 ///Pin map for Row 1
 #define R1 BIT5
+
 ///Pin map for Row 2
 #define R2 BIT6
+
 ///Pin map for Row 3
 #define R3 BIT7
+
+///Mask for row pins
+#define ROW_MASK R0|R1|R2|R3
+
 ///Decodes keypress 1
 #define ONE BIT9
+
 ///Decodes keypress 2
 #define TWO BITA
+
 ///Decodes keypress 3
 #define THREE BITB
+
 ///Decodes keypress 4
 #define FOUR BIT6
+
 ///Decodes keypress 5
 #define FIVE BIT7
+
 ///Decodes keypress 6
 #define SIX BIT8
+
 ///Decodes keypress 7
 #define SEVEN BIT3
+
 ///Decodes keypress 8
 #define EIGHT BIT4
+
 ///Decodes keypress 9
 #define NINE BIT5
+
 ///Decodes keypress 0
 #define STAR BIT0
+
 ///Decodes keypress *
 #define ZERO BIT1
+
 ///Decodes keypress #
 #define POUND BIT2
 

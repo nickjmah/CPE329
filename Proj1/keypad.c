@@ -1,26 +1,32 @@
-/*
- * keypad.c
+/** @file keypad.c
+ * @brief Read inputs from a 12-key keypad
  *
- *  Created on: Apr 13, 2018
- *      Author: Jason Zhou
+ * This file will reads inputs for from the keypad using pins defined in keypad.h
+ * and can either return an encoded result of all keys pressed at the time of measurement
+ * or can return a single character of a single key pressed.
+ *
+ * @author Nick Mah
+ * @author Jason Zhou
+ *
+ *
  */
 #include "keypad.h"
 
 void key_init(){
     //initializing columns as pull ups
-    COL_STRUCT->DIR &= ~(C0|C1|C2);
-    COL_STRUCT->REN |= C0|C1|C2;
-    COL_STRUCT->OUT &= ~(C0|C1|C2);
+    COL_STRUCT->DIR &= ~(COL_MASK);     //set columns to inputs
+    COL_STRUCT->REN |= COL_MASK;        //enable pull-x circuitry to columns
+    COL_STRUCT->OUT &= ~(COL_MASK);     //set columns as pull-ups
     //initializing rows as outputs
-    ROW_STRUCT->DIR |= R0|R1|R2|R3;
-    ROW_STRUCT->OUT &= ~(R0|R1|R2|R3);
+    ROW_STRUCT->DIR |= ROW_MASK;     //set rows as outputs
+    ROW_STRUCT->OUT &= ~(ROW_MASK);  //set all rows as 0
 }
 
 uint8_t checkRow(uint8_t row){
     //check all columns of a single row
     ROW_STRUCT->OUT |= row;//enable the selected row
     uint8_t col = COL_STRUCT->IN;//read all of the columns
-    col &= (C0|C1|C2);//clear everything but the columns of interest
+    col &= (COL_MASK);//clear everything but the columns of interest
     ROW_STRUCT->OUT &= ~row;//turn off row
     return col;
 }
