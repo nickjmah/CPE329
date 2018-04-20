@@ -1,4 +1,4 @@
-/*
+/**
  * @file combo.h
  *
  *  Created on: Apr 17, 2018
@@ -10,7 +10,6 @@
 
 #include "lcd.h"
 #include "keypad.h"
-
 #define WOMBO_COMBO '1234'
 /**
  * @brief displays a locked screen

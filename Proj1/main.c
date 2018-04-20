@@ -37,12 +37,24 @@ void main(void)
                 prev=keysPressed;
                 continue;
             }
-//            keyArray[i] = keysPressed;
-//            i += 1;
+            keyArray[i] = keysPressed;
+            i += 1;
             writeData(bitConvert(keysPressed));//write the key position
-//            if ((i == 4)&&(keyArray == WOMBO_COMBO)){
-//                displayUnlockedScreen();
-//            }
+            if(i>=4)
+            {
+                if ((keyArray == WOMBO_COMBO))
+                {
+                    displayUnlockedScreen();
+                }
+                else
+                {
+                    displayLockedScreen();
+                    i=0;
+                    memset(keyArray, 0-1, 4);
+                }
+            }
+
+
         }
         prev=keysPressed;//set previous key
     }
