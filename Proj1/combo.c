@@ -10,6 +10,7 @@
 #include "combo.h"
 void displayLockedScreen(void)
 {
+    clearDisplay();
     returnHome();
     writeString("Locked");
     rowShiftDown();
@@ -36,7 +37,7 @@ void displayUnlockedScreen(void)
 uint8_t checkCode(uint8_t* code)
 {
     int i = 0;
-    while(*code)
+    while(i<3)
     {
         if(*code != WOMBO_COMBO[i])
             return 0;
