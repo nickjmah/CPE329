@@ -31,17 +31,18 @@ void displayUnlockedScreen(void)
     clearDisplay();
     returnHome();
     writeString("Hello World");
-
+    rowShiftDown();
+    writeString("New Key: ");
 }
 
-uint8_t checkCode(uint8_t* code)
+uint8_t checkCode(uint8_t* input, uint8_t* key)
 {
     int i = 0;
-    while(i<3)
+    while(i<COMBO_SIZE)
     {
-        if(*code != WOMBO_COMBO[i])
+        if(*input != key[i])
             return 0;
-        code++;
+        input++;
         i++;
     }
     return 1;

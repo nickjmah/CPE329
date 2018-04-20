@@ -19,13 +19,14 @@ void init(void)
 }
 void main(void)
 {
-    int womboCombo = "1234";
-    int comboSize = strlen(WOMBO_COMBO);
-
+    uint8_t womboCombo[4] = "1234";
+    int j;
+    enum mode {locked, unlocked};
+    enum mode status=locked;
 	init();
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
     uint16_t keysPressed, prev=0;
-    uint8_t keyArray[ comboSize ];
+    uint8_t keyArray[ COMBO_SIZE ];
     displayLockedScreen();
     int i = 0;
     while(1)
@@ -37,26 +38,39 @@ void main(void)
             if(checkAsterisk(keysPressed)){
                 prev=keysPressed;
                 i=0;
-                memset(keyArray, '/0', comboSize);
+                status=locked;
+                memset(keyArray, '/0', COMBO_SIZE);
                 continue;
             }
             keyArray[i] = bitConvert(keysPressed);
             writeData(keyArray[i]);//write the key position
             i += 1;
-            if(i>=comboSize)
+            if(i>=COMBO_SIZE)
             {
+
                 delay_ms(100,FREQ);
-                if (checkCode(keyArray))
+                if(status==unlocked)
+                {
+                    for(j=0; j<COMBO_SIZE; j++)
+                    {
+                        womboCombo[j] = keyArray[j];
+                    }
+                    displayLockedScreen();
+                    status=locked;
+                }
+                else if (checkCode(keyArray, womboCombo))
                 {
                     displayUnlockedScreen();
+                    status=unlocked;
                 }
                 else
                 {
                     displayLockedScreen();
+                    status=locked;
 
                 }
                 i=0;
-                memset(keyArray, '/0', comboSize);//setting keyArray to be empty
+                memset(keyArray, '/0', COMBO_SIZE);//setting keyArray to be empty
             }
         }
         prev=keysPressed;//set previous key

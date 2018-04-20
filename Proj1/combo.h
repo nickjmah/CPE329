@@ -10,7 +10,7 @@
 
 #include "lcd.h"
 #include "keypad.h"
-#define WOMBO_COMBO "1234"
+#define COMBO_SIZE 4
 /**
  * @brief displays a locked screen
  *
@@ -23,7 +23,7 @@
 void displayLockedScreen(void);
 void displayUnlockedScreen(void);
 uint32_t checkAsterisk(uint32_t data);
-uint8_t checkCode(uint8_t* code);
+uint8_t checkCode(uint8_t* input, uint8_t* key);
 
 
 #endif /* COMBO_H_ */
