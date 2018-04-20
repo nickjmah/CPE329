@@ -1,9 +1,14 @@
-/*
- * lcd.h
+/** \file lcd.h
+ * \brief Contains function prototypes for delay functionality
  *
- *  Created on: Apr 8, 2018
- *      Author: Nick
+ * This file contains two functions. One can delay in microseconds and the other in milliseconds
+ *
+ *
+ * \author Nick Mah
+ * \author Jason Zhou
+ *
  */
+
 #ifndef LCD_H_
 #define LCD_H_
 #include <stdint.h>

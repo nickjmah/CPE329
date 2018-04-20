@@ -26,16 +26,6 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>delay.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Assgn2/delay.c</locationURI>
-		</link>
-		<link>
-			<name>delay.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Assgn2/delay.h</locationURI>
-		</link>
-		<link>
 			<name>lcd.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Assgn3/lcd.c</locationURI>
