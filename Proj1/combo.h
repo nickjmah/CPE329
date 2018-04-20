@@ -9,6 +9,7 @@
 #define COMBO_H_
 
 #include "lcd.h"
+#include "keypad.h"
 
 #define WOMBO_COMBO '1234'
 /**
@@ -22,7 +23,7 @@
  */
 void displayLockedScreen(void);
 void displayUnlockedScreen(void);
-void checkAsterisk(uint32_t data);
+uint32_t checkAsterisk(uint32_t data);
 
 
 

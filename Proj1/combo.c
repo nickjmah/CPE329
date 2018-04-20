@@ -16,15 +16,18 @@ void displayLockedScreen(void)
     writeString("Enter Key ");
 }
 
-void checkAsterisk(uint32_t data){
-    if (data && "*"){
+uint32_t checkAsterisk(uint32_t data){
+    if (data == STAR){
         clearDisplay();
         displayLockedScreen();
+        return 1;
     }
+    return 0;
 }
 
 void displayUnlockedScreen(void)
 {
+    clearDisplay();
     returnHome();
     writeString("Hello World");
 
