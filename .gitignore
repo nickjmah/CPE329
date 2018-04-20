@@ -11,3 +11,11 @@ Assgn3/Debug/*
 Assgn4/Debug/makefile
 Assgn4/Debug/Assgn4_linkInfo.xml
 *.obj
+*.xml
+*.png
+*.html
+*.css
+*.js
+*.hhc
+*.hhk
+*.hhp
