@@ -24,7 +24,7 @@ void main(void)
 	init();
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
     uint16_t keysPressed, prev=0;
-    uint16_t keyArray[ 4 ];
+    uint8_t keyArray[ 4 ];
     displayLockedScreen();
     int i = 0;
     while(1)
@@ -35,14 +35,16 @@ void main(void)
         {
             if(checkAsterisk(keysPressed)){
                 prev=keysPressed;
+                i=0;
+                memset(keyArray, '/0', 4);
                 continue;
             }
-            keyArray[i] = keysPressed;
+            keyArray[i] = bitConvert(keysPressed);
+            writeData(keyArray[i]);//write the key position
             i += 1;
-            writeData(bitConvert(keysPressed));//write the key position
             if(i>=4)
             {
-                if ((keyArray == WOMBO_COMBO))
+                if (checkCode(keyArray))
                 {
                     displayUnlockedScreen();
                 }
@@ -50,7 +52,7 @@ void main(void)
                 {
                     displayLockedScreen();
                     i=0;
-                    memset(keyArray, 0-1, 4);
+                    memset(keyArray, '/0', 4);//setting keyArray to be empty
                 }
             }
 

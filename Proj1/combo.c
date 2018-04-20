@@ -33,4 +33,16 @@ void displayUnlockedScreen(void)
 
 }
 
+uint8_t checkCode(uint8_t* code)
+{
+    int i = 0;
+    while(*code)
+    {
+        if(*code != WOMBO_COMBO[i])
+            return 0;
+        code++;
+        i++;
+    }
+    return 1;
+}
 
