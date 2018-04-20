@@ -28,19 +28,19 @@ uint8_t checkRow(uint8_t row){
     uint8_t col = COL_STRUCT->IN;//read all of the columns
     col &= (COL_MASK);//clear everything but the columns of interest
     ROW_STRUCT->OUT &= ~row;//turn off row
-    return col;
+    return col; //returns column results in row
 }
 
 uint16_t checkKP(){
     //checks all of the rows and bit shifts them into a 16 bit number
-    uint8_t i;
-    uint16_t result=0;
-    for(i=0; i<4; i++){
-        result |= checkRow(R0<<i);//checks each row
+    int i; //init iterator for the for loop
+    uint16_t result=0; //init final result
+    for(i=0; i<4; i++){//define for loop used to check all of the rows
+        result |= checkRow(R0<<i);//checks row at iterator
         result = result << 3;//bit shifts the number over by the amount of columns(3)
     }
     result = result >> 3;//counteracting the last shift
-    return result;
+    return result; //returns final result
 }
 
 uint8_t bitConvert(uint16_t bitIndex){
@@ -58,6 +58,6 @@ uint8_t bitConvert(uint16_t bitIndex){
     case STAR: return '*';
     case ZERO: return '0';
     case POUND: return '#';
-    default: return '?';
+    default: return '?'; //if the bit encoded value is invalid or more than one key, return ?
     }
 }
