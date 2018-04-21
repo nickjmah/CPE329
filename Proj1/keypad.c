@@ -2,8 +2,8 @@
  * @brief Read inputs from a 12-key keypad
  *
  * This file will reads inputs for from the keypad using pins defined in keypad.h
- * and can either return an encoded result of all keys pressed at the time of measurement
- * or can return a single character of a single key pressed.
+ * and can either return an encoded result of all keys pressed at the time of
+ * measurement or can return a single character of a single key pressed.
  *
  * @author Nick Mah
  * @author Jason Zhou
@@ -16,7 +16,7 @@ void key_init(){
     //initializing columns as pull ups
     COL_STRUCT->DIR &= ~(COL_MASK);     //set columns to inputs
     COL_STRUCT->REN |= COL_MASK;        //enable pull-x circuitry to columns
-    COL_STRUCT->OUT &= ~(COL_MASK);     //set columns as pull-ups
+    COL_STRUCT->OUT &= ~(COL_MASK);     //set columns as pull-downs
     //initializing rows as outputs
     ROW_STRUCT->DIR |= ROW_MASK;     //set rows as outputs
     ROW_STRUCT->OUT &= ~(ROW_MASK);  //set all rows as 0
@@ -37,7 +37,8 @@ uint16_t checkKP(){
     uint16_t result=0; //init final result
     for(i=0; i<4; i++){//define for loop used to check all of the rows
         result |= checkRow(R0<<i);//checks row at iterator
-        result = result << 3;//bit shifts the number over by the amount of columns(3)
+        result = result << 3;
+                        //bit shifts the number over by the amount of columns(3)
     }
     result = result >> 3;//counteracting the last shift
     return result; //returns final result
@@ -58,6 +59,7 @@ uint8_t bitConvert(uint16_t bitIndex){
     case STAR: return '*';
     case ZERO: return '0';
     case POUND: return '#';
-    default: return '?'; //if the bit encoded value is invalid or more than one key, return ?
+    default: return '?';
+    //if the bit encoded value is invalid or more than one key, return ?
     }
 }

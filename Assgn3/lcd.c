@@ -1,13 +1,17 @@
-/*
- * lcd.c
+/** \file lcd.c
+ * \brief Enables LCD functionality in 4-bit mode
  *
- *  Created on: Apr 8, 2018
- *      Author: Nick
+ * This file contains all of the functions required to operate the lcd in 4-bit mode.
+ * Note, none of the reading is able to work.
+ *
+ * \author Nick Mah
+ * \author Jason Zhou
+ *
  */
 
 #include "lcd.h"
 
-void writeCommand(uint8_t cmd, uint8_t init)
+void writeCommand(uint8_t cmd)
 {
     //TODO: perform a check if busy first(warning might not be compatible with init function as it currently is)
     P4->OUT = 0x00; //reset output
@@ -19,7 +23,7 @@ void writeCommand(uint8_t cmd, uint8_t init)
     P4->OUT = cmd & (0x00); //set output port to cmd
     delay_us(4, FREQ_48000_KHZ); //enable pulsewidth
 
-//    cmd = cmd<<4; //shift over by 4 bits
+//  cmd = cmd<<4; //shift over by 4 bits
     P3->OUT |= EN; //set enable
     P4->OUT = (cmd<<4); //set output port to cmd
     delay_us(4, FREQ_48000_KHZ); //enable pulsewidth
@@ -28,38 +32,47 @@ void writeCommand(uint8_t cmd, uint8_t init)
     delay_us(1000, FREQ_48000_KHZ);
     //sends a command to the lcd
 }
+
 void clearDisplay()
 {
-    writeCommand(CLEAR_DISP, 0);//clears display
+    writeCommand(CLEAR_DISP);//clears display
 }
+
 void returnHome()
 {
-    writeCommand(RET_HOME, 0);//returns home
+    writeCommand(RET_HOME);//returns home
 }
+
 void setEntryMode(uint32_t direction, uint32_t dispShift)
 {
-    writeCommand(ENTRY_MODE_SET | direction | dispShift, 0);//sets entry mode based off of parameters
+    writeCommand(ENTRY_MODE_SET | direction | dispShift);//sets entry mode based off of parameters
 }
+
 void dispOnSet(uint32_t disp, uint32_t cursor, uint32_t cursorBlink)
 {
-    writeCommand(DISP_CTRL | disp | cursor | cursorBlink, 0);
+    writeCommand(DISP_CTRL | disp | cursor | cursorBlink);
 }
+
 void shift(uint32_t cursorShift, uint32_t direction)
 {
-    writeCommand(CURS_DISP_SHFT | cursorShift | direction, 0);
+    writeCommand(CURS_DISP_SHFT | cursorShift | direction);
 }
+
 void funcSet(uint32_t dataLen, uint32_t numLines, uint32_t font)
 {
-    writeCommand(FUNCSET | dataLen | numLines | font, 1);
+    writeCommand(FUNCSET | dataLen | numLines | font);
 }
+
 void setCGRAM(uint32_t address)
 {
-    writeCommand(CGRAM | address, 0);
+    writeCommand(CGRAM | address);
 }
+
 void setDDRAM(uint32_t address)
 {
-    writeCommand(DDRAM | address, 0);
+    writeCommand(DDRAM | address);
 }
+
 uint8_t checkBusy()
 {
     uint8_t busy;
@@ -68,12 +81,14 @@ uint8_t checkBusy()
     busy = readData() & ((uint8_t)BIT7);
     return busy;
 }
+
 void writeData(uint32_t data)
 {
     P3->OUT |= RS;
-    writeCommand(data, 0);
+    writeCommand(data);
     P3->OUT &= ~RS;
 }
+
 uint8_t readData()
 {
     int data;
@@ -96,7 +111,8 @@ uint8_t readData()
     delay_us(2, FREQ_48000_KHZ); //enable pulsewidth
     P3->OUT &= ~EN; //clear enable
     return data;
-    }
+}
+
 void halfBitInit()
 {
     P3->DIR |= (RS|RW|EN);
@@ -122,6 +138,7 @@ void halfBitInit()
     setEntryMode(0x02, 0);
     delay_ms(1, FREQ_48000_KHZ);
 }
+
 void writeString(char* string)//takes in a pointer to a string
 {
     //TODO:Add in location select to start the string
@@ -132,6 +149,7 @@ void writeString(char* string)//takes in a pointer to a string
     }
     return;
 }
+
 void rowShiftDown(){
     setDDRAM(ROW_SHFT);
 }

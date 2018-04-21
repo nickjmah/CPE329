@@ -36,7 +36,7 @@ void displayLockedScreen(void);
 
 /** \brief Displays the unlocked screen
  *
- * This function will display text to show the tuser that the lock is not unlocked.\n
+ * This function will display text to show the user that the lock is not unlocked.\n
  * The first row will say "Hello World"\n
  * The second row will say "New Key: "\n
  *
@@ -46,9 +46,10 @@ void displayUnlockedScreen(void);
 
 /** \brief Checks checkKP() result to see if Asterisk has been pressed
  *
- * This function takes in the row/column encoded data of checkKP() and returns a boolean.
- * If the pressed key is asterisk, then the function returns a 1 and will display the locked screen
- * Else, the function will return 0 and leave the screen alone
+ * This function takes in the row/column encoded data of checkKP() and returns
+ * a boolean. If the pressed key is asterisk, then the function returns a 1
+ * and will display the locked screen. Else, the function will return 0 and
+ * leave the screen alone
  *
  * \return 1 if input is equivalent to asterisk, 0 otherwise
  * \param data the row/col encoded data resulting from checkKP()
@@ -57,15 +58,16 @@ uint32_t checkAsterisk(uint32_t data);
 
 /** \brief checks to see if the input string matches the output string
  *
- * This function takes in pointers of a string input and a key. If the key and the string
- * match, then the function will return true. The function assumes that both strings
- * are of comboSize long.
+ * This function takes in pointers of a string input and a key. If the key and
+ * the string match, then the function will return true. The function assumes
+ * that both strings are of comboSize long.
  *
  * \return 1 If input matches key, 0 otherwise
  * \param input A pointer to the input char array
  * \param key A pointer to the second char array
- * \bug the function will get a error out if one of the char arrays isn't initialized to the
- * correct size. This is because the index will try to read a data element outside of allocated memory
+ * \bug the function will get a error out if one of the char arrays isn't
+ * initialized to the correct size. This is because the index will try to read
+ * a data element outside of allocated memory
  *
  */
 uint8_t checkCode(uint8_t* input, uint8_t* key);

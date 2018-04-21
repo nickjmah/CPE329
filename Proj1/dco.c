@@ -29,27 +29,32 @@ void set_DCO(uint32_t freq)
 
         case FREQ_1500_KHZ :
             CS->CTL0 = CS_CTL0_DCORSEL_0; // set DCO = 1.5 MHz
-            CS->CTL1 = CS_CTL1_SELA_2 | CS_CTL1_SELS_3 | CS_CTL1_SELM_3; // select clock sources
+            CS->CTL1 = CS_CTL1_SELA_2 | CS_CTL1_SELS_3 | CS_CTL1_SELM_3;
+            // select clock sources
             break;
 
         case FREQ_3000_KHZ :
             CS->CTL0 = CS_CTL0_DCORSEL_1; // set DCO = 3 MHz
-            CS->CTL1 = CS_CTL1_SELA_2 | CS_CTL1_SELS_3 | CS_CTL1_SELM_3; // select clock sources
+            CS->CTL1 = CS_CTL1_SELA_2 | CS_CTL1_SELS_3 | CS_CTL1_SELM_3;
+            // select clock sources
             break;
 
         case FREQ_6000_KHZ :
             CS->CTL0 = CS_CTL0_DCORSEL_2; // set DCO = 6 MHz
-            CS->CTL1 = CS_CTL1_SELA_2 | CS_CTL1_SELS_3 | CS_CTL1_SELM_3; // select clock sources
+            CS->CTL1 = CS_CTL1_SELA_2 | CS_CTL1_SELS_3 | CS_CTL1_SELM_3;
+            // select clock sources
             break;
 
         case FREQ_12000_KHZ :
             CS->CTL0 = CS_CTL0_DCORSEL_3; // set DCO = 12 MHz
-            CS->CTL1 = CS_CTL1_SELA_2 | CS_CTL1_SELS_3 | CS_CTL1_SELM_3; // select clock sources
+            CS->CTL1 = CS_CTL1_SELA_2 | CS_CTL1_SELS_3 | CS_CTL1_SELM_3;
+            // select clock sources
             break;
 
         case FREQ_24000_KHZ :
             CS->CTL0 = CS_CTL0_DCORSEL_4; // set DCO = 24 MHz
-            CS->CTL1 = CS_CTL1_SELA_2 | CS_CTL1_SELS_3 | CS_CTL1_SELM_3; // select clock sources
+            CS->CTL1 = CS_CTL1_SELA_2 | CS_CTL1_SELS_3 | CS_CTL1_SELM_3;
+            // select clock sources
             break;
 
         case FREQ_48000_KHZ :
@@ -61,7 +66,8 @@ void set_DCO(uint32_t freq)
 
         default :
             CS->CTL0 = CS_CTL0_DCORSEL_1; // set DCO = 3 MHz
-            CS->CTL1 = CS_CTL1_SELA_2 | CS_CTL1_SELS_3 | CS_CTL1_SELM_3; // select clock sources
+            CS->CTL1 = CS_CTL1_SELA_2 | CS_CTL1_SELS_3 | CS_CTL1_SELM_3;
+            // select clock sources
             break;
     }
 
