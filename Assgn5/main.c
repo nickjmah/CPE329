@@ -9,6 +9,8 @@
  *
  */
 
+#define test
+
 #define FREQ FREQ_24000_KHZ
 
 void init(void)
@@ -35,12 +37,12 @@ int main(void) {
 
     // Ensures SLEEPONEXIT takes effect immediately
     __DSB();
-
+#ifndef test
     // Enable global interrupt
     __enable_irq();
 
     NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);
-
+#endif
     while (1)
     {
         __sleep();
