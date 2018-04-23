@@ -24,16 +24,4 @@
 		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>lcd.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Assgn3/lcd.c</locationURI>
-		</link>
-		<link>
-			<name>lcd.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Assgn3/lcd.h</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>
