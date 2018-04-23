@@ -20,13 +20,13 @@
 ///10us count or 25% duty cycle at 25kHz at 24MHz DCO frequency
 #define COUNT_25_25KHZ_24MHZ (uint32_t)240
 
-///100ms count at 1.5MHz DCO frequency divided by 8
+///100ms count at 1.5MHz DCO frequency divided by 4
 #define COUNT_100_1500KHZ (uint32_t)37500
 
 ///1ms count at 1.5MHz DCO frequency
-#define COUNT_1_1500KHZ (uint32_t)1500
+#define COUNT_1_1500KHZ (uint32_t)750
 
 ///2ms count at 1.5MHz DCO frequency
-#define COUNT_2_1500KHZ (uint32_t)3000
+#define COUNT_2_1500KHZ (uint32_t)1500
 
 #endif /* TIMER_H_ */
