@@ -14,8 +14,8 @@
 #define LCD_H_
 #include <stdint.h>
 #include "msp.h"
-#include "../Assgn2/delay.h"
-#include "../Assgn2/dco.h"
+#include "delay.h"
+#include "dco.h"
 #include "string.h"
 
 
