@@ -1,8 +1,10 @@
 #include "msp.h"
-
-
-/**
- * main.c
+/** \file main.c
+ * \brief Enables Timers
+ *
+ * \author Nick Mah
+ * \author Jason Zhou
+ *
  */
 void main(void)
 {
