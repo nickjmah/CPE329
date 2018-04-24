@@ -2,6 +2,8 @@
 #include "dco.h"
 #include "freq.h"
 #include "timer.h"
+#include "lcd.h"
+#include "keypad.h"
 /** \file main.c
  * \brief Enables Timers
  *
@@ -14,31 +16,19 @@
 
 #define FREQ FREQ_1500_KHZ
 
-volatile uint32_t timer_count = 0;
 
+volatile uint32_t timer_count = 0;
+volatile uint32_t stuff;
 void init(void)
 {
-//    P4->DIR |= BIT3;
-//    P4->SEL1&= ~BIT3;
-//    P4->SEL0|= BIT3;
-
     set_DCO(FREQ);
-    return;
-}
-#include "msp.h"
-
-int main(void) {
-    WDT_A->CTL = WDT_A_CTL_PW |             // Stop WDT
-            WDT_A_CTL_HOLD;
-
-    init();
-
-    // Configure GPIO
-    P1->DIR |= BIT0;
-    P1->OUT |= BIT0;
-    P2->DIR |= BIT2;
-    P2->OUT |= BIT2;
-
+    halfBitInit();
+    key_init();
+    // Configure keypad for interrupts
+    COL_STRUCT->IE |= COL_MASK; //enables interrupts
+    COL_STRUCT->IES &= ~COL_MASK; //set interrupt to trigger on rising edge
+    COL_STRUCT->IFG &= ~COL_MASK; //clear lingering flags
+    //Configure Timer for interrupts
     TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
     TIMER_A0->CCR[0] = COUNT_100_1500KHZ;
     TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CCIE; // TACCR1 interrupt enabled
@@ -50,12 +40,19 @@ int main(void) {
 
     // Ensures SLEEPONEXIT takes effect immediately
     __DSB();
-//#ifndef test
-//     Enable global interrupt
+    //     Enable global interrupt
     __enable_irq();
 
     NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);
-//#endif
+    NVIC->ISER[1] = 1 << ((PORT1_IRQn) & 31);//enabling port 1 interrupt
+    return;
+}
+#include "msp.h"
+
+int main(void) {
+    WDT_A->CTL = WDT_A_CTL_PW |             // Stop WDT
+            WDT_A_CTL_HOLD;
+    init();
     while (1)
     {
 //        __sleep();
@@ -66,6 +63,18 @@ int main(void) {
 
 // Timer A0 interrupt service routine
 
+void PORT1_IRQHandler(void)
+{
+    if (P1->IFG &PENIS)
+    {
+        P1->IFG &= ~PENIS;
+    }
+    if(P1->IFG & RICK)
+    {
+        P1->IFG&= ~RICK;
+    }
+    return;
+}
 void TA0_0_IRQHandler(void) {
     if(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG)
     {

@@ -1,8 +1,9 @@
-/*
- * timer.h
+/** \file timer.h
+ * \brief Contains macros used for various counter increments for Assignment 5
  *
- *  Created on: Apr 22, 2018
- *      Author: Jason Zhou
+ * \author Nick Mah
+ * \author Jason Zhou
+ *
  */
 
 #include <stdint.h>
@@ -24,9 +25,9 @@
 #define COUNT_100_1500KHZ (uint32_t)37500
 
 ///1ms count at 1.5MHz DCO frequency
-#define COUNT_1_1500KHZ (uint32_t)1500
+#define COUNT_1_1500KHZ (uint32_t)750
 
 ///2ms count at 1.5MHz DCO frequency
-#define COUNT_2_1500KHZ (uint32_t)3000
+#define COUNT_2_1500KHZ (uint32_t)1500
 
 #endif /* TIMER_H_ */
