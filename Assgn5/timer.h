@@ -30,4 +30,7 @@
 ///2ms count at 1.5MHz DCO frequency
 #define COUNT_2_1500KHZ (uint32_t)1500
 
+///1ms count at 12MHz
+#define COUNT_1MS_12MHZ (uint32_t)12000
+
 #endif /* TIMER_H_ */
