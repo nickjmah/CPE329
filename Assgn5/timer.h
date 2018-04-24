@@ -1,8 +1,9 @@
-/*
- * timer.h
+/** \file timer.h
+ * \brief Contains macros used for various counter increments for Assignment 5
  *
- *  Created on: Apr 22, 2018
- *      Author: Jason Zhou
+ * \author Nick Mah
+ * \author Jason Zhou
+ *
  */
 
 #include <stdint.h>
@@ -20,7 +21,7 @@
 ///10us count or 25% duty cycle at 25kHz at 24MHz DCO frequency
 #define COUNT_25_25KHZ_24MHZ (uint32_t)240
 
-///100ms count at 1.5MHz DCO frequency divided by 4
+///100ms count at 1.5MHz DCO frequency divided by 8
 #define COUNT_100_1500KHZ (uint32_t)37500
 
 ///1ms count at 1.5MHz DCO frequency
