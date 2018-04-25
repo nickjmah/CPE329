@@ -10,6 +10,8 @@
 
 #include <stdint.h>
 
+///System Frequency
+extern uint32_t sysFreq;
 ///frequency at 1500kHz
 #define FREQ_1500_KHZ (uint32_t)1500
 

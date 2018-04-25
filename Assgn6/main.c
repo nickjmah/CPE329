@@ -15,7 +15,7 @@
 
 
 #define FREQ FREQ_12000_KHZ
-
+uint32_t sysFreq = FREQ;
 enum mode
 {
     count,         /**< timing State */
