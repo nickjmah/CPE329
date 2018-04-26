@@ -4,9 +4,11 @@
  *  Created on: Apr 25, 2018
  *      Author: Nick
  */
+
 #include "spi.h"
 
-void initSpi(uint16_t baud){
+void initSpi0(uint16_t baud)
+{
     P1->SEL1 &= ~SPI_MASK;
     P1->SEL0 |= SPI_MASK;
 

@@ -20,6 +20,6 @@
 void initSpi0(uint16_t baud);
 uint32_t clockDivide(uint16_t baud);
 void EUSCI_B0_IRQHandler(void);
-void sendData()
+void sendData();
 
 #endif /* SPI_H_ */
