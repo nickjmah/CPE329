@@ -7,7 +7,7 @@
 
 #include "spi.h"
 
-void initSpi0(uint16_t baud)
+void initSpi(uint16_t baud)
 {
     P1->SEL1 &= ~SPI_MASK;
     P1->SEL0 |= SPI_MASK;

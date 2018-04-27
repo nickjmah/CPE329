@@ -17,7 +17,7 @@
 #define MISO BIT7
 #define SPI_MASK BIT5 | BIT6 | BIT7
 
-void initSpi0(uint16_t baud);
+void initSpi(uint16_t baud);
 uint32_t clockDivide(uint16_t baud);
 void EUSCI_B0_IRQHandler(void);
 void sendData();
