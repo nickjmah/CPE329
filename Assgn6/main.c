@@ -15,16 +15,16 @@
 
 
 #define FREQ FREQ_12000_KHZ
+
 uint32_t sysFreq = FREQ;///This should be a global variable
 uint16_t baud = 6000;//SPI frequency in units of KHz
-enum mode
-{
-    count,         /**< timing State */
-    wait        /**< wait State */
-};
-enum mode status=wait;
-volatile uint32_t timer_count = 0;
-volatile uint32_t result = 0;
+//enum mode
+//{
+//    low,         /**< timing State */
+//    high        /**< wait State */
+//};
+//enum mode status=wait;
+volatile uint8_t output=0;
 volatile uint32_t stuff;
 
 void init(void)
@@ -35,7 +35,17 @@ void init(void)
     // Ensures SLEEPONEXIT takes effect immediately
 //    __DSB();
     //     Enable global interrupt
-    __enable_irq();
+    TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
+    TIMER_A0->CCR[0] = COUNT_100_1500KHZ;
+    TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK | // SMCLK, continuous mode
+            TIMER_A_CTL_MC__CONTINUOUS;
+
+//    SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;    // Enable sleep on exit from ISR
+
+    // Ensures SLEEPONEXIT takes effect immediately
+//    __DSB();
+    NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);
+    __enable_irq();//TODO: check to see if NVIC can be set before this
 
     return;
 }
@@ -52,5 +62,16 @@ int main(void) {
                 __no_operation();
     }
 }
+void TA0_0_IRQHandler(void) {
+    if(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG)
+    {
+        TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
+        if(!output)
+            dacOut(DAC_MAX_VAL);
 
+        else
+            dacOut(DAC_MAX_VAL);
+        output ^= 1; //invert state
+        TIMER_A0->CCR[0] += COUNT_1MS_12MHZ;    // Add Offset to TACCR0
+    }
 

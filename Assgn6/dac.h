@@ -12,6 +12,7 @@
 #define GA BIT5                 //setting gain to 1
 #define SHDN BIT4               //not shutting down
 #define BUF 0                   //disabling buffer
+#define DAC_MAX_VAL 4096
 
 /** \brief This function takes in a 12-bit encoded voltage and sends sends a formatted
  * message over SPI
