@@ -7,6 +7,8 @@
 
 #include "spi.h"
 
+volatile uint8_t RXDATA;
+
 void initSpi(uint16_t baud)
 {
     P1->SEL1 &= ~SPI_MASK;
@@ -29,5 +31,26 @@ uint32_t clockDivide(uint16_t baud){
     return sysFreq / baud;
 }
 
+void sendData(uint8_t* data, size_t size){
+    for(int i = 0; i < size/sizeof(uint8_t); i++){
+        while(!(EUSCI_B0->IFG & EUSCI_B_IFG_TXIFG)){
+            EUSCI_B0->TXBUF = data[i];
+            break;
+        }
+    }
+}
 
+void EUSCI_B0_IRQHandler(void){
+    if(checkSPIReadFlag()){
+        RXDATA = EUSCI_B0->RXBUF;
+    }
+}
+
+uint8_t readData(void){
+    return RXDATA;
+}
+
+uint32_t checkSPIReadFlag(void){
+    return EUSCI_B0->IFG & EUSCI_B_IFG_RXIFG;
+}
 

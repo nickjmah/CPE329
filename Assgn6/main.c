@@ -16,7 +16,7 @@
 
 #define FREQ FREQ_12000_KHZ
 uint32_t sysFreq = FREQ;///This should be a global variable
-uint16_t baud = 1;//SPI frequency in units of KHz
+uint16_t baud = 6000;//SPI frequency in units of KHz
 enum mode
 {
     count,         /**< timing State */
