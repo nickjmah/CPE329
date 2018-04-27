@@ -39,7 +39,8 @@ void init(void)
     TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
     TIMER_A0->CCR[0] = COUNT_20MS_12MHZ;    //TODO: this is too big of a number:(add in a prescaler
     TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK | // SMCLK, continuous mode
-            TIMER_A_CTL_MC__CONTINUOUS;
+            TIMER_A_CTL_MC__CONTINUOUS |
+            TIMER_A_CTL_ID__4;
 
 //    SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;    // Enable sleep on exit from ISR
 
@@ -69,9 +70,8 @@ void TA0_0_IRQHandler(void) {
         TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
         if(!output)
             dacOut(DAC_MAX_VAL);
-
         else
-            dacOut(DAC_MAX_VAL);
+            dacOut(DAC_MIN_VAL);
         output ^= 1; //invert state
         TIMER_A0->CCR[0] += COUNT_20MS_12MHZ;   //TODO:Change this to the correct offset // Add Offset to TACCR0
     }

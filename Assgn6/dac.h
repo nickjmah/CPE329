@@ -9,10 +9,11 @@
 #ifndef DAC_H_
 #define DAC_H_
 
-#define GA BIT5                 //setting gain to 1
-#define SHDN BIT4               //not shutting down
+#define GA BITD                 //setting gain to 1
+#define SHDN BITC               //not shutting down
 #define BUF 0                   //disabling buffer
-#define DAC_MAX_VAL 4096
+#define DAC_MAX_VAL 4095
+#define DAC_MIN_VAL 0
 
 /** \brief This function takes in a 12-bit encoded voltage and sends sends a formatted
  * message over SPI
