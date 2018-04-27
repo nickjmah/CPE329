@@ -20,6 +20,7 @@
 void initSpi(uint16_t baud);
 uint32_t clockDivide(uint16_t baud);
 void EUSCI_B0_IRQHandler(void);
-void sendData();
-
+uint32_t checkSPIReadFlag(void);
+uint8_t readData(void);
+void sendData(uint8_t* data, size_t size);//find array len through size/sizeof(*data)
 #endif /* SPI_H_ */
