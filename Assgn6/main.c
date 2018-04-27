@@ -69,7 +69,7 @@ void TA0_0_IRQHandler(void) {
     {
         TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
         if(!output)
-            dacOut(DAC_MAX_VAL);
+            dacOut(voltageOut(0.1));
         else
             dacOut(DAC_MIN_VAL);
         output ^= 1; //invert state
