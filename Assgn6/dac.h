@@ -1,4 +1,4 @@
-/*
+/**\file
  * dac.h
  *
  *  Created on: Apr 25, 2018
