@@ -6,6 +6,7 @@
  */
 
 #include "stdint.h"
+#include "stddef.h"
 #include "msp.h"
 #include "freq.h"
 #ifndef SPI_H_
@@ -21,6 +22,6 @@ void initSpi(uint16_t baud);
 uint32_t clockDivide(uint16_t baud);
 void EUSCI_B0_IRQHandler(void);
 uint32_t checkSPIReadFlag(void);
-uint8_t readData(void);
+uint8_t readSPI(void);
 void sendData(uint8_t* data, size_t size);//find array len through size/sizeof(*data)
 #endif /* SPI_H_ */

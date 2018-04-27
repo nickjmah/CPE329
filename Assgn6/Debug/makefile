@@ -10,6 +10,7 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
+"./dac.obj" \
 "./dco.obj" \
 "./delay.obj" \
 "./interrupt.obj" \
@@ -17,6 +18,7 @@ ORDERED_OBJS += \
 "./lcd.obj" \
 "./main.obj" \
 "./msp432p401x_ta0_01.obj" \
+"./spi.obj" \
 "./startup_msp432p401r_ccs.obj" \
 "./system_msp432p401r.obj" \
 "../msp432p401r.cmd" \
@@ -162,8 +164,8 @@ Assgn6.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "dco.obj" "delay.obj" "interrupt.obj" "keypad.obj" "lcd.obj" "main.obj" "msp432p401x_ta0_01.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" 
-	-$(RM) "dco.d" "delay.d" "interrupt.d" "keypad.d" "lcd.d" "main.d" "msp432p401x_ta0_01.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" 
+	-$(RM) "dac.obj" "dco.obj" "delay.obj" "interrupt.obj" "keypad.obj" "lcd.obj" "main.obj" "msp432p401x_ta0_01.obj" "spi.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" 
+	-$(RM) "dac.d" "dco.d" "delay.d" "interrupt.d" "keypad.d" "lcd.d" "main.d" "msp432p401x_ta0_01.d" "spi.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

@@ -32,7 +32,8 @@ uint32_t clockDivide(uint16_t baud){
 }
 
 void sendData(uint8_t* data, size_t size){
-    for(int i = 0; i < size/sizeof(uint8_t); i++){
+    int i=0;
+    for(i = 0; i < size/sizeof(uint8_t); i++){
         while(!(EUSCI_B0->IFG & EUSCI_B_IFG_TXIFG)){
             EUSCI_B0->TXBUF = data[i];
             break;
@@ -46,7 +47,7 @@ void EUSCI_B0_IRQHandler(void){
     }
 }
 
-uint8_t readData(void){
+uint8_t readSPI(void){
     return RXDATA;
 }
 
