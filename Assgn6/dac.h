@@ -18,6 +18,10 @@
  *
  *  This function takes in a 12-bit number representing a voltage from 0 to 3.3V.
  *  The function mapping the 12-bit number to voltage is as follows:
+ *  \f$ V_{out} = \frac{(V_{ref}\times D_n)}{2^n}*G\f$
+ *  Where:
+ *  \f$G=1\f$ and
+ *  \f$V_{ref}=3.3V\f$
  *
  *
  *  \param voltage A 12-bit number encoded encoding a voltage
@@ -25,5 +29,4 @@
  *
  */
 void dacOut(uint16_t voltage);
-
 #endif /* DAC_H_ */
