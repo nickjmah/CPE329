@@ -90,10 +90,9 @@ void TA0_0_IRQHandler(void) {
     //    __DSB();
         //     Enable global interrupt
         TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
-        TIMER_A0->CCR[0] = COUNT_1MS_12MHZ;
+        TIMER_A0->CCR[0] = COUNT_10MS_12MHZ;
         TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK | // SMCLK, continuous mode
-                TIMER_A_CTL_MC__CONTINUOUS |
-                TIMER_A_CTL_ID__4;
+                TIMER_A_CTL_MC__CONTINOUS;
 
     //    SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;    // Enable sleep on exit from ISR
 
@@ -110,6 +109,7 @@ void TA0_0_IRQHandler(void) {
         WDT_A->CTL = WDT_A_CTL_PW |             // Stop WDT
                 WDT_A_CTL_HOLD;
         init();
+        uint16_t tmp;
         while (1)
         {
             if(writeDac)
@@ -117,22 +117,16 @@ void TA0_0_IRQHandler(void) {
                 if(status == add)
                 {
                     if(dacVal >= DAC_2V - (COUNT_1MS_12MHZ * DAC_2V) / COUNT_10MS_12MHZ)
-                    {
                         dacVal = (DAC_2V-(COUNT_1MS_12MHZ * DAC_2V) / COUNT_10MS_12MHZ) + dacVal - DAC_2V;
                         status = subtract;
-                    }
                     else
-                    {
                         dacVal += (COUNT_1MS_12MHZ * DAC_2V) / COUNT_10MS_12MHZ;
-                    }
                 }
                 else
                 {
                     if(dacVal <= (COUNT_1MS_12MHZ * DAC_2V) / COUNT_10MS_12MHZ)
-                    {
                         dacVal = (COUNT_1MS_12MHZ * DAC_2V) / COUNT_10MS_12MHZ - dacVal;
                         status = add;
-                    }
                     else
                         dacVal -= (COUNT_1MS_12MHZ * DAC_2V) / COUNT_10MS_12MHZ;
                 }
@@ -145,8 +139,7 @@ void TA0_0_IRQHandler(void) {
     }
     void TA0_0_IRQHandler(void) {
         if(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG)
-        {
-            TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
+            TIMER_A0->CCTL[0] &= TIMER_A_CCTLN_CCIFG;
             writeDac=1;
             TIMER_A0->CCR[0] += COUNT_1MS_12MHZ;
         }

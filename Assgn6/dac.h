@@ -14,7 +14,6 @@
 #define BUF 0                   //disabling buffer
 #define DAC_MAX_VAL 4095
 #define DAC_MIN_VAL 0
-#define DAC_2V 2482
 
 /** \brief This function takes in a 12-bit encoded voltage and sends sends a formatted
  * message over SPI
