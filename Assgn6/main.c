@@ -212,3 +212,4 @@ void TA0_0_IRQHandler(void) {
         }
     }
 #endif
+>>>>>>> refs/remotes/origin/master
