@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "msp.h"
 #include "dco.h"
 #include "freq.h"
@@ -69,12 +70,12 @@ void TA0_0_IRQHandler(void) {
     {
         TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
         if(!output)
-            dacOut(DAC_MAX_VAL);
+            dacOut(voltageOut(0.1));
         else
             dacOut(DAC_MIN_VAL);
         output ^= 1; //invert state
-        TIMER_A0->CCR[0] += COUNT_10MS_12MHZ;
-    }
+        TIMER_A0->CCR[0] += COUNT_20MS_12MHZ;   //TODO:Change this to the correct offset // Add Offset to TACCR0
+        }
     return;
 }
 #endif

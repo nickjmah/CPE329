@@ -15,5 +15,9 @@ void dacOut(uint16_t voltage)
     return;
 }
 
+uint16_t voltageOut(float desiredV)
+{
+    return desiredV * 4095 / 3.3;
+}
 
 
