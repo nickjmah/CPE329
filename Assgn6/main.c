@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include "msp.h"
 #include "dco.h"
 #include "freq.h"
@@ -79,7 +78,7 @@ void TA0_0_IRQHandler(void) {
     return;
 }
 #endif
-#if 1 ///This is the code for the triangle wave that sucks
+//#if 1 ///This is the code for the triangle wave that sucks
     uint8_t writeDac = 0; //says when to write to dac
     uint16_t dacVal;
     void init(void)
@@ -156,7 +155,7 @@ void TA0_0_IRQHandler(void) {
                 TIMER_A0->CCR[1] += COUNT_1MS_12MHZ;
         }
     }
-#endif
+//#endif
 
 #if 0//this is the better version that might not work
     uint8_t writeDac = 0; //says when to write to dac
