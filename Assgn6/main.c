@@ -7,7 +7,7 @@
 #include "spi.h"
 #include "dac.h"
 /** \file main.c
- * \brief Enables Timers
+ * \brief DAC demo
  *
  * \author Nick Mah
  * \author Jason Zhou
@@ -16,25 +16,24 @@
 
 
 #define FREQ FREQ_12000_KHZ
-
-uint32_t sysFreq = FREQ;///This should be a global variable
+#define TRIANGLE_WAVE //enable this for the triangle wave
+//#define SQUARE_WAVE //enable this for the square wave
+uint32_t sysFreq = FREQ;///This should be a global variable that represents frequency that can be used anywhere
 uint16_t baud = 6000;//SPI frequency in units of KHz
 enum mode
 {
-    add,         /**< timing State */
-    subtract        /**< wait State */
+    add,         /**< Represents op counting state */
+    subtract        /**< Represents down counting state */
 };
 enum mode status=add;
 volatile uint8_t output=0;
-volatile uint32_t stuff;
-#if 0
+
+#ifdef SQUARE_WAVE
 void init(void)
 {
     set_DCO(FREQ);
     initSpi(baud);
 
-    // Ensures SLEEPONEXIT takes effect immediately
-//    __DSB();
     //     Enable global interrupt
     TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
     TIMER_A0->CCR[0] = COUNT_20MS_12MHZ;
@@ -42,12 +41,8 @@ void init(void)
             TIMER_A_CTL_MC__CONTINUOUS |
             TIMER_A_CTL_ID__4;
 
-//    SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;    // Enable sleep on exit from ISR
-
-    // Ensures SLEEPONEXIT takes effect immediately
-//    __DSB();
     NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);
-    __enable_irq();//TODO: check to see if NVIC can be set before this
+    __enable_irq();
 
     return;
 }
@@ -69,35 +64,31 @@ void TA0_0_IRQHandler(void) {
     {
         TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
         if(!output)
-            dacOut(voltageOut(0.1));
+            dacOut(DAC_2V);
         else
             dacOut(DAC_MIN_VAL);
         output ^= 1; //invert state
-        TIMER_A0->CCR[0] += COUNT_20MS_12MHZ;   //TODO:Change this to the correct offset // Add Offset to TACCR0
+        TIMER_A0->CCR[0] += COUNT_10MS_12MHZ;// Add Offset to TACCR0
         }
     return;
 }
 #endif
-//#if 1 ///This is the code for the triangle wave that sucks
+
+
+#ifdef TRIANGLE_WAVE
     uint8_t writeDac = 0; //says when to write to dac
-    uint16_t dacVal;
+    uint16_t dacVal; //value to write to the dac
     void init(void)
     {
         set_DCO(FREQ);
-        initSpi(baud);
+        initSpi(baud); //initalize spi
 
-        // Ensures SLEEPONEXIT takes effect immediately
-    //    __DSB();
         //     Enable global interrupt
         TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
-        TIMER_A0->CCR[0] = COUNT_1MS_12MHZ;
+        TIMER_A0->CCR[0] = COUNT_50US_12MHZ;
         TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK | // SMCLK, continuous mode
                 TIMER_A_CTL_MC__CONTINUOUS;
 
-    //    SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;    // Enable sleep on exit from ISR
-
-        // Ensures SLEEPONEXIT takes effect immediately
-    //    __DSB();
         NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);
         __enable_irq();
 
@@ -111,35 +102,41 @@ void TA0_0_IRQHandler(void) {
         init();
         while (1)
         {
-            if(writeDac)
+            if(writeDac) //only write to dac after some time
             {
                 if(status == add)
                 {
-                    if(dacVal >= DAC_2V - (COUNT_1MS_12MHZ * DAC_2V) / COUNT_10MS_12MHZ)
+                    //checks to see if the dac increment will go above the allowed value
+                    if(dacVal >= DAC_2V - (COUNT_50US_12MHZ * DAC_2V) / COUNT_10MS_12MHZ)
                     {
-                        dacVal = (DAC_2V-(COUNT_1MS_12MHZ * DAC_2V) / COUNT_10MS_12MHZ) + dacVal - DAC_2V;
+                        //if it goes above the allowed value, start subtracting
+                        dacVal = (DAC_2V-(COUNT_50US_12MHZ * DAC_2V) / COUNT_10MS_12MHZ) + dacVal - DAC_2V;
                         status = subtract;
                     }
                     else
                     {
-                        dacVal += (COUNT_1MS_12MHZ * DAC_2V) / COUNT_10MS_12MHZ;
+                        //otherwise, increment at the slope to get 2Vpp 20ms period
+                        dacVal += (COUNT_50US_12MHZ * DAC_2V) / COUNT_10MS_12MHZ;
                     }
                 }
                 else
                 {
-                    if(dacVal <= (COUNT_1MS_12MHZ * DAC_2V) / COUNT_10MS_12MHZ)
+                    //checks to see if decrementing dac will go negative
+                    if(dacVal <= (COUNT_50US_12MHZ * DAC_2V) / COUNT_10MS_12MHZ)
                     {
-                        dacVal = (COUNT_1MS_12MHZ * DAC_2V) / COUNT_10MS_12MHZ - dacVal;
+                        //if it goes below, start adding from zero
+                        dacVal = (COUNT_50US_12MHZ * DAC_2V) / COUNT_10MS_12MHZ - dacVal;
                         status = add;
                     }
                     else
-                        dacVal -= (COUNT_1MS_12MHZ * DAC_2V) / COUNT_10MS_12MHZ;
+                        //otherwise, keep subtracting
+                        dacVal -= (COUNT_50US_12MHZ * DAC_2V) / COUNT_10MS_12MHZ;
                 }
+                //keep writing to dac
                 dacOut(dacVal);
                 writeDac=0;
             }
 
-            //add something to sleep
         }
     }
     void TA0_0_IRQHandler(void) {
@@ -147,10 +144,10 @@ void TA0_0_IRQHandler(void) {
         {
             TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
             writeDac=1;
-            TIMER_A0->CCR[0] += COUNT_1MS_12MHZ;
+            TIMER_A0->CCR[0] += COUNT_50US_12MHZ;
         }
     }
-//#endif
+#endif
 
 #if 0//this is the better version that might not work
     uint8_t writeDac = 0; //says when to write to dac
@@ -166,7 +163,7 @@ void TA0_0_IRQHandler(void) {
         TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
         TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CCIE; //TACCR1 interrupt enable
         TIMER_A0->CCR[0] = COUNT_10MS_12MHZ;
-        TIMER_A0->CCR[1] = COUNT_1MS_12MHZ;
+        TIMER_A0->CCR[1] = COUNT_50US_12MHZ;
         TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK | // SMCLK, continuous mode
                 TIMER_A_CTL_MC__UPDOWN;
 
@@ -211,10 +208,10 @@ void TA0_0_IRQHandler(void) {
 
             writeDac=1;
 
-            if(TIMER_A0->CCR[1] >=COUNT_10MS_12MHZ-COUNT_1MS_12MHZ)
-                TIMER_A0->CCR[1] = COUNT_10MS_12MHZ - TIMER_A0->CCR[1] + COUNT_1MS_12MHZ;
+            if(TIMER_A0->CCR[1] >=COUNT_10MS_12MHZ-COUNT_50US_12MHZ)
+                TIMER_A0->CCR[1] = COUNT_10MS_12MHZ - TIMER_A0->CCR[1] + COUNT_50US_12MHZ;
             else
-                TIMER_A0->CCR[1] += COUNT_1MS_12MHZ;
+                TIMER_A0->CCR[1] += COUNT_50US_12MHZ;
         }
     }
 #endif
