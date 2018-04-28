@@ -90,18 +90,16 @@ void TA0_0_IRQHandler(void) {
     //    __DSB();
         //     Enable global interrupt
         TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
-        TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CCIE; //TACCR1 interrupt enable
         TIMER_A0->CCR[0] = COUNT_10MS_12MHZ;
-        TIMER_A0->CCR[1] = COUNT_1MS_12MHZ;
         TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK | // SMCLK, continuous mode
-                TIMER_A_CTL_MC__UP;
+                TIMER_A_CTL_MC__CONTINOUS;
 
     //    SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;    // Enable sleep on exit from ISR
 
         // Ensures SLEEPONEXIT takes effect immediately
     //    __DSB();
         NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);
-        __enable_irq();//TODO:
+        __enable_irq();
 
         return;
     }
@@ -115,7 +113,7 @@ void TA0_0_IRQHandler(void) {
         while (1)
         {
             if(writeDac)
-            {//28+6 = 26
+            {
                 if(status == add)
                 {
                     if(dacVal >= DAC_2V - (COUNT_1MS_12MHZ * DAC_2V) / COUNT_10MS_12MHZ)
@@ -141,18 +139,9 @@ void TA0_0_IRQHandler(void) {
     }
     void TA0_0_IRQHandler(void) {
         if(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG)
-        {
-            TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
-            TIMER_A0->CCR[0] = COUNT_10MS_12MHZ;
-        }
-        if(TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG)
-        {
-            TIMER_A0->CCTL[1] &= TIMER_A_CCTLN_CCIFG;
+            TIMER_A0->CCTL[0] &= TIMER_A_CCTLN_CCIFG;
             writeDac=1;
-            if(TIMER_A0->CCR[1] >=COUNT_10MS_12MHZ-COUNT_1MS_12MHZ)
-                TIMER_A0->CCR[1] = COUNT_10MS_12MHZ - TIMER_A0->CCR[1] + COUNT_1MS_12MHZ;
-            else
-                TIMER_A0->CCR[1] += COUNT_1MS_12MHZ;
+            TIMER_A0->CCR[0] += COUNT_1MS_12MHZ;
         }
     }
 //#endif
