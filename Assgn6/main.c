@@ -18,7 +18,8 @@
 #define FREQ FREQ_12000_KHZ
 #define TRIANGLE_WAVE //enable this for the triangle wave
 //#define SQUARE_WAVE //enable this for the square wave
-uint32_t sysFreq = FREQ;///This should be a global variable that represents frequency that can be used anywhere
+uint32_t sysFreq = FREQ;///This should be a global variable that represents frequency
+                          //that can be used anywhere
 uint16_t baud = 6000;//SPI frequency in units of KHz
 enum mode
 {
@@ -110,7 +111,8 @@ void TA0_0_IRQHandler(void) {
                     if(dacVal >= DAC_2V - (COUNT_50US_12MHZ * DAC_2V) / COUNT_10MS_12MHZ)
                     {
                         //if it goes above the allowed value, start subtracting
-                        dacVal = (DAC_2V-(COUNT_50US_12MHZ * DAC_2V) / COUNT_10MS_12MHZ) + dacVal - DAC_2V;
+                        dacVal = (DAC_2V-(COUNT_50US_12MHZ * DAC_2V) / COUNT_10MS_12MHZ) +
+                                dacVal - DAC_2V;
                         status = subtract;
                     }
                     else
@@ -202,7 +204,7 @@ void TA0_0_IRQHandler(void) {
         }
         if(TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG)
         {
-            dacVal = (TIMER_A0->R * DAC_2V) / COUNT_10MS_12MHZ // this may or may not overflow
+            dacVal = (TIMER_A0->R * DAC_2V) / COUNT_10MS_12MHZ
             TIMER_A0->CCTL[0] &= TIMER_A_CCTLN_CCIFG; //reading TIMER_A0-> may cause an interrupt to occur instantly. Need to test this
             TIMER_A0->CCTL[1] &= TIMER_A_CCTLN_CCIFG;
 
