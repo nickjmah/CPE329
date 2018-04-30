@@ -3,6 +3,11 @@
  */
 #include "msp.h"
 #include <math.h>
+//#define var_type int8_t //should make it easier to test this out
+//#define var_type int32_t
+//#define var_type int64_t
+//#define var_type float
+#define var_type double
 var_type TestFunction(var_type num);
 int main(void)
 {
@@ -21,8 +26,7 @@ int main(void)
     //set P2.0-2.2 as output pins
     P2->OUT |= (BIT2 | BIT1 | BIT0);
     // turn on RGB LED
-    mainVar = T
-    estFunction(15);
+    mainVar = TestFunction(15);
     // test function for timing
     P2->OUT &= ~(BIT2 | BIT1 | BIT0);
     // turn off RGB LED
@@ -36,8 +40,8 @@ var_type TestFunction(var_type num)
     var_type testVar;
     P1->OUT |= BIT0;
     // set P1.0 LED on
-    {
-    insert_function_here (ie testVar = num;)}
+    //{insert_function_here (ie testVar = num;)}
+    testVar = abs(num);
     P1->OUT &= ~BIT0;
     // set P1.0 LED off
     return testVar;
