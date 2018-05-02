@@ -17,7 +17,7 @@ void initSpi(uint16_t baud)
     CS_STRUCT->OUT |= CS0; //setting chip select high
 
     EUSCI_B0->CTLW0 |= EUSCI_B_CTLW0_SWRST;     //reset universal serial
-                                                //commmunication interface
+                                                //communication interface
     EUSCI_B0->CTLW0 = EUSCI_B_CTLW0_SWRST|
                       EUSCI_B_CTLW0_MST|        //set MSP as master
                       EUSCI_B_CTLW0_SYNC|       //enable synchronous communication
