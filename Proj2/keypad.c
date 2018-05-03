@@ -17,9 +17,16 @@ void key_init(){
     COL_STRUCT->DIR &= ~(COL_MASK);     //set columns to inputs
     COL_STRUCT->REN |= COL_MASK;        //enable pull-x circuitry to columns
     COL_STRUCT->OUT &= ~(COL_MASK);     //set columns as pull-downs
+    //enabling interrupts on all columns
+    COL_STRUCT->IE |= COL_MASK;
+    COL_STRUCT->IES &= ~COL_MASK;
+    COL_STRUCT->IFG &= ~COL_MASK;
     //initializing rows as outputs
     ROW_STRUCT->DIR |= ROW_MASK;     //set rows as outputs
     ROW_STRUCT->OUT &= ~(ROW_MASK);  //set all rows as 0
+    ///Not enabling NVIC because just checking the flags in a if statement
+
+
 }
 
 uint8_t checkRow(uint8_t row){
@@ -35,11 +42,13 @@ uint16_t checkKP(){
     //checks all of the rows and bit shifts them into a 16 bit number
     int i; //init iterator for the for loop
     uint16_t result=0; //init final result
+    ROW_STRUCT->OUT &= ~ROW_MASK; //setting all rows high
     for(i=0; i<4; i++){//define for loop used to check all of the rows
         result |= checkRow(R0<<i);//checks row at iterator
         result = result << 3;
                         //bit shifts the number over by the amount of columns(3)
     }
+    ROW_STRUCT->OUT |= ROW_MASK;//setting all rows high for key interrupt
     result = result >> 3;//counteracting the last shift
     return result; //returns final result
 }
