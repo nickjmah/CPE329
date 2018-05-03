@@ -42,7 +42,7 @@ void sawtooth(uint16_t minVal, uint16_t maxVal)
 
 void sine(uint16_t minVal, uint16_t maxVal)
 {
-
+    dacOut(sinUpdate(masterCount));
 }
 
 void main(void)

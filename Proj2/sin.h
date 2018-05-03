@@ -7,6 +7,7 @@
 #include "stdint.h"
 #ifndef SIN_H_
 #define SIN_H_
+#define SINEPOINTS 1600
 
 uint16_t sinUpate(uint16_t time);
 
