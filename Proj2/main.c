@@ -23,6 +23,7 @@
 
 uint32_t masterCount = 0;
 uint16_t dutyCycle;
+uint8_t timerFlag=0;
 extern uint32_t sysFreq=FREQ_48000_KHZ;
 
 void init(void)
@@ -100,7 +101,8 @@ void main(void)
             }
         }
         masterCount += incAmt;
-        while(timerFlag);//wait to synchronize DAC
+        while(!timerFlag);//wait to synchronize DAC
+        timerFlag = 0;
     }
 }
 
@@ -108,6 +110,7 @@ void TA0_0_IRQHandler(void) {
     if(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG)
     {
         TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
+        timerFlag = 1;
         TIMER_A0->CCR[0] += COUNT_50US_12MHZ;
     }
 }
