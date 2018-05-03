@@ -9,7 +9,7 @@
 #define SIN_H_
 #define SINEPOINTS 1600
 
-uint16_t sinUpate(uint16_t time);
+uint16_t sinUpdate(uint16_t time);
 
 
 #endif /* SIN_H_ */
