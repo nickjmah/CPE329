@@ -49,7 +49,7 @@ void square(uint16_t minVal, uint16_t maxVal)
     if(masterCount == 0){
         dacOut(maxVal);
     }
-    else if(masterCount == dutyCycle){
+    else if(masterCount >= dutyCycle){
         dacOut(minVal);
     }
 }
