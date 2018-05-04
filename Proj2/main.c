@@ -20,8 +20,8 @@
 #define HALF_MAX_COUNT MAXMASTERCOUNT / 2
 #define CCR_INCR 450
 #define HALF_DUTY_CYCLE (MAXMASTERCOUNT + 1)/ 2
-#define TEN_PERCENT_DUTY_CYCLE (MAXMASTERCOUNT + 1) / 10
-#define MAX_DUTY_CYCLE (MAXMASTERCOUNT + 1) - TEN_PERCENT_DUTY_CYCLE
+#define TEN_PERCENT_DUTY_CYCLE (MAXMASTERCOUNT) / 10 + 1
+#define MAX_DUTY_CYCLE (MAXMASTERCOUNT) - TEN_PERCENT_DUTY_CYCLE
 #define MIN_DUTY_CYCLE TEN_PERCENT_DUTY_CYCLE
 #define BAUD 16000
 
@@ -66,8 +66,9 @@ void sine(uint16_t masterCount, uint16_t dutyCycle, uint16_t minVal, uint16_t ma
 void triangle(uint16_t masterCount, uint16_t dutyCycle, uint16_t minVal, uint16_t maxVal, uint8_t incr)
 {
     if(masterCount <= HALF_MAX_COUNT)
-        dacOut(maxVal * masterCount / HALF_MAX_COUNT);
-    dacOut(MAXMASTERCOUNT - maxVal*masterCount / HALF_MAX_COUNT);
+        dacOut(2*maxVal * masterCount / MAXMASTERCOUNT);
+    else
+        dacOut(2*maxVal*(MAXMASTERCOUNT - masterCount) / MAXMASTERCOUNT);
 }
 
 void main(void)
@@ -79,7 +80,10 @@ void main(void)
     uint8_t incAmt=1; //represents the scaler to set frequency for the output waveform
     uint32_t masterCount = 500;
     uint16_t dutyCycle = HALF_DUTY_CYCLE;
+    uint16_t max_duty = MAX_DUTY_CYCLE;
     init();
+    P1->DIR |= BIT0;
+    P1->OUT &= ~BIT0;
     while(1)
     {
         (*wavePtrArr[functionIndex])(masterCount, dutyCycle, DAC_MIN_VAL,DAC_MAX_VAL, incAmt);
@@ -103,6 +107,7 @@ void main(void)
                 case FIVE   :   incAmt=5;
                                 break;
                 case SIX    :   functionIndex = TRIANGLE;
+                                P1->OUT |= BIT0;
                                 break;
                 case SEVEN  :   functionIndex = SQUARE;
                                 break;
@@ -127,6 +132,7 @@ void main(void)
             masterCount = 0;
         while(!timerFlag);//wait to synchronize DAC
         timerFlag = 0;
+        P1->OUT &= ~BIT0;
     }
 }
 
