@@ -14,8 +14,10 @@
 #define SQUARE 0
 #define SAWTOOTH 1
 #define SINE 2
+#define TRIANGLE 3
 #define KHZ_PER_100HZ 10
 #define MAXMASTERCOUNT (uint16_t)(FREQ_48000_KHZ*KHZ_PER_100HZ/CCR_INCR)
+#define HALF_MAX_COUNT MAXMASTERCOUNT / 2
 #define CCR_INCR 450
 #define HALF_DUTY_CYCLE (MAXMASTERCOUNT + 1)/ 2
 #define TEN_PERCENT_DUTY_CYCLE (MAXMASTERCOUNT + 1) / 10
@@ -61,10 +63,17 @@ void sine(uint16_t masterCount, uint16_t dutyCycle, uint16_t minVal, uint16_t ma
     dacOut(sinUpdate(masterCount));
 }
 
+void triangle(uint16_t masterCount, uint16_t dutyCycle, uint16_t minVal, uint16_t maxVal, uint8_t incr)
+{
+    if(masterCount <= HALF_MAX_COUNT)
+        dacOut(maxVal * masterCount / HALF_MAX_COUNT);
+    dacOut(MAXMASTERCOUNT - maxVal*masterCount / HALF_MAX_COUNT);
+}
+
 void main(void)
 {
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
-	void(*wavePtrArr[])(uint16_t, uint16_t, uint16_t, uint16_t, uint8_t) = {square, sawtooth, sine};
+	void(*wavePtrArr[])(uint16_t, uint16_t, uint16_t, uint16_t, uint8_t) = {square, sawtooth, sine, triangle};
     uint8_t functionIndex = SAWTOOTH;
     uint16_t keyPressed=0;
     uint8_t incAmt=1; //represents the scaler to set frequency for the output waveform
@@ -93,7 +102,8 @@ void main(void)
                                 break;
                 case FIVE   :   incAmt=5;
                                 break;
-                case SIX    :   break;
+                case SIX    :   functionIndex = TRIANGLE;
+                                break;
                 case SEVEN  :   functionIndex = SQUARE;
                                 break;
                 case EIGHT  :   functionIndex = SINE;
