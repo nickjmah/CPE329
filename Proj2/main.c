@@ -26,7 +26,7 @@ uint32_t masterCount = 0;
 uint16_t dutyCycle = HALF_DUTY_CYCLE;
 uint8_t timerFlag=0;
 uint8_t port4Flag = 0;
-extern uint32_t sysFreq=FREQ_48000_KHZ;
+extern uint32_t sysFreq=FREQ_3000_KHZ;
 
 void init(void)
 {
@@ -40,7 +40,7 @@ void init(void)
                     TIMER_A_CTL_MC__CONTINUOUS; //TODO:check for prescaler
     NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);
 //    NVIC->ISER[1] = 1 << ((PORT4_IRQn) & 31);//enabling port 1 interrupt
-    COL_STRUCT->IFG &= ~COL_MASK;
+    P4->IFG &= ~(C0|C1|C2);
     __enable_irq();
     return;
 }
@@ -81,8 +81,11 @@ void main(void)
 //        if(port4Flag)
         {
 //            port4Flag = 0;
-            P4->IFG &= ~(C0|C1|C2);
+            P2->OUT &= ~(R0|R1|R2|R3); //setting all rows low
+            delay_us(200, sysFreq);
             keyPressed = checkKP();
+
+            P4->IFG &= ~(C0|C1|C2);
             switch(keyPressed){
                 case ONE    :   incAmt=1;
                                 break;
@@ -109,8 +112,12 @@ void main(void)
                 case POUND  :   if(dutyCycle < MAX_DUTY_CYCLE) //increment if less than 90%
                                 dutyCycle += TEN_PERCENT_DUTY_CYCLE;
                                 break;
-                default     :   break;//do nothing otherwise
+                default     :   P1->OUT |= BIT0;
+                                delay_ms(1, sysFreq);
+                                break;//do nothing otherwise
+
             }
+            P1->OUT &= ~BIT0;
         }
         masterCount += incAmt;
         if(masterCount >= 1600)

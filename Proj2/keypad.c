@@ -14,16 +14,16 @@
 
 void key_init(){
     //initializing columns as pull ups
-    COL_STRUCT->DIR &= ~(COL_MASK);     //set columns to inputs
-    COL_STRUCT->REN |= COL_MASK;        //enable pull-x circuitry to columns
-    COL_STRUCT->OUT &= ~(COL_MASK);     //set columns as pull-downs
+    P4->DIR &= ~((C0|C1|C2));     //set columns to inputs
+    P4->REN |= (C0|C1|C2);        //enable pull-x circuitry to columns
+    P4->OUT &= ~((C0|C1|C2));     //set columns as pull-downs
     //initializing rows as outputs
-    ROW_STRUCT->DIR |= ROW_MASK;     //set rows as outputs
-    ROW_STRUCT->OUT |= (ROW_MASK);  //set all rows as 0
+    P2->DIR |= (R0|R1|R2|R3);     //set rows as outputs
+    P2->OUT |= ((R0|R1|R2|R3));  //set all rows as 0
     //enabling interrupts on all columns
-    COL_STRUCT->IE |= COL_MASK;
-    COL_STRUCT->IES &= ~COL_MASK;
-    COL_STRUCT->IFG &= ~COL_MASK;
+    P4->IE |= (C0|C1|C2);
+    P4->IES &= ~(C0|C1|C2);
+    P4->IFG &= ~(C0|C1|C2);
     ///Not enabling NVIC because just checking the flags in a if statement
 
 
@@ -31,16 +31,15 @@ void key_init(){
 
 uint8_t checkRow(uint8_t row){
     //check all columns of a single row
-    ROW_STRUCT->OUT |= row;//enable the selected row
-    uint8_t col = COL_STRUCT->IN;//read all of the columns
-    col &= (COL_MASK);//clear everything but the columns of interest
-    ROW_STRUCT->OUT &= ~row;//turn off row
+    P2->OUT |= row;//enable the selected row
+    uint8_t col = P4->IN;//read all of the columns
+    col &= ((C0|C1|C2));//clear everything but the columns of interest
+    P2->OUT &= ~(R0|R1|R2|R3);//turn off row
     return col; //returns column results in row
 }
 
 uint16_t checkKP(){
     //checks all of the rows and bit shifts them into a 16 bit number
-    ROW_STRUCT->OUT &= ~ROW_MASK; //setting all rows low
     int i; //init iterator for the for loop
     uint16_t result=0; //init final result
     for(i=0; i<4; i++){//define for loop used to check all of the rows
@@ -49,7 +48,7 @@ uint16_t checkKP(){
                         //bit shifts the number over by the amount of columns(3)
     }
     result = result >> 3;//counteracting the last shift
-    ROW_STRUCT->OUT |= R0|R1|R2|R3;//setting all rows high for key interrupt
+    P2->OUT |= (R0|R1|R2|R3);//setting all rows high for key interrupt
     return result; //returns final result
 }
 
