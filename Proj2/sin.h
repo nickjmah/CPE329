@@ -7,7 +7,7 @@
 #include "stdint.h"
 #ifndef SIN_H_
 #define SIN_H_
-#define SINEPOINTS 1600
+#define SINEPOINTS 1067
 
 uint16_t sinUpdate(uint16_t time);
 

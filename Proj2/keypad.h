@@ -10,7 +10,8 @@
  *
  */
 #include "msp.h"
-
+#include "delay.h"
+#include "freq.h"
 
 
 #ifndef KEYPAD_H_

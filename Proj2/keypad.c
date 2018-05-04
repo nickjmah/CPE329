@@ -31,6 +31,7 @@ void key_init(){
 
 uint8_t checkRow(uint8_t row){
     //check all columns of a single row
+    delay_us(2, sysFreq);
     P2->OUT |= row;//enable the selected row
     uint8_t col = P4->IN;//read all of the columns
     col &= ((C0|C1|C2));//clear everything but the columns of interest

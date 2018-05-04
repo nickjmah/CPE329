@@ -27,7 +27,7 @@ void initSpi(uint16_t baud)
     EUSCI_B0->BRW = clockDivide(baud); //use sysfreq or sysfreq function here
     EUSCI_B0->CTLW0 &= ~EUSCI_B_CTLW0_SWRST; //turn on eUSCI state machine
     EUSCI_B0->IE = EUSCI_B_IE_RXIE; //enable interrupts to be received
-    NVIC->ISER[0] = 1<<((EUSCIB0_IRQn) & 31); //enable NVIC interrupts
+//    NVIC->ISER[0] = 1<<((EUSCIB0_IRQn) & 31); //enable NVIC interrupts
 }
 
 uint32_t clockDivide(uint16_t baud){
@@ -37,14 +37,16 @@ uint32_t clockDivide(uint16_t baud){
 
 void sendData(uint8_t* data, size_t size){
     CS_STRUCT->OUT &= ~CS0; //reset chip select low to start data transmission
-    int i=0; //initialize counter to zero
-    for(i = 0; i < size; i++){ //loop for size of array
+    int i = 0; //initialize counter to zero
+    while(i < size){
+//    for(i = 0; i < size; i++){ //loop for size of array
         while(!(EUSCI_B0->IFG & EUSCI_B_IFG_TXIFG)){ //no op for when interrupt flag is
                                                      //not raised
             asm(""); //prevent while loop from being compiled out at higher optimizations
         }
         EUSCI_B0->TXBUF = *data; //set TXbuffer to one byte of data
         data++; //increment data byte pointer
+        i++;
     }
     CS_STRUCT->OUT |= CS0; //set chip select high to end data transmission
 }

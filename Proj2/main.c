@@ -14,19 +14,17 @@
 #define SQUARE 0
 #define SAWTOOTH 1
 #define SINE 2
-#define MAXMASTERCOUNT 1599
-#define CCR_INCR 300
-#define HALF_DUTY_CYCLE 800
-#define TEN_PERCENT_DUTY_CYCLE 160
-#define MAX_DUTY_CYCLE 1440
-#define MIN_DUTY_CYCLE 160
-#define BAUD 20000
+#define KHZ_PER_100HZ 10
+#define MAXMASTERCOUNT (uint16_t)(FREQ_48000_KHZ*KHZ_PER_100HZ/CCR_INCR)
+#define CCR_INCR 450
+#define HALF_DUTY_CYCLE (MAXMASTERCOUNT + 1)/ 2
+#define TEN_PERCENT_DUTY_CYCLE (MAXMASTERCOUNT + 1) / 10
+#define MAX_DUTY_CYCLE (MAXMASTERCOUNT + 1) - TEN_PERCENT_DUTY_CYCLE
+#define MIN_DUTY_CYCLE TEN_PERCENT_DUTY_CYCLE
+#define BAUD 16000
 
-uint32_t masterCount = 0;
-uint16_t dutyCycle = HALF_DUTY_CYCLE;
-uint8_t timerFlag=0;
-uint8_t port4Flag = 0;
-extern uint32_t sysFreq=FREQ_3000_KHZ;
+uint32_t sysFreq=FREQ_48000_KHZ;
+volatile uint8_t timerFlag=0;
 
 void init(void)
 {
@@ -39,27 +37,26 @@ void init(void)
     TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK |
                     TIMER_A_CTL_MC__CONTINUOUS; //TODO:check for prescaler
     NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);
-//    NVIC->ISER[1] = 1 << ((PORT4_IRQn) & 31);//enabling port 1 interrupt
     P4->IFG &= ~(C0|C1|C2);
     __enable_irq();
     return;
 }
-void square(uint16_t minVal, uint16_t maxVal)
+void square(uint16_t masterCount, uint16_t dutyCycle, uint16_t minVal, uint16_t maxVal, uint8_t incr)
 {
     if(masterCount == 0){
         dacOut(maxVal);
     }
-    else if(masterCount >= dutyCycle){
+    else if(masterCount == (dutyCycle - dutyCycle%incr)){
         dacOut(minVal);
     }
 }
 
-void sawtooth(uint16_t minVal, uint16_t maxVal)
+void sawtooth(uint16_t masterCount, uint16_t dutyCycle, uint16_t minVal, uint16_t maxVal, uint8_t incr)
 {
     dacOut(maxVal * masterCount / MAXMASTERCOUNT);
 }
 
-void sine(uint16_t minVal, uint16_t maxVal)
+void sine(uint16_t masterCount, uint16_t dutyCycle, uint16_t minVal, uint16_t maxVal, uint8_t incr)
 {
     dacOut(sinUpdate(masterCount));
 }
@@ -67,22 +64,21 @@ void sine(uint16_t minVal, uint16_t maxVal)
 void main(void)
 {
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
-	void(*wavePtrArr[])(uint16_t, uint16_t) = {square, sawtooth, sine};
-    uint8_t functionIndex = SQUARE;
+	void(*wavePtrArr[])(uint16_t, uint16_t, uint16_t, uint16_t, uint8_t) = {square, sawtooth, sine};
+    uint8_t functionIndex = SAWTOOTH;
     uint16_t keyPressed=0;
     uint8_t incAmt=1; //represents the scaler to set frequency for the output waveform
+    uint32_t masterCount = 500;
+    uint16_t dutyCycle = HALF_DUTY_CYCLE;
     init();
-    P1->DIR |= BIT0;
-    P1->OUT &= ~BIT0;
     while(1)
     {
-        (*wavePtrArr[functionIndex])(DAC_MIN_VAL,DAC_MAX_VAL);
+        (*wavePtrArr[functionIndex])(masterCount, dutyCycle, DAC_MIN_VAL,DAC_MAX_VAL, incAmt);
         if(P4->IFG & (C0|C1|C2))
 //        if(port4Flag)
         {
 //            port4Flag = 0;
             P2->OUT &= ~(R0|R1|R2|R3); //setting all rows low
-            delay_us(200, sysFreq);
             keyPressed = checkKP();
 
             P4->IFG &= ~(C0|C1|C2);
@@ -112,15 +108,12 @@ void main(void)
                 case POUND  :   if(dutyCycle < MAX_DUTY_CYCLE) //increment if less than 90%
                                 dutyCycle += TEN_PERCENT_DUTY_CYCLE;
                                 break;
-                default     :   P1->OUT |= BIT0;
-                                delay_ms(1, sysFreq);
-                                break;//do nothing otherwise
-
+                default     :   break;//do nothing otherwise
             }
-            P1->OUT &= ~BIT0;
+//            P1->OUT &= ~BIT0;
         }
         masterCount += incAmt;
-        if(masterCount >= 1600)
+        if(masterCount >= MAXMASTERCOUNT)
             masterCount = 0;
         while(!timerFlag);//wait to synchronize DAC
         timerFlag = 0;
@@ -135,11 +128,3 @@ void TA0_0_IRQHandler(void) {
         TIMER_A0->CCR[0] += CCR_INCR;
     }
 }
-
-//void PORT4_IRQHandler(void) {
-//    P4->IFG &= ~(C0|C1|C2);
-//    ROW_STRUCT->OUT &= ~ROW_MASK; //setting all rows low
-//    P1->OUT |= BIT0;
-//    port4Flag = 1;
-//    P1->OUT &= ~BIT0;
-//}
