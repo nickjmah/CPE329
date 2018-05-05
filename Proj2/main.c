@@ -54,7 +54,6 @@ void (*wavePtrArr[])(uint16_t, uint16_t, uint16_t, uint16_t, uint8_t) =
 
 //Global Variable Declarations
 uint8_t functionIndex = SQUARE; //set the start waveform as a square wave
-uint16_t keyPressed = 0;//initialize keypressed
 uint8_t incAmt = 1; //represents the scaler to set frequency for the output waveform
 uint32_t masterCount = 0; //initialize counter
 uint16_t dutyCycle = HALF_DUTY_CYCLE; //set duty cycle to half
@@ -172,8 +171,8 @@ void triangle(uint16_t masterCount, uint16_t dutyCycle, uint16_t minVal,
 void main(void)
 {
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
+    uint16_t keyPressed = 0;//initialize keypressed
     init();
-
     while (1)
     {
         if (P4->IFG & (C0 | C1 | C2 )) //check if a key is pressed

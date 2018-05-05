@@ -1,6 +1,8 @@
 /** \file spi.c
  * \brief Covers everything to run SPI
  *
+ * This function covers all functionality for SPI, including interrupts if desired.
+ *
  * @author Nick Mah
  * @author Jason Zhou
  *
@@ -40,7 +42,6 @@ void sendData(uint8_t* data, size_t size){
     CS_STRUCT->OUT &= ~CS0; //reset chip select low to start data transmission
     int i = 0; //initialize counter to zero
     while(i < size){
-//    for(i = 0; i < size; i++){ //loop for size of array
         while(!(EUSCI_B0->IFG & EUSCI_B_IFG_TXIFG)){ //no op for when interrupt flag is
                                                      //not raised
             asm(""); //prevent while loop from being compiled out at higher optimizations
