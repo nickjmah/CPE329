@@ -1,8 +1,9 @@
-/*
- * spi.h
+/** \file spi.h
+ * \brief Function prototypes for SPI
  *
- *  Created on: Apr 25, 2018
- *      Author: Nick
+ * @author Nick Mah
+ * @author Jason Zhou
+ *
  */
 
 #include "stdint.h"

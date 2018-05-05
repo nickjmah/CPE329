@@ -1,8 +1,9 @@
-/*
- * spi.c
+/** \file spi.c
+ * \brief Covers everything to run SPI
  *
- *  Created on: Apr 25, 2018
- *      Author: Nick
+ * @author Nick Mah
+ * @author Jason Zhou
+ *
  */
 
 #include "spi.h"
