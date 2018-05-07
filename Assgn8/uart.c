@@ -8,6 +8,7 @@
 #include "msp.h"
 static uint8_t RxBuffer;
 static uint8_t RxFlag=0;
+static uint16_t result = 0;
 
 void initUART(void)
 {
@@ -56,13 +57,43 @@ void sendUART(uint8_t* data, size_t size)
     }
 }
 
+void parseUART(uint8_t data)
+{
+    if(!(data == 13))
+    {
+        uint16_t testChar;
+        testChar = data - '\0';
+        if(testChar <= 9)
+        {
+            result = result*10 + data;
+            while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
+            EUSCI_A0->TXBUF = data;
+        }
+    }
+    else if (data == 13)
+    {
+        RxFlag = 1;
+    }
+}
+
 void EUSCIA0_IRQHandler(void)
 {
     if(EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG)
     {
         RxBuffer = EUSCI_A0->RXBUF;
-        sendUART(&RxBuffer, 1);
-        RxFlag = 1;
+        if(!(RxBuffer == 13))
+        {
+            uint16_t testChar;
+            testChar = RxBuffer - '\0';
+            if(testChar <= 9)
+                result = result*10 + RxBuffer;
+            else
+                RxBuffer = 0;
+        }
+        else if (RxBuffer == 13)
+            RxFlag = 1;
+        while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
+        EUSCI_A0->TXBUF = RxBuffer;
     }
 }
 
