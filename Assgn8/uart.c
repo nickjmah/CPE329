@@ -59,7 +59,7 @@ void sendUART(uint8_t* data, size_t size)
 
 void parseUART(uint8_t data)
 {
-    if(!(data == 13))
+    if(!(data == '\n'))
     {
         uint16_t testChar;
         testChar = data - '0';
@@ -68,7 +68,7 @@ void parseUART(uint8_t data)
         else
             data = 0;
     }
-    else if (data == 13)
+    else if (data == '\n')
         RxFlag = 1;
     while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
     EUSCI_A0->TXBUF = data;
