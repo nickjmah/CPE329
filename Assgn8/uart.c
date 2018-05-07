@@ -59,7 +59,7 @@ void sendUART(uint8_t* data, size_t size)
 
 void parseUART(uint8_t data)
 {
-    if(!(data == '\n'))
+    if(!(data == '\r'))
     {
         uint16_t testChar;
         testChar = data - '0';
@@ -68,7 +68,7 @@ void parseUART(uint8_t data)
         else
             data = 0;
     }
-    else if (data == '\n')
+    else if (data == '\r')
         RxFlag = 1;
     while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
     EUSCI_A0->TXBUF = data;
@@ -89,7 +89,7 @@ void EUSCIA0_IRQHandler(void)
     if(EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG)
     {
         RxBuffer = EUSCI_A0->RXBUF;
-        if(!(RxBuffer == '\n'))
+        if(!(RxBuffer == '\r'))
         {
             uint16_t testChar;
             testChar = RxBuffer - '0';
@@ -98,7 +98,7 @@ void EUSCIA0_IRQHandler(void)
             else
                 RxBuffer = 0;
         }
-        else if (RxBuffer == '\n')
+        else if (RxBuffer == '\r')
             RxFlag = 1;
         while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
         EUSCI_A0->TXBUF = RxBuffer;
