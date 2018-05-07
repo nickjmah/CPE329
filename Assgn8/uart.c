@@ -81,7 +81,11 @@ void clearResult(void)
     result = 0;
 }
 
-
+uint16_t readResult(void)
+{
+    RxFlag = 0;
+    return result;
+}
 void EUSCIA0_IRQHandler(void)
 {
     if(EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG)
@@ -90,9 +94,9 @@ void EUSCIA0_IRQHandler(void)
         if(!(RxBuffer == 13))
         {
             uint16_t testChar;
-            testChar = RxBuffer - '\0';
+            testChar = RxBuffer - '0';
             if(testChar <= 9)
-                result = result*10 + RxBuffer;
+                result = result*10 + testChar;
             else
                 RxBuffer = 0;
         }

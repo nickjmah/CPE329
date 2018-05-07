@@ -12,7 +12,7 @@
 
 volatile uint8_t RXDATA;
 
-void initSpi(uint16_t baud)
+void initSPI(uint16_t baud)
 {
     SPI_STRUCT->SEL1 &= ~SPI_MASK; //resetting port 1 select bits
     SPI_STRUCT->SEL0 |= SPI_MASK; //setting port 0 select bits

@@ -29,7 +29,7 @@
  *  \param baud The desired baud rate in KHz
  *  \return void
  */
-void initSpi(uint16_t baud);
+void initSPI(uint16_t baud);
 
 /** \brief helper function that determines clock division amount
  *

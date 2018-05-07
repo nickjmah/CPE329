@@ -35,4 +35,5 @@ uint8_t readUART(void);
 void sendUART(uint8_t* data, size_t size);
 void parseUART(uint8_t data);
 void clearResult(void);
+uint16_t readResult(void);
 #endif /* UART_H_ */
