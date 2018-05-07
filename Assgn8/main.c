@@ -14,6 +14,7 @@ void main(void)
 {
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 	set_DCO(sysFreq);
+	P1->SEL0 |= BIT2|BIT3;
 	EUSCI_A0->CTLW0 |= EUSCI_A_CTLW0_SWRST;
 	EUSCI_A0->CTLW0 = EUSCI_A_CTLW0_SWRST |
 	                    EUSCI_A_CTLW0_SSEL__SMCLK;
