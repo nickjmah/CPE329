@@ -76,6 +76,12 @@ void parseUART(uint8_t data)
     }
 }
 
+void clearResult(void)
+{
+    result = 0;
+}
+
+
 void EUSCIA0_IRQHandler(void)
 {
     if(EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG)
