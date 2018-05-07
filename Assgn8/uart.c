@@ -62,18 +62,16 @@ void parseUART(uint8_t data)
     if(!(data == 13))
     {
         uint16_t testChar;
-        testChar = data - '\0';
+        testChar = data - '0';
         if(testChar <= 9)
-        {
             result = result*10 + data;
-            while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
-            EUSCI_A0->TXBUF = data;
-        }
+        else
+            data = 0;
     }
     else if (data == 13)
-    {
         RxFlag = 1;
-    }
+    while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
+    EUSCI_A0->TXBUF = data;
 }
 
 void clearResult(void)
@@ -91,7 +89,7 @@ void EUSCIA0_IRQHandler(void)
     if(EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG)
     {
         RxBuffer = EUSCI_A0->RXBUF;
-        if(!(RxBuffer == 13))
+        if(!(RxBuffer == '\n'))
         {
             uint16_t testChar;
             testChar = RxBuffer - '0';
@@ -100,7 +98,7 @@ void EUSCIA0_IRQHandler(void)
             else
                 RxBuffer = 0;
         }
-        else if (RxBuffer == 13)
+        else if (RxBuffer == '\n')
             RxFlag = 1;
         while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
         EUSCI_A0->TXBUF = RxBuffer;
