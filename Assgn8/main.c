@@ -9,7 +9,7 @@
 
 ///Setting global MCLK frequency
 uint32_t sysFreq = FREQ_48000_KHZ;
-
+#define SPI_BAUD 16000
 /** \brief init everything
  *
  *  Sets DCO to 48MHz, initializes UART and SPI
@@ -19,7 +19,7 @@ void init(void)
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;     // stop watchdog timer
     set_DCO(sysFreq);
     initUART();
-    initSPI(16000);//set SPI to 16Mbaud
+    initSPI(SPI_BAUD);//set SPI to 16Mbaud
 }
 
 

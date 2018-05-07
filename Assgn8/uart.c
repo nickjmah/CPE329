@@ -33,6 +33,8 @@ void initUART(void)
     EUSCI_A0->IE |= EUSCI_A_IE_RXIE;        // Enable USCI_A0 RX interrupt
     // Enable eUSCIA0 interrupt in NVIC module
     NVIC->ISER[0] = 1 << ((EUSCIA0_IRQn) & 31);
+    sendUART("\033[H", sizeof("\033[H"));//return home
+    sendUART("\033[2J", sizeof("\033[2J"));//clear terminal
 }
 uint8_t readUARTRxFlag(void)
 {
@@ -93,15 +95,20 @@ void EUSCIA0_IRQHandler(void)
         {
             uint16_t testChar;
             testChar = RxBuffer - '0';
-            if(testChar <= 9)
+            if(testChar <= 9){
                 result = result*10 + testChar;
-            else
-                RxBuffer = 0;
+                while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
+                EUSCI_A0->TXBUF = RxBuffer;
+            }
         }
         else if (RxBuffer == '\r')
+        {
             RxFlag = 1;
-        while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
-        EUSCI_A0->TXBUF = RxBuffer;
+            while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
+            EUSCI_A0->TXBUF = '\r';
+            while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
+            EUSCI_A0->TXBUF = '\n';
+        }
     }
 }
 
