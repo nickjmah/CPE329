@@ -9,7 +9,19 @@
 
 ///Setting global MCLK frequency
 uint32_t sysFreq = FREQ_48000_KHZ;
-
+uint16_t atoi(uint8_t* str)
+{
+    uint16_t result = 0;
+    while(*str)
+    {
+        /*shifts result over 1 sig fig, then takes the ascii value
+         * of the string and subtracts out the offset to make it 0-9
+         */
+        result = result*10 + *str - '\0';
+        str++;
+    }
+    return result;
+}
 void main(void)
 {
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
@@ -23,7 +35,7 @@ void main(void)
         if(readUARTRxFlag())
         {
             receive = readUART();
-            sendUART(&receive,1);
+
         }
     }
 }
