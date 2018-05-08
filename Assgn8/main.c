@@ -20,6 +20,7 @@ void init(void)
     set_DCO(sysFreq);
     initUART();
     initSPI(SPI_BAUD);//set SPI to 16Mbaud
+    dacOut(0);
 }
 
 
