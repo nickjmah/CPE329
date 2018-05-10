@@ -33,6 +33,7 @@ void main(void)
     __enable_irq();
     while(1)
     {
+        //check to see if enter has been pressed
         if(readUARTRxFlag())
         {
             receive = readResult();
@@ -40,7 +41,7 @@ void main(void)
             {
                 dacOut(receive);
             }
-            clearResult();
+            clearResult();//clear the value of result
         }
     }
 }

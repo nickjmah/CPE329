@@ -86,6 +86,7 @@ uint16_t readResult(void)
     RxFlag = 0;
     return result;
 }
+
 void EUSCIA0_IRQHandler(void)
 {
     if(EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG)
