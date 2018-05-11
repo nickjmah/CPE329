@@ -38,6 +38,9 @@ void main(void)
 
         // Start sampling/conversion
         ADC14->CTL0 |= ADC14_CTL0_ENC | ADC14_CTL0_SC;
+        while(!readADCFlag()){
+            asm(""); //prevent while loop from being compiled out at higher optimizations
+        }
         if(readADCFlag())
         {
             ADC_Val = readADC();
