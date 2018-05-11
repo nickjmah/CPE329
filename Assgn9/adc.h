@@ -11,6 +11,7 @@
 
 #define ADC_STRUCT P5
 #define ADC_0 BIT4
+#define ADC_CAL 0
 
 void initADC(void);
 uint16_t readADCFlag(void);

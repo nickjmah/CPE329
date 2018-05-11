@@ -26,13 +26,16 @@ void initADC(void)
 
 uint16_t readADCFlag(void)
 {
+    while(ADCFlag == 0){
+        asm(""); //prevent while loop from being compiled out at higher optimizations
+    }
     return ADCFlag;
 }
 
 uint32_t readADC(void)
 {
     ADCFlag = 0;
-    return ADCMem0; //no filtering
+    return ADCMem0 + ADC_CAL; //no filtering
 }
 
 void ADC14_IRQHandler(void)
