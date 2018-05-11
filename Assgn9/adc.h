@@ -14,7 +14,7 @@
 
 void initADC(void);
 uint16_t readADCFlag(void);
-uint8_t readADC(void);
+uint32_t readADC(void);
 void ADC14_IRQHandler(void);
 
 #endif /* ADC_H_ */

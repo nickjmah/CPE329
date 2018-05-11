@@ -7,7 +7,7 @@
 
 #include "adc.h"
 #include "msp.h"
-static uint8_t ADCMem0 = 0;
+static uint32_t ADCMem0 = 0;
 static uint8_t ADCFlag=0;
 
 void initADC(void)
@@ -29,7 +29,7 @@ uint16_t readADCFlag(void)
     return ADCFlag;
 }
 
-uint8_t readADC(void)
+uint32_t readADC(void)
 {
     ADCFlag = 0;
     return ADCMem0; //no filtering
