@@ -90,5 +90,15 @@
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Proj2/spi.h</locationURI>
 		</link>
+		<link>
+			<name>uart.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Assgn8/uart.c</locationURI>
+		</link>
+		<link>
+			<name>uart.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Assgn8/uart.h</locationURI>
+		</link>
 	</linkedResources>
 </projectDescription>
