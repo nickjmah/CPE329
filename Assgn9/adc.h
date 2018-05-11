@@ -9,6 +9,9 @@
 #define ADC_H_
 #include <stdint.h>
 
+#define ADC_STRUCT P5
+#define ADC_0 BIT4
+
 void initADC(void);
 uint16_t readADCFlag(void);
 uint16_t readADC(void);
