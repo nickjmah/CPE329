@@ -7,13 +7,27 @@
 /**
  * main.c
  */
-uint32_t sysFreq = FREQ_24000_KHZ;
-char* itoa(int val)
+#define ADC_MAX_VAL 16383
+#define SIG_FIGS 3
+uint32_t sysFreq = FREQ_48000_KHZ;
+uint8_t* itoaForADC(int val)
 {
-    static char buf[32] = {0};
+    int adc = val*330/ADC_MAX_VAL;
+    static uint8_t buf[32] = {0};
     int i = 30;
-    for(; val && i; i--, val/=10)
-        buf[i] = "0123456789"[val % 10];
+    int j=0;
+    for(j=0; j<SIG_FIGS+1; i--,j++)
+    {
+        if(j==SIG_FIGS-1)
+        {
+            buf[i] = '.';
+        }
+        else
+        {
+            buf[i] = "0123456789"[(adc) % 10];
+            adc /= 10;
+        }
+    }
     return &buf[i+1];
 }
 
@@ -27,7 +41,7 @@ void init(void)
 
 void main(void)
 {
-    uint8_t ADC_Val;
+    uint32_t ADC_Val;
     init();
 
     // Enable global interrupt
@@ -37,15 +51,13 @@ void main(void)
     {
 
         // Start sampling/conversion
-        ADC14->CTL0 |= ADC14_CTL0_ENC | ADC14_CTL0_SC;
+        startConv();
         while(!readADCFlag()){
             asm(""); //prevent while loop from being compiled out at higher optimizations
         }
-        if(readADCFlag())
-        {
-            ADC_Val = readADC();
-            sendUART(&ADC_Val, sizeof(ADC_Val));
-        }
+        ADC_Val = readADC();
+        sendUART(itoaForADC(ADC_Val), SIG_FIGS+1);
+        sendUART("\r\n",2);
     }
 }
 

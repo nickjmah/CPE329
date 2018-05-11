@@ -14,6 +14,7 @@
 #define ADC_CAL 0
 
 void initADC(void);
+void startConv(void);
 uint16_t readADCFlag(void);
 uint32_t readADC(void);
 void ADC14_IRQHandler(void);

@@ -17,7 +17,7 @@ void initADC(void)
     NVIC->ISER[0] = 1 << ((ADC14_IRQn) & 31);
 
     // Sampling time, S&H=16, ADC14 on
-    ADC14->CTL0 = ADC14_CTL0_SHT0_2 | ADC14_CTL0_SHP | ADC14_CTL0_ON;
+    ADC14->CTL0 = ADC14_CTL0_SHT0_7 | ADC14_CTL0_SHP | ADC14_CTL0_ON;
     ADC14->CTL1 = ADC14_CTL1_RES__14BIT;         // Use sampling timer, 14-bit conversion results
 
     ADC14->MCTL[0] |= ADC14_MCTLN_INCH_1;   // A1 ADC input select; Vref=AVCC
@@ -33,6 +33,11 @@ uint32_t readADC(void)
 {
     ADCFlag = 0;
     return ADCMem0 + ADC_CAL; //no filtering
+}
+
+void startConv(void)
+{
+    ADC14->CTL0 |= ADC14_CTL0_ENC | ADC14_CTL0_SC;
 }
 
 void ADC14_IRQHandler(void)
