@@ -26,9 +26,6 @@ void initADC(void)
 
 uint16_t readADCFlag(void)
 {
-    while(ADCFlag == 0){
-        asm(""); //prevent while loop from being compiled out at higher optimizations
-    }
     return ADCFlag;
 }
 
