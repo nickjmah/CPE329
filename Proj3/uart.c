@@ -58,7 +58,15 @@ void sendUART(uint8_t* data, size_t size)
         i++;
     }
 }
-
+void sendUARTString(char* data)
+{
+    while(*data)
+    {
+        while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
+        EUSCI_A0->TXBUF = *data;
+        data++;
+    }
+}
 void parseUART(uint8_t data)
 {
     if(!(data == '\r'))
