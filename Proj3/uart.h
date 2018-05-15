@@ -33,6 +33,7 @@ uint8_t readUART(void);
  *
  */
 void sendUART(uint8_t* data, size_t size);
+void sendUARTString(char* data);
 void parseUART(uint8_t data);
 void clearResult(void);
 uint16_t readResult(void);
