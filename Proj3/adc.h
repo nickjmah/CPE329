@@ -14,7 +14,7 @@
 #define ADC_0 BIT4
 #define ADC_CAL 0
 
-uint8_t* itoa(int val);
+char* itoa(int val);
 void initADC(void);
 void startConv(void);
 uint16_t readADCFlag(void);

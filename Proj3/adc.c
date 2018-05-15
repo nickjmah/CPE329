@@ -15,7 +15,7 @@
 static uint32_t ADCMem0 = 0;
 static uint8_t ADCFlag=0;
 
-uint8_t* itoa(int val)
+char* itoa(int val)
 {
     static uint8_t buf[32] = {0};
     int i = 30;
