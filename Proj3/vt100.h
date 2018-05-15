@@ -9,6 +9,8 @@
 #include "uart.h"
 #define BAR_HEIGHT 10 //bar height in terms of characters
 #define BUFFER_SIZE 100
+#define MAX_PERCENT 100
+#define BAR_RES MAX_PERCENT / BAR_HEIGHT;
 #ifndef VT100_H_
 #define VT100_H_
 
