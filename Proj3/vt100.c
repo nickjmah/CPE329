@@ -15,14 +15,14 @@ char* barGraph(uint32_t minVal, uint32_t maxVal, uint32_t val, uint32_t xPos, ui
     char barVal = '-';
     n = sprintf(buf,"\033[%d;%dH %s", yPos+1, xPos, title);
     sendUARTString(buf);
-    n = sprintf(buf,"\033[%d;%dH %s", yPos, xPos-3, "0%");
+    n = sprintf(buf,"\033[%d;%dH %dV", yPos, xPos-3, minVal);
     sendUARTString(buf);
-    n = sprintf(buf,"\033[%d;%dH %d%%", yPos-BAR_HEIGHT+1, xPos-5, MAX_PERCENT);
+    n = sprintf(buf,"\033[%d;%dH %dV", yPos-BAR_HEIGHT+1, xPos-5, maxVal);
     sendUARTString(buf);
     for(i=0;i<BAR_HEIGHT;i++)
     {
         fillAmt -=BAR_RES;
-        if(fillAmt<MAX_PERCENT && fillAmt>=0)
+        if(fillAmt<MAX_PERCENT)
         {
             barVal = '#';
 
