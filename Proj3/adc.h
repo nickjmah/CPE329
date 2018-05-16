@@ -13,6 +13,7 @@
 #define ADC_STRUCT P5
 #define ADC_0 BIT4
 #define ADC_CAL 0
+#define ADC_MAX_VAL 16384
 
 char* itoa(int val);
 void initADC(void);

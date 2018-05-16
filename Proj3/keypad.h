@@ -36,7 +36,7 @@
 #define ROW_STRUCT P2
 
 ///Pin map for Row 0
-#define R0 BIT4
+#define R0 BIT4 //this was taken out for CCR1 on the DMM
 
 ///Pin map for Row 1
 #define R1 BIT5

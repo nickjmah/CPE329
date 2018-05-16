@@ -12,11 +12,11 @@
 #include "timer.h"
 
 #define DMM_STRUCT P2
-#define DMM_0 1
+#define DMM_0 BIT4
 
 void initFreqMeas(void);
 uint16_t readFreqFlag(void);
-uint32_t readFreq(void);
+uint32_t readPeriod(void);
 void TA0_N_IRQHandler(void);
 
 
