@@ -9,8 +9,7 @@
 #include "msp.h"
 #include "uart.h"
 
-static uint32_t captureValues[2] = {0};
-static uint32_t capturePeriod = 0;
+static uint32_t captureValue[2] = {0};
 static uint16_t captureFlag = 0;
 
 void initFreqMeas(void)
@@ -36,11 +35,20 @@ uint16_t readFreqFlag(void)
 uint32_t readPeriod(void)
 {
     captureFlag = 0;
-    return capturePeriod;
+    return captureValue[1] - captureValue[0];
 }
 
 void TA0_N_IRQHandler(void)
 {
+    static uint32_t captureCount = 0;
+    if(TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG){
+        captureValue[captureCount] = TIMER_A0->CCR[1];
+        captureCount++;
+        if(captureCount == 2){
+            captureCount = 0;
+            captureFlag = 1;
+        }
 
+    }
 }
 
