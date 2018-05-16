@@ -17,7 +17,7 @@ static uint8_t ADCFlag=0;
 
 char* itoa(int val)
 {
-    static uint8_t buf[32] = {0};
+    static char buf[32] = {0};
     int i = 30;
     for(; val == 0; i--)
     {
