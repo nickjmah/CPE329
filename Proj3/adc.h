@@ -21,7 +21,6 @@ void startConv(void);
 uint16_t readADCFlag(void);
 uint32_t readADC(void);
 uint32_t averageADC(uint32_t* arrayADC, uint8_t arraySize);
-uint32_t averageDC(void);
 void ADC14_IRQHandler(void);
 //void TA0_0_IRQHandler(void);
 

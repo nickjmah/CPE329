@@ -10,13 +10,21 @@
 
 #include <stdint.h>
 #include "timer.h"
+#include "delay.h"
+#include "freq.h"
+#include "adc.h"
 
 #define DMM_STRUCT P2
 #define DMM_0 BIT4
 
 void initFreqMeas(void);
 uint16_t readFreqFlag(void);
+uint16_t readRisingFlag(void);
+void clearRisingFlag(void);
 uint32_t readPeriod(void);
+uint32_t averageDC(void);
+uint32_t averageOffset(void);
+void clearDoneFlag(void);
 void TA0_N_IRQHandler(void);
 
 
