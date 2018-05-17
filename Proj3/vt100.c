@@ -55,7 +55,7 @@ void updateFreq(uint32_t val)
     static char measBuf[MEAS_BUFFER_SIZE]; //the buffer that to generate the string
     sprintf(measBuf, "\033[%d;%dH %s", MEAS_START_YPNT + FREQ_YPOS,
     MEAS_START_XPNT,
-            itoaADC(val));//TODO: change when freq format decided
+            itoa(val));//TODO: change when freq format decided
     sendUARTString(measBuf);
 }
 
@@ -146,4 +146,12 @@ char* itoaADC(uint32_t val)
         }
     }
     return &buf[i + 1];
+}
+/**takes in a period from the CCR values and
+ * returns what the frequency is
+ */
+#define
+uint32_t calcFreq()
+{
+    return sysFreq / readPeriod();
 }
