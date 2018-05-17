@@ -35,9 +35,9 @@ void updateVDC(uint32_t val)
 {
     static char measBuf[MEAS_BUFFER_SIZE]; //the buffer that to generate the string
     sprintf(measBuf, "\033[%d;%dH %s", MEAS_START_YPNT, MEAS_START_XPNT,
-            itoaADC(val));
-    sendUARTString(measBuf);
-    barGraph(val,V_DC_X_POS,V_DC_Y_POS,"Vdc");
+            itoaADC(val));//set cursor to start position and print voltage determine by itoaADC
+    sendUARTString(measBuf);//print the buf
+    barGraph(val,V_DC_X_POS,V_DC_Y_POS,"Vdc");//update the bargraph
 
 }
 
@@ -90,28 +90,30 @@ char* barGraph(uint32_t val, uint32_t xPos, uint32_t yPos, char* title)
 {
     static char buf[BUFFER_SIZE]; //the buffer that to generate the string
     uint32_t fillAmt = (MAX_PERCENT * val) / (DMM_MAX_VAL) - DMM_MIN_VAL;
-    int n = 0;
+	//fillAmt maps val to a percentage from 0 to 100
+    int n = 0;//n is a placeholder
     int i = 0;
-    char barVal = '-';
-    n = sprintf(buf, "\033[%d;%dH %s", yPos + 1, xPos, title);
-    sendUARTString(buf);
+    char barVal = '-';//set barVal initial value to empty
+	//format and print title and side bars
+    n = sprintf(buf, "\033[%d;%dH %s", yPos + 1, xPos, title); //format string to be at location
+    sendUARTString(buf); //send string
     n = sprintf(buf, "\033[%d;%dH 0V", yPos, xPos - 3);
     sendUARTString(buf);
     n = sprintf(buf, "\033[%d;%dH 3V", yPos - BAR_HEIGHT + 1, xPos - 3);
     sendUARTString(buf);
+	//begin bar value
     for (i = 0; i < BAR_HEIGHT; i++)
     {
-        fillAmt -= BAR_RES
-        ;
-        if (fillAmt < MAX_PERCENT)
+        fillAmt -= BAR_RES; //substracts fillAmt by resolution for each loop
+        if (fillAmt < MAX_PERCENT) //checks to make sure that there is remaining perc. to fill out
         {
-            barVal = '#';
+            barVal = '#'; //if so, fill in the next block with a full character
 
         }
         else
-            barVal = '-';
-        n = sprintf(buf, "\033[%d;%dH %c", yPos - i, xPos, barVal);
-        if (n < BUFFER_SIZE)
+            barVal = '-'; //otherwise empty
+        n = sprintf(buf, "\033[%d;%dH %c", yPos - i, xPos, barVal);//format result
+        if (n < BUFFER_SIZE) //check for errors
             sendUARTString(buf);
         else
             sendUARTString("Uh Oh");
@@ -121,7 +123,7 @@ char* barGraph(uint32_t val, uint32_t xPos, uint32_t yPos, char* title)
 }
 
 char* itoaADC(uint32_t val)
-{
+{//TODO: remove magic numbers
     int adc = val * 33 / 10;
     static char buf[32] = { 0 };
     int i, j = 0;
