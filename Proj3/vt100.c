@@ -37,6 +37,8 @@ void updateVDC(uint32_t val)
     sprintf(measBuf, "\033[%d;%dH %s", MEAS_START_YPNT, MEAS_START_XPNT,
             itoaADC(val));
     sendUARTString(measBuf);
+    barGraph(val,V_DC_X_POS,V_DC_Y_POS,"Vdc");
+
 }
 
 void updateVAC(uint32_t val)
@@ -73,6 +75,7 @@ void updateRMS(uint32_t val)
     MEAS_START_XPNT,
             itoaADC(val));
     sendUARTString(measBuf);
+    barGraph(val,V_RMS_X_POS, V_RMS_Y_POS,"Vrms");
 }
 void updateAll(uint32_t vdc, uint32_t vac, uint32_t freq, uint32_t pkPk,
                uint32_t rms)
