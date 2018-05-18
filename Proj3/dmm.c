@@ -18,8 +18,6 @@ static uint32_t overflowSave = 0;
 
 void initFreqMeas(void)
 {
-
-
     DMM_STRUCT->SEL0 |= DMM_0;
     DMM_STRUCT->DIR &= ~DMM_0;
     TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CM_1 | //trigger on rising edge
@@ -55,6 +53,7 @@ uint32_t readPeriod(void)
             + TIMER_MAX * overflowSave;
     overflowSave = 0;
     captureFlag = 0;
+//    return temp + (48000000/(200 * temp)) + 1;
     return temp;
 }
 
@@ -64,7 +63,8 @@ uint32_t readPeriod(void)
 
 uint32_t calcFreq(void)
 {
-    return sysFreq * 1000 / readPeriod();
+    uint32_t temp = sysFreq * 1000 / readPeriod();
+    return temp + temp/200 + 1;
 }
 
 void clearDoneFlag(void)
@@ -92,7 +92,6 @@ uint32_t averageDC(void)
         buffer += readADC();
         size++;
     }
-    doneFlag = 1;
     return buffer / size;
 }
 
@@ -173,8 +172,8 @@ void TA0_N_IRQHandler(void)
         captureCount++;
         if (captureCount == 1)
             overflow = 0;
-//        if(doneFlag == 0)
-//            risingFlag += 1;
+        if(doneFlag == 0)
+            risingFlag += 1;
         if (captureCount == 2)
         {
             overflowSave = overflow;
