@@ -30,6 +30,7 @@
 #define FREQ_YPOS 1
 #define PK_PK_YPOS 2
 #define RMS_YPOS 3
+#define WAVE_YPOS 4
 #define SIG_FIGS 4 //the amount of digits shown in the measurement
 /** \brief initalizes header for the GUI
  * sets up the GUI by printing out the "box" with title and initializing the display
@@ -82,11 +83,16 @@ void updateFreq(uint32_t val);
  * \return void
  */
 void updatePkPk(uint32_t val);
+/** \brief Updates Waveform data
+ *
+ */
+void updateWave(char* wave);
 /** \brief updates and converts the rms value to a voltage reading
  * This function will update the RMS printed value and the Vrms bar graph
  * \param val The peak to peak value from the DMM
  * \return void
  */
+
 void updateRMS(uint32_t val);
 /** \brief updates all of the values and graphs
  * This function calls all of the updateX functions for easier usage
@@ -97,7 +103,7 @@ void updateRMS(uint32_t val);
  * \return void
  */
 void updateAC(uint32_t vac, uint32_t freq, uint32_t pkPk,
-               uint32_t rms);
+               uint32_t rms, char* wave);
 /** \converts an ADC value to a number in decimal
  * This function takes in a value that is assumed to be a 14-bit number from the ADC
  * and converts it to a fixed point float with SIG_FIGS precision. The function is identical to 

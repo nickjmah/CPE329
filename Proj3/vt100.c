@@ -13,7 +13,7 @@ void initGUI(void)
     //init bar graphs as empty
     barGraph(0, V_RMS_X_POS, V_RMS_Y_POS, "Vrms");
     barGraph(0, V_DC_X_POS, V_DC_Y_POS, "Vdc");
-    updateAC(DMM_MIN_VAL, 0, DMM_MIN_VAL, DMM_MIN_VAL);
+    updateAC(DMM_MIN_VAL, 0, DMM_MIN_VAL, DMM_MIN_VAL, "Unknown");
     //draw title
 }
 void displayDC(void)
@@ -45,7 +45,7 @@ void displayAC(void)
                "|Frequency (Hz):                                         |\r\n"
                "|Peak-Peak  (V):                                         |\r\n"
                "|RMS     (Vrms):                                         |\r\n"
-               "|                                                        |\r\n"
+               "|Waveform      :                                         |\r\n"
                "|                                                        |\r\n"
                "|                                                        |\r\n"
                "|                                                        |\r\n"
@@ -53,7 +53,7 @@ void displayAC(void)
                "| Press 1 to                                             |\r\n"
                "| Enter DC Mode                                          |\r\n"
                "+--------------------------------------------------------+");
-    updateAC(DMM_MIN_VAL, 0, DMM_MIN_VAL, DMM_MIN_VAL);
+    updateAC(DMM_MIN_VAL, 0, DMM_MIN_VAL, DMM_MIN_VAL, "Unknown");
 }
 void updateVDC(uint32_t val)
 {
@@ -105,13 +105,20 @@ void updateRMS(uint32_t val)
     sendUARTString(measBuf);
     barGraph(val,V_RMS_X_POS, V_RMS_Y_POS,"Vrms");
 }
+void updateWave(char* wave)
+{
+    static char measBuf[MEAS_BUFFER_SIZE];
+    sprintf(measBuf, "\033[%d;%dH %s        ",MEAS_START_YPNT + WAVE_YPOS, MEAS_START_XPNT, wave);
+    sendUARTString(measBuf);
+}
 void updateAC(uint32_t vac, uint32_t freq, uint32_t pkPk,
-               uint32_t rms)
+               uint32_t rms, char* wave)
 {
     updateVAC(vac);
     updateFreq(freq);
     updatePkPk(pkPk);
     updateRMS(rms);
+    updateWave(wave);
 }
 char* barGraph(uint32_t val, uint32_t xPos, uint32_t yPos, char* title)
 {
