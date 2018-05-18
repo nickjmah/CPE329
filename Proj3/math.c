@@ -9,7 +9,7 @@
 
 uint32_t sqrtDMM(uint32_t val)
 {
-    int i=MSB-1;
+    uint32_t i=MSB-1;
     uint32_t guess = 1<<(MSB-1);
     uint32_t check;
     while(i<MSB)

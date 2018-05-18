@@ -14,6 +14,7 @@
 #include "delay.h"
 #include "freq.h"
 #include "adc.h"
+#include "math.h"
 
 #define DMM_STRUCT P2
 #define DMM_0 BIT4
@@ -25,9 +26,9 @@ void clearRisingFlag(void);
 uint32_t readPeriod(void);
 uint32_t calcFreq(void);
 uint32_t averageDC(void);
-uint32_t averageOffset(void);
-uint32_t * peakToPeak(void);
-uint32_t PTPCalc(uint32_t* array);
+uint32_t PTPCalc(uint32_t minVal, uint32_t maxVal);
+uint32_t OffsetCalc(uint32_t minVal, uint32_t maxVal);
+void ACMeas(uint32_t* ACVals);
 void clearDoneFlag(void);
 void TA0_N_IRQHandler(void);
 

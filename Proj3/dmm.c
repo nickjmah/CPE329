@@ -12,12 +12,18 @@ static uint32_t captureValue[2] = { 0 };
 static uint16_t captureFlag = 0;
 static uint16_t risingFlag = 0;
 static uint16_t doneFlag = 0;
-static uint32_t PTPArray[2] = { 0 };
 static uint32_t overflow = 0;
 static uint32_t overflowSave = 0;
+//static uint32_t timer_count = 0;
 
 void initFreqMeas(void)
 {
+    //Configure Timer 0 for interrupts
+    TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
+    TIMER_A0->CCR[0] = COUNT_20US_48MHZ;
+    TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK | // SMCLK, continuous mode
+                    TIMER_A_CTL_MC__CONTINUOUS;
+
     DMM_STRUCT->SEL0 |= DMM_0;
     DMM_STRUCT->DIR &= ~DMM_0;
     TIMER_A0->CCTL[1] = TIMER_A_CCTLN_CM_1 | //trigger on rising edge
@@ -53,7 +59,6 @@ uint32_t readPeriod(void)
             + TIMER_MAX * overflowSave;
     overflowSave = 0;
     captureFlag = 0;
-//    return temp + (48000000/(200 * temp)) + 1;
     return temp;
 }
 
@@ -76,11 +81,8 @@ uint32_t averageDC(void)
 {
     uint32_t buffer = 0;
     uint8_t size = 0;
-    //Configure Timer 0 for interrupts
-    TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
-    TIMER_A0->CCR[0] = COUNT_20US_48MHZ;
-    TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK | // SMCLK, continuous mode
-                    TIMER_A_CTL_MC__CONTINUOUS;
+    TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
+    TIMER_A0->CCR[0] += COUNT_20US_48MHZ;
     while (!(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG))
     {
         startConv();
@@ -95,67 +97,52 @@ uint32_t averageDC(void)
     return buffer / size;
 }
 
-uint32_t averageOffset(void)
+uint32_t PTPCalc(uint32_t minVal, uint32_t maxVal)
 {
-    uint32_t buffer = 0;
-    uint32_t size = 0;
-    while (risingFlag == 0)
-    {
-        P1->OUT |= BIT0;
-
-        startConv();
-        while (!readADCFlag())
-        {
-            asm("");
-            //prevent while loop from being compiled out at higher optimizations
-        }
-        buffer += readADC();
-        size++;
-        P1->OUT &= ~BIT0;
-    }
-//    sendUARTString(itoa(size));
-//    delay_us(10, sysFreq);
-    return buffer / size;
-//      return readADC();
+    return maxVal - minVal;
 }
 
-uint32_t * peakToPeak(void)
+uint32_t OffsetCalc(uint32_t minVal, uint32_t maxVal)
+{
+    return (maxVal + minVal) / 2;
+}
+
+void ACMeas(uint32_t* ACVals)
 {
     uint32_t temp = 0;
-    while (risingFlag == 0)
-    {
+    uint32_t squared = 0;
+    uint64_t sum = 0;
+    uint32_t vals = 0;
+    uint32_t minVal = 16383;
+    uint32_t maxVal = 0;
+    while(vals < 10000){
+        while(!(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG));
         startConv();
+        TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
+        TIMER_A0->CCR[0] += COUNT_20US_48MHZ;
         while (!readADCFlag())
         {
             asm("");
             //prevent while loop from being compiled out at higher optimizations
         }
         temp = readADC();
-        if (temp < PTPArray[0])
+        squared = temp * temp;
+        sum += squared;
+        vals ++;
+        if (temp < minVal)
         {
-            PTPArray[0] = temp;
+            minVal = temp;
         }
-        else if (temp > PTPArray[1])
+        else if (temp > maxVal)
         {
-            PTPArray[1] = temp;
+            maxVal = temp;
         }
     }
-    return PTPArray;
+    ACVals[0] = (uint32_t)(sum / vals);
+    ACVals[1] = minVal;
+    ACVals[2] = maxVal;
+    return;
 }
-
-uint32_t PTPCalc(uint32_t* array)
-{
-    return array[1] - array[0];
-}
-
-//void TA0_0_IRQHandler(void) {
-//    if(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG)
-//    {
-//        TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
-////        timer_count += 1;
-//        TIMER_A0->CCR[0] += COUNT_20US_48MHZ;              // Add Offset to TACCR0
-//    }
-//}
 
 void TA0_N_IRQHandler(void)
 {
