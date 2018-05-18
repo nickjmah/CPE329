@@ -53,6 +53,14 @@ void initGUI(void);
  *  \return pointer to the buffer holding the string
  */
 char* barGraph(uint32_t val, uint32_t xPos, uint32_t yPos, char* title);//todo: make a init GUI to save space
+/** \brief Changes the display to DC mode
+ *
+ */
+void displayDC(void);
+/** \brief Changes the display to AC mode
+ *
+ */
+void displayAC(void);
 /** \brief updates and converts the voltage data to a DC voltage reading
  * \param val The average DC value from the DMM
  * \return void
@@ -113,4 +121,5 @@ void clearMeas(uint32_t yPos);
  *
  */
 char* itoaForFreq(uint32_t val);
+
 #endif /* VT100_H_ */

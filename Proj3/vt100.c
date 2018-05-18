@@ -31,6 +31,14 @@ void initGUI(void)
     updateAll(DMM_MIN_VAL, DMM_MIN_VAL, 0, DMM_MIN_VAL, DMM_MIN_VAL);
     //draw title
 }
+void displayDC(void)
+{
+
+}
+void displayAC(void)
+{
+
+}
 void updateVDC(uint32_t val)
 {
     //\033[ROW;HEIGHT

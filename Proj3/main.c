@@ -14,13 +14,13 @@
 uint32_t sysFreq = FREQ_48000_KHZ;
 uint8_t* itoaForADC(int val)
 {
-    int adc = val*330/ADC_MAX;
-    static uint8_t buf[32] = {0};
+    int adc = val * 330 / ADC_MAX;
+    static uint8_t buf[32] = { 0 };
     int i = 30;
-    int j=0;
-    for(j=0; j<SIG_FIGS+1; i--,j++)
+    int j = 0;
+    for (j = 0; j < SIG_FIGS + 1; i--, j++)
     {
-        if(j==SIG_FIGS-1)
+        if (j == SIG_FIGS - 1)
         {
             buf[i] = '.';
         }
@@ -30,7 +30,7 @@ uint8_t* itoaForADC(int val)
             adc /= 10;
         }
     }
-    return &buf[i+1];
+    return &buf[i + 1];
 }
 
 void init(void)
@@ -53,31 +53,39 @@ void main(void)
 
     uint16_t receive;
 
-
     while (1)
     {
         uint32_t ACVals[3] = { 0 };
         uint32_t* ACVal_ptr = &(ACVals[0]);
-        if(readUARTRxFlag())
+        if (readUARTRxFlag())
         {
             receive = readResult();
-            clearResult();//clear the value of result
+            clearResult();     //clear the value of result
+            switch (receive)
+            {
+            case (1):
+                displayDC();
+                break;
+            default:
+                displayAC();
+            }
         }
-        switch(receive)
+        switch (receive)
         {
-        case(1) :
+        case (1):
             updateVDC(averageDC());
             break;
-        default :
-            if(readFreqFlag()){
+        default:
+            if (readFreqFlag())
+            {
                 updateFreq(calcFreq());
             }
             ACMeas(ACVal_ptr);
             updateVAC(OffsetCalc(ACVals[1], ACVals[2]));
             updatePkPk(PTPCalc(ACVals[1], ACVals[2]));
-    //        static char buffer[10000] = {0};
-    //        sprintf(buffer, "\033[H%d", ACVals[0]);
-    //        sendUARTString(buffer);
+            //        static char buffer[10000] = {0};
+            //        sprintf(buffer, "\033[H%d", ACVals[0]);
+            //        sendUARTString(buffer);
             updateRMS(sqrtDMM((ACVals[0])));
         }
 
@@ -89,5 +97,4 @@ void main(void)
 
     }
 }
-
 
