@@ -9,6 +9,7 @@
 #define DMM_H_
 
 #include <stdint.h>
+#include <stdio.h>
 #include "timer.h"
 #include "delay.h"
 #include "freq.h"
@@ -25,7 +26,8 @@ uint32_t readPeriod(void);
 uint32_t calcFreq(void);
 uint32_t averageDC(void);
 uint32_t averageOffset(void);
-uint32_t peakToPeak(void);
+uint32_t * peakToPeak(void);
+uint32_t PTPCalc(uint32_t* array);
 void clearDoneFlag(void);
 void TA0_N_IRQHandler(void);
 

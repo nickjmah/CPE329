@@ -58,15 +58,6 @@ void startConv(void)
     ADC14->CTL0 |= ADC14_CTL0_ENC | ADC14_CTL0_SC;
 }
 
-//uint32_t averageADC(uint32_t* arrayADC, uint8_t arraySize)
-//{
-//    uint32_t totalVal = 0;
-//    int i = 0;
-//    for (i = 0; i < arraySize; i++)
-//        totalVal += arrayADC[i];
-//    return totalVal / arraySize;
-//}
-
 void ADC14_IRQHandler(void)
 {
     if (ADC14->IFGR0 & ADC14_IFGR0_IFG0)    // check if MEM0 flag is raised
@@ -76,11 +67,3 @@ void ADC14_IRQHandler(void)
     }
 }
 
-//void TA0_0_IRQHandler(void) {
-//    if(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG)
-//    {
-//        TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
-////        timer_count += 1;
-//        TIMER_A0->CCR[0] += COUNT_20US_48MHZ;              // Add Offset to TACCR0
-//    }
-//}

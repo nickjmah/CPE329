@@ -12,6 +12,8 @@
 #ifndef TIMER_H_
 #define TIMER_H_
 
+#define TIMER_MAX (uint32_t)65535
+
 ///20us count or 50% duty cycle at 25kHz at 24MHz DCO frequency
 #define COUNT_50_25KHZ_24MHZ (uint32_t)480
 
@@ -38,7 +40,5 @@
 
 ///1ms count at 48MHz DCO frequency
 #define COUNT_20US_48MHZ (uint16_t)4800
-
-void initTimer(void);
 
 #endif /* TIMER_H_ */
