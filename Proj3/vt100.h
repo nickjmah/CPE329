@@ -56,9 +56,9 @@ void initGUI(void);
  *  \return pointer to the buffer holding the string
  */
 char* barGraph(uint32_t val, uint32_t xPos, uint32_t yPos, char* title); //todo: make a init GUI to save space
-               /** \brief Changes the display to DC mode
-                *
-                */
+/** \brief Changes the display to DC mode
+ *
+ */
 void displayDC(void);
 /** \brief Changes the display to AC mode
  *

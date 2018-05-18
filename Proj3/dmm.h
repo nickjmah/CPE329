@@ -11,7 +11,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "timer.h"
-#include "delay.h"
 #include "freq.h"
 #include "adc.h"
 #include "math.h"
@@ -19,8 +18,11 @@
 
 #define DMM_STRUCT P2
 #define DMM_0 BIT4
-#define THRES 120
+#define THRES 120 //threshold for determining waveform type
 
+/** \brief initializes timers for frequency measurement
+ *  Enabes a
+ */
 void initFreqMeas(void);
 uint16_t readFreqFlag(void);
 uint32_t readPeriod(void);

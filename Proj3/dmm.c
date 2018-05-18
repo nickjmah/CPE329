@@ -17,7 +17,7 @@ void initFreqMeas(void)
 {
     //Configure Timer 0 for interrupts
     TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
-    TIMER_A0->CCR[0] = COUNT_20US_48MHZ;
+    TIMER_A0->CCR[0] = COUNT_100US_48MHZ;
     TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK | // SMCLK, continuous mode
             TIMER_A_CTL_MC__CONTINUOUS;
 
@@ -60,10 +60,11 @@ uint32_t averageDC(void)
 {
     uint32_t buffer = 0;
     uint8_t size = 0;
-    TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
-    TIMER_A0->CCR[0] += COUNT_20US_48MHZ;
-    while (!(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG))
+    while (size < COUNT_1MS_48MHZ / COUNT_100US_48MHZ )
     {
+        TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
+        TIMER_A0->CCR[0] += COUNT_100US_48MHZ;
+        while (!(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG));
         startConv();
         while (!readADCFlag())
         {
@@ -100,7 +101,7 @@ void ACMeas(uint32_t* ACVals)
             ;
         startConv();
         TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
-        TIMER_A0->CCR[0] += COUNT_20US_48MHZ;
+        TIMER_A0->CCR[0] += COUNT_100US_48MHZ;
         while (!readADCFlag())
         {
             asm("");
@@ -129,13 +130,13 @@ char * waveDetect(uint32_t RMS, uint32_t PTP, uint32_t OFS)
 {
     uint32_t VPK = PTP / 2;
     uint32_t VDC_SQR = OFS * OFS;
-    uint32_t SINE_RMS = sqrtDMM(VDC_SQR + VPK * VPK/2);
-    if(PTP < 8700)
+    uint32_t SINE_RMS = sqrtDMM(VDC_SQR + VPK * VPK / 2);
+    if (PTP < 8700)
         return "INPUT TOO LOW";
-    if((THRES >= (RMS - SINE_RMS)) || (THRES >= (SINE_RMS - RMS)))
+    if ((THRES >= (RMS - SINE_RMS)) || (THRES >= (SINE_RMS - RMS)))
         return "SINE";
-    uint32_t TRI_RMS = sqrtDMM(VDC_SQR + VPK * VPK/3);
-    if((THRES >= (RMS - TRI_RMS)) || (THRES >= (TRI_RMS - RMS)))
+    uint32_t TRI_RMS = sqrtDMM(VDC_SQR + VPK * VPK / 3);
+    if ((THRES >= (RMS - TRI_RMS)) || (THRES >= (TRI_RMS - RMS)))
         return "TRIANGLE";
     else
         return "SQUARE";
