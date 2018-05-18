@@ -19,7 +19,7 @@ char* itoa(int val)
 {
     static char buf[32] = {0};
     int i = 30;
-    for(; val == 0; i--)
+    for(; val != 0; i--)
     {
         buf[i] = "0123456789"[(val) % 10];
         val /= 10;
