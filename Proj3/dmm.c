@@ -10,12 +10,8 @@
 
 static uint32_t captureValue[2] = { 0 };
 static uint16_t captureFlag = 0;
-static uint16_t risingFlag = 0;
-static uint16_t doneFlag = 0;
 static uint32_t overflow = 0;
-static uint32_t overflowSave = 0;
 static uint32_t period = 0;
-//static uint32_t timer_count = 0;
 
 void initFreqMeas(void)
 {
@@ -44,16 +40,6 @@ uint16_t readFreqFlag(void)
     return captureFlag;
 }
 
-uint16_t readRisingFlag(void)
-{
-    return risingFlag;
-}
-
-void clearRisingFlag(void)
-{
-    risingFlag = 0;
-}
-
 uint32_t readPeriod(void)
 {
     captureFlag = 0;
@@ -68,11 +54,6 @@ uint32_t calcFreq(void)
 {
     uint32_t temp = sysFreq * 1000 / readPeriod();
     return temp + temp / 200 + 1;
-}
-
-void clearDoneFlag(void)
-{
-    doneFlag = 0;
 }
 
 uint32_t averageDC(void)
@@ -144,6 +125,22 @@ void ACMeas(uint32_t* ACVals)
     return;
 }
 
+char * waveDetect(uint32_t RMS, uint32_t PTP, uint32_t OFS)
+{
+    uint32_t VPK = PTP / 2;
+    uint32_t VDC_SQR = OFS * OFS;
+    uint32_t SINE_RMS = sqrtDMM(VDC_SQR + VPK * VPK/2);
+    if(PTP < 8700)
+        return "INPUT TOO LOW";
+    if((THRES >= (RMS - SINE_RMS)) || (THRES >= (SINE_RMS - RMS)))
+        return "SINE";
+    uint32_t TRI_RMS = sqrtDMM(VDC_SQR + VPK * VPK/3);
+    if((THRES >= (RMS - TRI_RMS)) || (THRES >= (TRI_RMS - RMS)))
+        return "TRIANGLE";
+    else
+        return "SQUARE";
+}
+
 void TA0_N_IRQHandler(void)
 {
     static uint32_t captureCount = 0;
@@ -159,8 +156,6 @@ void TA0_N_IRQHandler(void)
         captureCount++;
         if (captureCount == 1)
             overflow = 0;
-        if (doneFlag == 0)
-            risingFlag += 1;
         if (captureCount == 2)
         {
             period = captureValue[1] - captureValue[0] + TIMER_MAX * overflow;

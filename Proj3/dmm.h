@@ -15,21 +15,21 @@
 #include "freq.h"
 #include "adc.h"
 #include "math.h"
+#include "uart.h"
 
 #define DMM_STRUCT P2
 #define DMM_0 BIT4
+#define THRES 120
 
 void initFreqMeas(void);
 uint16_t readFreqFlag(void);
-uint16_t readRisingFlag(void);
-void clearRisingFlag(void);
 uint32_t readPeriod(void);
 uint32_t calcFreq(void);
 uint32_t averageDC(void);
 uint32_t PTPCalc(uint32_t minVal, uint32_t maxVal);
 uint32_t OffsetCalc(uint32_t minVal, uint32_t maxVal);
 void ACMeas(uint32_t* ACVals);
-void clearDoneFlag(void);
+char * waveDetect(uint32_t RMS, uint32_t PTP, uint32_t OFS);
 void TA0_N_IRQHandler(void);
 
 

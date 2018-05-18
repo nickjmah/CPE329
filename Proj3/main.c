@@ -55,6 +55,9 @@ void main(void)
 
     while (1)
     {
+        uint32_t offset = 0;
+        uint32_t vpp = 0;
+        uint32_t rms = 0;
         uint32_t prev;
         uint32_t ACVals[3] = { 0 };
         uint32_t* ACVal_ptr = &(ACVals[0]);
@@ -86,12 +89,13 @@ void main(void)
                 updateFreq(calcFreq());
             }
             ACMeas(ACVal_ptr);
-            updateVAC(OffsetCalc(ACVals[1], ACVals[2]));
-            updatePkPk(PTPCalc(ACVals[1], ACVals[2]));
-            //        static char buffer[10000] = {0};
-            //        sprintf(buffer, "\033[H%d", ACVals[0]);
-            //        sendUARTString(buffer);
-            updateRMS(sqrtDMM((ACVals[0])));
+            offset = OffsetCalc(ACVals[1], ACVals[2]);
+            updateVAC(offset);
+            vpp = PTPCalc(ACVals[1], ACVals[2]);
+            updatePkPk(vpp);
+            rms = sqrtDMM((ACVals[0]));
+            updateRMS(rms);
+            updateWave(waveDetect(rms, vpp, offset));
         }
 
 //        TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIE;
