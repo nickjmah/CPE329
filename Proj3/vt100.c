@@ -49,6 +49,8 @@ void updateVAC(uint32_t val)
     MEAS_START_XPNT,
             itoaADC(val));
     sendUARTString(measBuf);
+    barGraph(val,V_DC_X_POS,V_DC_Y_POS,"Vdc");//update the bargraph
+
 }
 
 void updateFreq(uint32_t val)

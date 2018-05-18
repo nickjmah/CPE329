@@ -14,6 +14,7 @@ static uint16_t risingFlag = 0;
 static uint16_t doneFlag = 0;
 static uint32_t overflow = 0;
 static uint32_t overflowSave = 0;
+static uint32_t period = 0;
 //static uint32_t timer_count = 0;
 
 void initFreqMeas(void)
@@ -22,7 +23,7 @@ void initFreqMeas(void)
     TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; // TACCR0 interrupt enabled
     TIMER_A0->CCR[0] = COUNT_20US_48MHZ;
     TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK | // SMCLK, continuous mode
-                    TIMER_A_CTL_MC__CONTINUOUS;
+            TIMER_A_CTL_MC__CONTINUOUS;
 
     DMM_STRUCT->SEL0 |= DMM_0;
     DMM_STRUCT->DIR &= ~DMM_0;
@@ -55,11 +56,8 @@ void clearRisingFlag(void)
 
 uint32_t readPeriod(void)
 {
-    uint32_t temp = captureValue[1] - captureValue[0]
-            + TIMER_MAX * overflowSave;
-    overflowSave = 0;
     captureFlag = 0;
-    return temp;
+    return period;
 }
 
 /**takes in a period from the CCR values and
@@ -69,7 +67,7 @@ uint32_t readPeriod(void)
 uint32_t calcFreq(void)
 {
     uint32_t temp = sysFreq * 1000 / readPeriod();
-    return temp + temp/200 + 1;
+    return temp + temp / 200 + 1;
 }
 
 void clearDoneFlag(void)
@@ -115,8 +113,10 @@ void ACMeas(uint32_t* ACVals)
     uint32_t vals = 0;
     uint32_t minVal = 16383;
     uint32_t maxVal = 0;
-    while(vals < 10000){
-        while(!(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG));
+    while (vals < 10000)
+    {
+        while (!(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG))
+            ;
         startConv();
         TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
         TIMER_A0->CCR[0] += COUNT_20US_48MHZ;
@@ -128,7 +128,7 @@ void ACMeas(uint32_t* ACVals)
         temp = readADC();
         squared = temp * temp;
         sum += squared;
-        vals ++;
+        vals++;
         if (temp < minVal)
         {
             minVal = temp;
@@ -138,7 +138,7 @@ void ACMeas(uint32_t* ACVals)
             maxVal = temp;
         }
     }
-    ACVals[0] = (uint32_t)(sum / vals);
+    ACVals[0] = (uint32_t) (sum / vals);
     ACVals[1] = minVal;
     ACVals[2] = maxVal;
     return;
@@ -159,11 +159,11 @@ void TA0_N_IRQHandler(void)
         captureCount++;
         if (captureCount == 1)
             overflow = 0;
-        if(doneFlag == 0)
+        if (doneFlag == 0)
             risingFlag += 1;
         if (captureCount == 2)
         {
-            overflowSave = overflow;
+            period = captureValue[1] - captureValue[0] + TIMER_MAX * overflow;
             captureCount = 0;
             captureFlag = 1;
         }
