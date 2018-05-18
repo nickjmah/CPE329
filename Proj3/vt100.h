@@ -103,4 +103,9 @@ void updateAll(uint32_t vdc, uint32_t vac, uint32_t freq, uint32_t pkPk,
  *
  */
 char* itoaADC(uint32_t val);
+/** \brief clears the measurement value to fix unchanged characters
+ *
+ *
+ */
+void clearMeas(uint32_t yPos);
 #endif /* VT100_H_ */

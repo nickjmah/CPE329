@@ -28,11 +28,12 @@ void initGUI(void)
     //init bar graphs as empty
     barGraph(0, V_RMS_X_POS, V_RMS_Y_POS, "Vrms");
     barGraph(0, V_DC_X_POS, V_DC_Y_POS, "Vdc");
-    updateAll(DMM_MIN_VAL, DMM_MIN_VAL, DMM_MIN_VAL, DMM_MIN_VAL, DMM_MIN_VAL);
+    updateAll(DMM_MIN_VAL, DMM_MIN_VAL, 1, DMM_MIN_VAL, DMM_MIN_VAL);
     //draw title
 }
 void updateVDC(uint32_t val)
 {
+    //\033[ROW;HEIGHT
     static char measBuf[MEAS_BUFFER_SIZE]; //the buffer that to generate the string
     sprintf(measBuf, "\033[%d;%dH %s", MEAS_START_YPNT, MEAS_START_XPNT,
             itoaADC(val));//set cursor to start position and print voltage determine by itoaADC
@@ -52,6 +53,7 @@ void updateVAC(uint32_t val)
 
 void updateFreq(uint32_t val)
 {
+    clearMeas(FREQ_YPOS);
     static char measBuf[MEAS_BUFFER_SIZE]; //the buffer that to generate the string
     sprintf(measBuf, "\033[%d;%dH %s", MEAS_START_YPNT + FREQ_YPOS,
     MEAS_START_XPNT,
@@ -149,4 +151,10 @@ char* itoaADC(uint32_t val)
     }
     return &buf[i + 1];
 }
-
+void clearMeas(uint32_t yPos)
+{
+    static char measBuf[MEAS_BUFFER_SIZE]; //the buffer that to generate the string
+    sprintf(measBuf,"\033[%d:%d       ", yPos, MEAS_START_XPNT);
+    //clearing 6 spaces to remove any lingering values
+    return;
+}
