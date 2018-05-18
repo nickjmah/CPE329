@@ -22,8 +22,10 @@ uint16_t readFreqFlag(void);
 uint16_t readRisingFlag(void);
 void clearRisingFlag(void);
 uint32_t readPeriod(void);
+uint32_t calcFreq(void);
 uint32_t averageDC(void);
 uint32_t averageOffset(void);
+uint32_t peakToPeak(void);
 void clearDoneFlag(void);
 void TA0_N_IRQHandler(void);
 

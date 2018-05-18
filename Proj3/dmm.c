@@ -49,6 +49,15 @@ uint32_t readPeriod(void)
     return captureValue[1] - captureValue[0];
 }
 
+/**takes in a period from the CCR values and
+ * returns what the frequency is
+ */
+
+uint32_t calcFreq(void)
+{
+    return sysFreq / readPeriod();
+}
+
 void clearDoneFlag(void)
 {
     doneFlag = 0;
@@ -94,19 +103,39 @@ uint32_t averageOffset(void)
 //      return readADC();
 }
 
+//uint32_t peakToPeak(void)
+//{
+//    while(risingFlag == 0)
+//    {
+//        P1->OUT |= BIT0;
+//
+//        startConv();
+//        while(!readADCFlag()){
+//            asm(""); //prevent while loop from being compiled out at higher optimizations
+//        }
+//        buffer += readADC();
+//        size ++;
+//        P1->OUT &= ~BIT0;
+//    }
+////    sendUARTString(itoa(size));
+////    delay_us(10, sysFreq);
+//    return buffer / size;
+////      return readADC();
+//}
+
 void TA0_N_IRQHandler(void)
 {
-//    static uint32_t captureCount = 0;
+    static uint32_t captureCount = 0;
     if(TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG){
         TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;
-//        captureValue[captureCount] = TIMER_A0->CCR[1];
-//        captureCount++;
+        captureValue[captureCount] = TIMER_A0->CCR[1];
+        captureCount++;
         if(doneFlag == 0)
             risingFlag += 1;
-//        if(captureCount == 2){
-//            captureCount = 0;
-//            captureFlag = 1;
-//        }
+        if(captureCount == 2){
+            captureCount = 0;
+            captureFlag = 1;
+        }
 
     }
 

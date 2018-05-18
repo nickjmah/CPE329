@@ -149,11 +149,4 @@ char* itoaADC(uint32_t val)
     }
     return &buf[i + 1];
 }
-/**takes in a period from the CCR values and
- * returns what the frequency is
- */
-#define
-uint32_t calcFreq()
-{
-    return sysFreq / readPeriod();
-}
+
