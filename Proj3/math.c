@@ -18,13 +18,14 @@ uint32_t sqrtDMM(uint32_t val)
         if(val>check)
         {
             guess |= 1<<i;
+            check = guess * guess;
         }
-        else if(val < check)
+        if(val < check)
         {
             guess &= ~(1<<i);
             guess |= (1<<(i-1));
         }
-        else
+        else if(val == check)
         {
             return guess;
         }
