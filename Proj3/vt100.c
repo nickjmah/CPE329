@@ -9,35 +9,51 @@
 
 void initGUI(void)
 {
-    sendUARTString(
-            "+--------------------------------------------------------+\r\n"
-            "|                       CPE329: DMM                      |\r\n"
-            "+--------------------------------------------------------+\r\n"
-            "|Voltage  (VDC):                                         |\r\n"
-            "|Voltage  (VAC):                                         |\r\n"
-            "|Frequency (Hz):                                         |\r\n"
-            "|Peak-Peak  (V):                                         |\r\n"
-            "|RMS     (Vrms):                                         |\r\n"
-            "|                                                        |\r\n"
-            "|                                                        |\r\n"
-            "|                                                        |\r\n"
-            "|                                                        |\r\n"
-            "|                                                        |\r\n"
-            "|                                                        |\r\n"
-            "+--------------------------------------------------------+");
+    displayAC();
     //init bar graphs as empty
     barGraph(0, V_RMS_X_POS, V_RMS_Y_POS, "Vrms");
     barGraph(0, V_DC_X_POS, V_DC_Y_POS, "Vdc");
-    updateAll(DMM_MIN_VAL, DMM_MIN_VAL, 0, DMM_MIN_VAL, DMM_MIN_VAL);
+    updateAC(DMM_MIN_VAL, 0, DMM_MIN_VAL, DMM_MIN_VAL);
     //draw title
 }
 void displayDC(void)
 {
-
+    sendUARTString("\033[H"
+               "+--------------------------------------------------------+\r\n"
+               "|                       CPE329: DC Mode                  |\r\n"
+               "+--------------------------------------------------------+\r\n"
+               "|Voltage  (VDC):                                         |\r\n"
+               "|                                                        |\r\n"
+               "|                                                        |\r\n"
+               "|                                                        |\r\n"
+               "|                                                        |\r\n"
+               "|                                                        |\r\n"
+               "|                                                        |\r\n"
+               "|                                                        |\r\n"
+               "|                                                        |\r\n"
+               "| Press ANY key to                                       |\r\n"
+               "| Enter AC Mode                                          |\r\n"
+               "+--------------------------------------------------------+");
 }
 void displayAC(void)
 {
-
+    sendUARTString("\033[H"
+               "+--------------------------------------------------------+\r\n"
+               "|                       CPE329: AC Mode                  |\r\n"
+               "+--------------------------------------------------------+\r\n"
+               "|Voltage  (VAC):                                         |\r\n"
+               "|Frequency (Hz):                                         |\r\n"
+               "|Peak-Peak  (V):                                         |\r\n"
+               "|RMS     (Vrms):                                         |\r\n"
+               "|                                                        |\r\n"
+               "|                                                        |\r\n"
+               "|                                                        |\r\n"
+               "|                                                        |\r\n"
+               "|                                                        |\r\n"
+               "| Press 1 to                                             |\r\n"
+               "| Enter DC Mode                                          |\r\n"
+               "+--------------------------------------------------------+");
+    updateAC(DMM_MIN_VAL, 0, DMM_MIN_VAL, DMM_MIN_VAL);
 }
 void updateVDC(uint32_t val)
 {
@@ -89,10 +105,9 @@ void updateRMS(uint32_t val)
     sendUARTString(measBuf);
     barGraph(val,V_RMS_X_POS, V_RMS_Y_POS,"Vrms");
 }
-void updateAll(uint32_t vdc, uint32_t vac, uint32_t freq, uint32_t pkPk,
+void updateAC(uint32_t vac, uint32_t freq, uint32_t pkPk,
                uint32_t rms)
 {
-    updateVDC(vdc);
     updateVAC(vac);
     updateFreq(freq);
     updatePkPk(pkPk);

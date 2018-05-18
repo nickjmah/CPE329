@@ -26,10 +26,10 @@
 #define V_DC_X_POS 35
 #define MEAS_START_XPNT 17
 #define MEAS_START_YPNT 4
-#define VAC_YPOS 1
-#define FREQ_YPOS 2
-#define PK_PK_YPOS 3
-#define RMS_YPOS 4
+#define VAC_YPOS 0
+#define FREQ_YPOS 1
+#define PK_PK_YPOS 2
+#define RMS_YPOS 3
 #define SIG_FIGS 4 //the amount of digits shown in the measurement
 /** \brief initalizes header for the GUI
  * sets up the GUI by printing out the "box" with title and initializing the display
@@ -90,14 +90,13 @@ void updatePkPk(uint32_t val);
 void updateRMS(uint32_t val);
 /** \brief updates all of the values and graphs
  * This function calls all of the updateX functions for easier usage
- * \param vdc The DC Voltage reading
  * \param vac The AC Voltage reading
  * \param freq The frequency measurement
  * \param pkPk The Peak-Peak voltage measurement
  * \param rms The RMS voltage reading
  * \return void
  */
-void updateAll(uint32_t vdc, uint32_t vac, uint32_t freq, uint32_t pkPk,
+void updateAC(uint32_t vac, uint32_t freq, uint32_t pkPk,
                uint32_t rms);
 /** \converts an ADC value to a number in decimal
  * This function takes in a value that is assumed to be a 14-bit number from the ADC

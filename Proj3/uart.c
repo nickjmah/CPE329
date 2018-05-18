@@ -106,18 +106,19 @@ void EUSCIA0_IRQHandler(void)
             testChar = RxBuffer - '0';
             if(testChar <= 9){
                 result = result*10 + testChar;
-                while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
-                EUSCI_A0->TXBUF = RxBuffer;
+                RxFlag = 1;
+//                while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
+//                EUSCI_A0->TXBUF = RxBuffer;
             }
         }
-        else if (RxBuffer == '\r')
-        {
-            RxFlag = 1;
-            while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
-            EUSCI_A0->TXBUF = '\r';
-            while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
-            EUSCI_A0->TXBUF = '\n';
-        }
+//        else if (RxBuffer == '\r')
+//        {
+//            RxFlag = 1;
+//            while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
+//            EUSCI_A0->TXBUF = '\r';
+//            while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
+//            EUSCI_A0->TXBUF = '\n';
+//        }
     }
 }
 

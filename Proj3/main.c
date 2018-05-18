@@ -51,23 +51,28 @@ void main(void)
     init();
     __enable_irq();
 
-    uint16_t receive;
+    uint16_t receive = 0;
 
     while (1)
     {
+        uint32_t prev;
         uint32_t ACVals[3] = { 0 };
         uint32_t* ACVal_ptr = &(ACVals[0]);
         if (readUARTRxFlag())
         {
+            prev = receive;
             receive = readResult();
             clearResult();     //clear the value of result
-            switch (receive)
+            if (prev != receive)//TODO: screen needless refreshes still
             {
-            case (1):
-                displayDC();
-                break;
-            default:
-                displayAC();
+                switch (receive)
+                {
+                case (1):
+                    displayDC();
+                    break;
+                default:
+                    displayAC();
+                }
             }
         }
         switch (receive)
