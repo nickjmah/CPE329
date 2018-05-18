@@ -28,7 +28,7 @@ void initGUI(void)
     //init bar graphs as empty
     barGraph(0, V_RMS_X_POS, V_RMS_Y_POS, "Vrms");
     barGraph(0, V_DC_X_POS, V_DC_Y_POS, "Vdc");
-    updateAll(DMM_MIN_VAL, DMM_MIN_VAL, 1, DMM_MIN_VAL, DMM_MIN_VAL);
+    updateAll(DMM_MIN_VAL, DMM_MIN_VAL, 12, DMM_MIN_VAL, DMM_MIN_VAL);
     //draw title
 }
 void updateVDC(uint32_t val)
@@ -55,9 +55,9 @@ void updateFreq(uint32_t val)
 {
     clearMeas(FREQ_YPOS);
     static char measBuf[MEAS_BUFFER_SIZE]; //the buffer that to generate the string
-    sprintf(measBuf, "\033[%d;%dH %s", MEAS_START_YPNT + FREQ_YPOS,
+    sprintf(measBuf, "\033[%d;%dH %sHz    ", MEAS_START_YPNT + FREQ_YPOS,
     MEAS_START_XPNT,
-            itoa(val));//TODO: change when freq format decided
+            itoaForFreq(val));//TODO: change when freq format decided
     sendUARTString(measBuf);
 }
 
@@ -158,4 +158,15 @@ void clearMeas(uint32_t yPos)
     sendUARTString(measBuf);
     //clearing 6 spaces to remove any lingering values
     return;
+}
+char* itoaForFreq(uint32_t val)
+{
+    static char buf[32] = {0};
+    int i = 30;
+    for(; val!=0; i--)
+    {
+        buf[i] = "0123456789"[val%10];
+        val /= 10;
+    }
+    return &buf[i+1];
 }

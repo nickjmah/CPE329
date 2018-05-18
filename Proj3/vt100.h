@@ -108,4 +108,9 @@ char* itoaADC(uint32_t val);
  *
  */
 void clearMeas(uint32_t yPos);
+/** \brief itoa but it always is 4 digits long for freq
+ *
+ *
+ */
+char* itoaForFreq(uint32_t val);
 #endif /* VT100_H_ */
