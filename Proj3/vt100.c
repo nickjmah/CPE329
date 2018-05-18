@@ -154,7 +154,7 @@ char* itoaADC(uint32_t val)
 void clearMeas(uint32_t yPos)
 {
     static char measBuf[MEAS_BUFFER_SIZE]; //the buffer that to generate the string
-    sprintf(measBuf,"\033[%d;%dH       ", yPos, MEAS_START_XPNT);
+    sprintf(measBuf,"\033[%d;%dH       ",MEAS_START_YPNT +yPos, MEAS_START_XPNT);
     sendUARTString(measBuf);
     //clearing 6 spaces to remove any lingering values
     return;
