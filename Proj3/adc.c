@@ -19,6 +19,8 @@ char* itoa(int val)
 {
     static char buf[ITOA_BUF_SIZE] = {0}; //create a static buffer for string output
     int i = ITOA_INDEX_START;
+    buf[i+1] = '\0';                      //forcing termination character in the event
+                                          //of unexpected behaviour
     for(; val != 0; i--)                  //loop until val is 0
     {
         buf[i] = "0123456789"[(val) % 10];//give buf the least significant bit of val
