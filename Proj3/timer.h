@@ -42,4 +42,5 @@
 #define COUNT_100US_48MHZ (uint16_t)4800
 ///1ms count at 48MHz DCO frequency
 #define COUNT_1MS_48MHZ (uint16_t)48000
+#define COUNT_1S_48MHZ (uint32_t)48000000
 #endif /* TIMER_H_ */

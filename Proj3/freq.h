@@ -12,6 +12,8 @@
 
 ///System Frequency
 extern uint32_t sysFreq;
+//Unit definition
+#define UNITS_KILO 1000//converts the encoded KHZ to MHZ
 ///frequency at 1500kHz
 #define FREQ_1500_KHZ (uint32_t)1500
 

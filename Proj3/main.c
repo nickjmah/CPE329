@@ -64,7 +64,7 @@ void main(void)
             updateVDC(averageDC());     //Take average DC Value after a ms
             break;
         default:    //Perform AC Measurement otherwise
-            if (readFreqFlag())
+            if (readFreqFlag())//check if frequency has an update
             {
                 updateFreq(calcFreq());
                 //update frequency on the screen if there's a new reading
