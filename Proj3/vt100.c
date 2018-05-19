@@ -32,7 +32,7 @@ void displayDC(void)
             "|                                                        |\r\n"
             "|                                                        |\r\n"
             "|                                                        |\r\n"
-            "| Press ANY key to                                       |\r\n"
+            "| Press NUM key to                                       |\r\n"
             "| Enter AC Mode                                          |\r\n"
             "+--------------------------------------------------------+");
 }

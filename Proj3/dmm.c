@@ -34,14 +34,12 @@ void initFreqMeas(void)
     NVIC->ISER[0] = 1 << ((TA0_N_IRQn) & 31);
 }
 
-
 uint32_t calcFreq(void)
 {
-    uint32_t temp = sysFreq * UNITS_KILO / readPeriod();//frequency/cycle = freq
+    uint32_t temp = sysFreq * UNITS_KILO / readPeriod(); //frequency/cycle = freq
     return temp + temp / 200 + 1;
     //temp / 200 + 1 is a calibration slope derived from experimentation
 }
-
 
 uint32_t averageDC(void)
 {
@@ -53,7 +51,8 @@ uint32_t averageDC(void)
         TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
         TIMER_A0->CCR[0] += COUNT_100US_48MHZ;
         //wait until 100us since last measurement
-        while (!(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG));
+        while (!(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG))
+            ;
         //begin ADC conversion
         startConv();
         while (!readADCFlag())
@@ -64,7 +63,7 @@ uint32_t averageDC(void)
         buffer += readADC();
         size++;
     }
-    return buffer / size;//return average value
+    return buffer / size; //return average value
 }
 
 uint32_t PTPCalc(uint32_t minVal, uint32_t maxVal)
@@ -74,7 +73,7 @@ uint32_t PTPCalc(uint32_t minVal, uint32_t maxVal)
 
 uint32_t OffsetCalc(uint32_t minVal, uint32_t maxVal)
 {
-    return (maxVal + minVal) / 2;//assumes perfect symmetric waveform
+    return (maxVal + minVal) / 2; //assumes perfect symmetric waveform
 }
 
 void ACMeas(uint32_t* ACVals)
@@ -83,9 +82,9 @@ void ACMeas(uint32_t* ACVals)
     uint32_t squared = 0;
     uint64_t sum = 0;
     uint32_t vals = 0;
-    uint32_t minVal = ADC_MAX_VAL;//initalized as max val just in case
+    uint32_t minVal = ADC_MAX_VAL; //initalized as max val just in case
     uint32_t maxVal = 0;
-    while (vals < COUNT_1S_48MHZ / COUNT_100US_48MHZ)//wait for 1 second
+    while (vals < COUNT_1S_48MHZ / COUNT_100US_48MHZ ) //wait for 1 second
     {
         while (!(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG))
             ;
@@ -99,11 +98,11 @@ void ACMeas(uint32_t* ACVals)
             asm("");
             //prevent while loop from being compiled out at higher optimizations
         }
-        temp = readADC();//readADC value
+        temp = readADC(); //readADC value
         squared = temp * temp;
-        sum += squared;//accumulate sqaures
+        sum += squared; //accumulate sqaures
         vals++;
-        if (temp < minVal)//check if smaller than min
+        if (temp < minVal) //check if smaller than min
         {
             minVal = temp;
         }
@@ -112,7 +111,7 @@ void ACMeas(uint32_t* ACVals)
             maxVal = temp;
         }
     }
-    ACVals[0] = (uint32_t) (sum / vals);//return average of accumulated
+    ACVals[0] = (uint32_t) (sum / vals); //return average of accumulated
     ACVals[1] = minVal;
     ACVals[2] = maxVal;
     return;
@@ -139,7 +138,7 @@ char* waveDetect(uint32_t RMS, uint32_t PTP, uint32_t OFS)
     if ((THRES >= (RMS - TRI_RMS)) || (THRES >= (TRI_RMS - RMS)))
         return "TRIANGLE";
     else
-        return "SQUARE";//otherwise guess that the wave is a squarewave
+        return "SQUARE"; //otherwise guess that the wave is a squarewave
 }
 
 uint16_t readFreqFlag(void)
@@ -170,17 +169,17 @@ void TA0_N_IRQHandler(void)
     if (TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG)
     {
         TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;
-        captureValue[captureCount] = TIMER_A0->CCR[1];//store rising edge
+        captureValue[captureCount] = TIMER_A0->CCR[1]; //store rising edge
         captureCount++;
         if (captureCount == 1)
-            overflow = 0;//first index of buffer means start measurement
+            overflow = 0; //first index of buffer means start measurement
         if (captureCount == 2)
         {
             //calculate number of cycles by getting difference and adding in
             //overflow periods
             period = captureValue[1] - captureValue[0] + TIMER_MAX * overflow;
             captureCount = 0;
-            captureFlag = 1;//raise a flag to service
+            captureFlag = 1;            //raise a flag to service
         }
 
     }
