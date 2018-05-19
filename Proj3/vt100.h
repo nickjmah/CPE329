@@ -17,20 +17,22 @@
 #define MEAS_BUFFER_SIZE 10 //The size of the buffer to create the voltage readout
 #define MAX_PERCENT 100 //used for math purposes
 #define BAR_RES MAX_PERCENT / BAR_HEIGHT //resolution of the bar graph
-#define DMM_MAX_VAL 14895 // 3 / 3.3 * 2^14
+#define DMM_MAX_VAL 14895 // 3 / 3.3 * 2^14 maximum expected DAC Val
 #define DMM_MIN_VAL 0
+//start values of all of the measurements
+#define MEAS_START_XPNT 17
+#define MEAS_START_YPNT 4
 //defining the cursor positions of the measurements
 #define V_RMS_Y_POS 13 
 #define V_RMS_X_POS 52
 #define V_DC_Y_POS 13
 #define V_DC_X_POS 35
-#define MEAS_START_XPNT 17
-#define MEAS_START_YPNT 4
 #define VAC_YPOS 0
 #define FREQ_YPOS 1
 #define PK_PK_YPOS 2
 #define RMS_YPOS 3
 #define WAVE_YPOS 4
+
 #define SIG_FIGS 4 //the amount of digits shown in the measurement
 /** \brief initalizes header for the GUI
  * sets up the GUI by printing out the "box" with title and initializing the display
@@ -53,10 +55,10 @@ void initGUI(void);
  *  \param title    The title for the graph
  *  \return pointer to the buffer holding the string
  */
-char* barGraph(uint32_t val, uint32_t xPos, uint32_t yPos, char* title);//todo: make a init GUI to save space
-/** \brief Changes the display to DC mode
- *
- */
+char* barGraph(uint32_t val, uint32_t xPos, uint32_t yPos, char* title); //todo: make a init GUI to save space
+               /** \brief Changes the display to DC mode
+                *
+                */
 void displayDC(void);
 /** \brief Changes the display to AC mode
  *
@@ -95,15 +97,15 @@ void updateWave(char* wave);
 
 void updateRMS(uint32_t val);
 /** \brief updates all of the values and graphs
- * This function calls all of the updateX functions for easier usage
+ * This function calls all of the updateX functions for AC mode
  * \param vac The AC Voltage reading
  * \param freq The frequency measurement
  * \param pkPk The Peak-Peak voltage measurement
  * \param rms The RMS voltage reading
  * \return void
  */
-void updateAC(uint32_t vac, uint32_t freq, uint32_t pkPk,
-               uint32_t rms, char* wave);
+void updateAC(uint32_t vac, uint32_t freq, uint32_t pkPk, uint32_t rms,
+              char* wave);
 /** \converts an ADC value to a number in decimal
  * This function takes in a value that is assumed to be a 14-bit number from the ADC
  * and converts it to a fixed point float with SIG_FIGS precision. The function is identical to 
@@ -121,10 +123,5 @@ char* itoaADC(uint32_t val);
  *
  */
 void clearMeas(uint32_t yPos);
-/** \brief itoa but it always is 4 digits long for freq
- *
- *
- */
-char* itoaForFreq(uint32_t val);
 
 #endif /* VT100_H_ */

@@ -14,6 +14,10 @@
 #define ADC_0 BIT4
 #define ADC_CAL 0
 #define ADC_MAX_VAL 16384
+#define ADC_MAX_ANALOG_VAL 3300 //maximum voltage for the ADC in mV
+#define UNITS_MILLI 1000
+#define ITOA_BUF_SIZE 32
+#define ITOA_INDEX_START 30
 
 char* itoa(int val);
 void initADC(void);

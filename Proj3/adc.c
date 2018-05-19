@@ -17,8 +17,8 @@ static uint8_t ADCFlag=0;
 
 char* itoa(int val)
 {
-    static char buf[32] = {0};
-    int i = 30;
+    static char buf[ITOA_BUF_SIZE] = {0};
+    int i = ITOA_INDEX_START;
     for(; val != 0; i--)
     {
         buf[i] = "0123456789"[(val) % 10];
