@@ -147,7 +147,8 @@ char* barGraph(uint32_t val, uint32_t xPos, uint32_t yPos, char* title)
     for (i = 0; i < BAR_HEIGHT; i++)
     {
         fillAmt -= BAR_RES; //subtracts fillAmt by resolution for each loop
-        if (fillAmt < MAX_PERCENT) //check to make sure that there is remaining perc. to fill out
+        if (fillAmt < MAX_PERCENT)
+        //check to make sure that there is remaining perc. to fill out
         {
             barVal = '#'; //if so, fill in the next block with a full character
 

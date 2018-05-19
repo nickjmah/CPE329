@@ -115,8 +115,6 @@ void updateAC(uint32_t vac, uint32_t freq, uint32_t pkPk, uint32_t rms,
  * accumulated
  * \param val a 14-bit number from the ADC
  * \return a pointer to buf indexed to the first digit
- * \bug the function assumes that the value is no greater than 2^14. Unknown operation will occur
- * \bug The adc initialization doesn't take SIG_FIGS into account and must be adjusted every time
  *
  */
 char* itoaADC(uint32_t val);
