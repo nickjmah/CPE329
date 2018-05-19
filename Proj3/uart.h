@@ -15,8 +15,9 @@
 void initUART(void);
 /** \brief IRQ for UART Receive
  *
- * This function will only accept a number. Upon receive, a static value will be updated to hold
- * the integer representation of the string using a custom atoi
+ * This function will only accept a number. Upon receive, a static value
+ * will be updated to hold the integer representation of the string using a
+ * custom atoi
  */
 void EUSCIA0_IRQHandler(void);
 /** \brief Checks if an interrupt occurred
@@ -31,7 +32,8 @@ uint8_t readUARTRxFlag(void);
 uint8_t readUART(void);
 /** \brief sends an arbitrary amount of data over the UART bus
  *
- * Sends an arbitrary amount of chars to the uart buffer. Use size to determine the sent size.
+ * Sends an arbitrary amount of chars to the uart buffer. Use size to determine
+ * the sent size.
  * \param data a pointer to the array of data to be sent
  * \param size the amount of data bytes to be sent
  */

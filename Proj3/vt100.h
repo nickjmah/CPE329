@@ -41,12 +41,13 @@
  */
 void initGUI(void);
 /** \brief draws a barGraph at a spot on the VT100 terminal
- *  the barGraph takes in a list of parameters and prints out a bargraph at that position
- *  A title will be printed at the bottom of the graph as well as the max and min values of 0 and 3V
- *  The bargraph will display '-' for an empty box and '#' for a full box. The resolution and size of
- *  the box is determined by the macro BAR_HEIGHT indirectly. The bar graph is printed vertically.
- *  Upon completion the bargraph will return the last printed characters. Upon an error "Uh Oh" will
- *  printed at the location of the error
+ *  the barGraph takes in a list of parameters and prints out a bargraph at that
+ *  position. A title will be printed at the bottom of the graph as well as the
+ *  max and min values of 0 and 3V. The bargraph will display '-' for an empty box
+ *  and '#' for a full box. The resolution and size of the box is determined by
+ *  the macro BAR_HEIGHT indirectly. The bar graph is printed vertically. Upon
+ *  completion the bargraph will return the last printed characters. Upon an
+ *  error "Uh Oh" will printed at the location of the error
  *  \param minVal   The minimum value of the input data
  *  \param maxVal   The maximum value of the input data
  *  \param val      The input data
@@ -55,7 +56,7 @@ void initGUI(void);
  *  \param title    The title for the graph
  *  \return pointer to the buffer holding the string
  */
-char* barGraph(uint32_t val, uint32_t xPos, uint32_t yPos, char* title); //todo: make a init GUI to save space
+char* barGraph(uint32_t val, uint32_t xPos, uint32_t yPos, char* title);
 /** \brief Changes the display to DC mode
  *
  */
@@ -107,10 +108,11 @@ void updateRMS(uint32_t val);
 void updateAC(uint32_t vac, uint32_t freq, uint32_t pkPk, uint32_t rms,
               char* wave);
 /** \converts an ADC value to a number in decimal
- * This function takes in a value that is assumed to be a 14-bit number from the ADC
- * and converts it to a fixed point float with SIG_FIGS precision. The function is identical to 
- * itoa() except that it accounts for a fixed point number and inserts a '.' A static buffer is used
- * to allow for the string to be accumulated
+ * This function takes in a value that is assumed to be a 14-bit number from the
+ * ADC and converts it to a fixed point float with SIG_FIGS precision. The
+ * function is identical to itoa() except that it accounts for a fixed point
+ * number and inserts a '.' A static buffer is used to allow for the string to be
+ * accumulated
  * \param val a 14-bit number from the ADC
  * \return a pointer to buf indexed to the first digit
  * \bug the function assumes that the value is no greater than 2^14. Unknown operation will occur

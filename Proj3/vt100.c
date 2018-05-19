@@ -136,7 +136,8 @@ char* barGraph(uint32_t val, uint32_t xPos, uint32_t yPos, char* title)
     //fillAmt maps val to a percentage from 0 to 100
 
     /* format and print title and side bars
-     * First print the title at the bottom of the graph, then the min value, then the max
+     * First print the title at the bottom of the graph, then the min value,
+     * then the max
      */
     n = sprintf(buf, "\033[%d;%dH %s \033[%d;%dH 0V \033[%d;%dH 3V", yPos + 1,
                 xPos, title, yPos, xPos - 3, yPos - BAR_HEIGHT + 1, xPos - 3);

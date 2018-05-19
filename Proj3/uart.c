@@ -109,7 +109,8 @@ void EUSCIA0_IRQHandler(void)
         testChar = RxBuffer - '0'; //subtract out ASCII offset
         if (testChar <= 9)
         { //ensure that the key pressed is actually a number
-            result = result * 10 + testChar; //if another transmission occurs, do a decimal bitshift
+            result = result * 10 + testChar;
+            //if another transmission occurs, do a decimal bitshift
             RxFlag = 1; //raise flag
         }
 
