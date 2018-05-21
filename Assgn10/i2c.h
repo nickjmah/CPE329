@@ -11,6 +11,9 @@
 #include "msp.h"
 #include "stdint.h"
 #include "stdio.h"
+
+#define BAUD_DIV_400KHZ 120
+
 void initI2C(void);
 void sendI2C(uint8_t address,uint8_t* payload, size_t size);
 /** \brief reads RxData

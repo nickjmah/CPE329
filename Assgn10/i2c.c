@@ -7,11 +7,19 @@
 
 #include "i2c.h"
 
+static uint8_t RXData[5] = {0};
+static uint8_t RXDataPointer;
+static uint8_t RXReceiveFlag = 0;
+
+// Pointer to TX data
+static uint8_t TXData[]= {0xA1, 0xB1, 0xC1, 0xD1};
+
+static uint8_t TXByteCtr;
+static uint8_t SlaveFlag = 0;
+
 void initI2C(void)
 {
     // Configure GPIO
-    P1->OUT &= ~BIT0;                       // Clear P1.0 output latch
-    P1->DIR |= BIT0;                        // For LED
     P1->SEL0 |= BIT6 | BIT7;                // I2C pins
 
     // Enable eUSCIB0 interrupt in NVIC module
@@ -26,12 +34,83 @@ void initI2C(void)
             EUSCI_B_CTLW0_SSEL__SMCLK;      // SMCLK
     EUSCI_B0->CTLW1 |= EUSCI_B_CTLW1_ASTP_2;// Automatic stop generated
                                             // after EUSCI_B0->TBCNT is reached
-    EUSCI_B0->BRW = 30;                     // baudrate = SMCLK / 30 = 100kHz
+    EUSCI_B0->BRW = BAUD_DIV_400KHZ;        // baudrate = SMCLK /120
     EUSCI_B0->TBCNT = 0x0005;               // number of bytes to be received
-    EUSCI_B0->I2CSA = 0x0048;               // Slave address
     EUSCI_B0->CTLW0 &= ~EUSCI_A_CTLW0_SWRST;// Release eUSCI from reset
 
-    EUSCI_B0->IE |= EUSCI_A_IE_RXIE |       // Enable receive interrupt
-            EUSCI_B_IE_NACKIE |             // Enable NACK interrupt
+    EUSCI_B0->IE |= EUSCI_B_IE_TXIE0 |      // Enable transmit interrupt
+            EUSCI_B_IE_NACKIE;              // Enable NACK interrupt
             EUSCI_B_IE_BCNTIE;              // Enable byte counter interrupt
 }
+
+void sendI2C(uint8_t address,uint8_t* payload, size_t size)
+{
+
+}
+
+uint8_t readI2C(uint8_t address, uint8_t* RxData_Ptr)
+{
+    EUSCI_B0->I2CSA = (uint32_t)address;               // Slave address
+    // Ensure stop condition got sent
+    while (EUSCI_B0->CTLW0 & EUSCI_B_CTLW0_TXSTP);
+
+    // I2C start condition
+    EUSCI_B0->CTLW0 |= EUSCI_B_CTLW0_TXSTT;
+}
+
+uint8_t readI2CReceiveFlag(void)
+{
+    return RXReceiveFlag;
+}
+
+// I2C interrupt service routine
+void EUSCIB0_IRQHandler(void)
+{
+    if (EUSCI_B0->IFG & EUSCI_B_IFG_NACKIFG)
+    {
+        EUSCI_B0->IFG &= ~EUSCI_B_IFG_NACKIFG;
+
+        // I2C start condition
+        UCB0CTL1 |= EUSCI_B_CTLW0_TXSTT;
+    }
+    if (EUSCI_B0->IFG & EUSCI_B_IFG_TXIFG0)
+    {
+        EUSCI_B0->IFG &= ~EUSCI_B_IFG_TXIFG0;
+
+        // Check TX byte counter
+        if (TXByteCtr)
+        {
+            // Load TX buffer
+            EUSCI_B0->TXBUF = TXData[SlaveFlag];
+
+            // Decrement TX byte counter
+            TXByteCtr--;
+        }
+        else
+        {
+            // I2C stop condition
+            EUSCI_B0->CTLW0 |= EUSCI_B_CTLW0_TXSTP;
+
+            // Clear USCI_B0 TX int flag
+            EUSCI_B0->IFG &= ~EUSCI_B_IFG_TXIFG;
+        }
+    }
+    if (EUSCI_B0->IFG & EUSCI_B_IFG_RXIFG0)
+    {
+        EUSCI_B0->IFG &= ~ EUSCI_B_IFG_RXIFG0;
+        RXReceiveFlag = 1;
+
+        // Get RX data
+        RXData[RXDataPointer++] = EUSCI_B0->RXBUF;
+
+        if (RXDataPointer > sizeof(RXData))
+        {
+            RXDataPointer = 0;
+        }
+    }
+    if (EUSCI_B0->IFG & EUSCI_B_IFG_BCNTIFG)
+    {
+        EUSCI_B0->IFG &= ~ EUSCI_B_IFG_BCNTIFG;
+    }
+}
+
