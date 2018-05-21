@@ -8,8 +8,9 @@
 #ifndef I2C_H_
 #define I2C_H_
 
+#include "msp.h"
 
-
+void initI2C(void);
 
 
 #endif /* I2C_H_ */
