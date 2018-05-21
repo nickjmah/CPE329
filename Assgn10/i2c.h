@@ -12,7 +12,7 @@
 #include "stdint.h"
 #include "stdio.h"
 void initI2C(void);
-void sendI2C(uint8_t address, size_t size);
+void sendI2C(uint8_t address,uint8_t* payload, size_t size);
 /** \brief reads RxData
  *
  *  \param RxData_Ptr pointer to the first element of the array containing RxData
