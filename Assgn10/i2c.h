@@ -23,5 +23,4 @@ void sendI2C(uint8_t address,uint8_t* payload, size_t size);
  *
  */
 uint8_t readI2C(uint8_t address, uint8_t* RxData_Ptr);
-uint8_t readI2CReceiveFlag(void);
 #endif /* I2C_H_ */

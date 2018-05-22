@@ -2,6 +2,7 @@
 #include "dco.h"
 #include "i2c.h"
 #include "freq.h"
+#include "delay.h"
 /**
  * main.c
  */
@@ -19,7 +20,7 @@ void init(void)
 void main(void)
 {
     P1->DIR |= BIT0;
-    P1->OUT &= BIT0;
+    P1->OUT &= ~BIT0;
     uint16_t memAddr = 0;
     uint8_t RxData = 0;
     uint8_t msgPacket[3] = {((memAddr & 0xFF00)>>8), (memAddr & 0x00FF),0xAA};//write to address 0, send AA
@@ -28,8 +29,9 @@ void main(void)
 	init();
 
 	sendI2C(EEPROM_I2C_ADDR, msgPacket, sizeof(msgPacket));
-	//receive
+	delay_ms(5, sysFreq);
 	sendI2C(EEPROM_I2C_ADDR, recAddr, sizeof(recAddr));
+    delay_ms(5, sysFreq);
 	readI2C(EEPROM_I2C_ADDR, &RxData);
 	if(RxData == 0xAA)
 	{
