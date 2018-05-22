@@ -7,9 +7,10 @@
 
 #include "i2c.h"
 
-static uint8_t RXData[5] = {0};
+static uint8_t RXData;
 static uint8_t RXDataPointer;
 static uint8_t RXReceiveFlag = 0;
+static uint8_t TXSendFlag = 0;
 
 // Pointer to TX data
 static uint8_t TXData[]= {0xA1, 0xB1, 0xC1, 0xD1};
@@ -43,6 +44,8 @@ void initI2C(void)
 
 void sendI2C(uint8_t address,uint8_t* payload, size_t size)
 {
+    TXSendFlag = 0;
+
     // configure slave address
     EUSCI_B0->I2CSA = address;
 
@@ -51,10 +54,16 @@ void sendI2C(uint8_t address,uint8_t* payload, size_t size)
     // Ensure stop condition got sent
     while (EUSCI_B0->CTLW0 & EUSCI_B_CTLW0_TXSTP);
     EUSCI_B0->TXBUF = *payload;
+    // I2C stop condition
+    EUSCI_B0->CTLW0 |= EUSCI_B_CTLW0_TXSTP;
+    // Clear USCI_B0 TX int flag
+    EUSCI_B0->IFG &= ~EUSCI_B_IFG_TXIFG;
 }
 
 uint8_t readI2C(uint8_t address, uint8_t* RxData_Ptr)
 {
+    RXReceiveFlag = 0;
+
     // configure slave address
     EUSCI_B0->I2CSA = (uint32_t)address;
 
@@ -62,13 +71,18 @@ uint8_t readI2C(uint8_t address, uint8_t* RxData_Ptr)
     EUSCI_B0->CTLW0 |= EUSCI_B_CTLW0_TXSTT;
     // Ensure stop condition got sent
     while (EUSCI_B0->CTLW0 & EUSCI_B_CTLW0_TXSTP);
-    uint16_t bytes = EUSCI_B0->STATW;
-    return (uint8_t)((bytes & 0xFF00) >> 8);
+    RXData = EUSCI_B0->RXBUF;
+    return RXData;
 }
 
 uint8_t readI2CReceiveFlag(void)
 {
     return RXReceiveFlag;
+}
+
+uint8_t readI2CSendFlag(void)
+{
+    return TXSendFlag;
 }
 
 // I2C interrupt service routine
@@ -84,24 +98,9 @@ void EUSCIB0_IRQHandler(void)
     if (EUSCI_B0->IFG & EUSCI_B_IFG_TXIFG0)
     {
         EUSCI_B0->IFG &= ~EUSCI_B_IFG_TXIFG0;
-
-        // Check TX byte counter
-        if (TXByteCtr)
-        {
-            // Load TX buffer
-            EUSCI_B0->TXBUF = TXData[SlaveFlag];
-
-            // Decrement TX byte counter
-            TXByteCtr--;
-        }
-        else
-        {
-            // I2C stop condition
-            EUSCI_B0->CTLW0 |= EUSCI_B_CTLW0_TXSTP;
-
-            // Clear USCI_B0 TX int flag
-            EUSCI_B0->IFG &= ~EUSCI_B_IFG_TXIFG;
-        }
+        // I2C stop condition
+        EUSCI_B0->CTLW0 |= EUSCI_B_CTLW0_TXSTP;
+        TXSendFlag = 1;
     }
     if (EUSCI_B0->IFG & EUSCI_B_IFG_RXIFG0)
     {
@@ -109,14 +108,6 @@ void EUSCIB0_IRQHandler(void)
         // I2C stop condition
         EUSCI_B0->CTLW0 |= EUSCI_B_CTLW0_TXSTP;
         RXReceiveFlag = 1;
-
-        // Get RX data
-        RXData[RXDataPointer++] = EUSCI_B0->RXBUF;
-
-        if (RXDataPointer > sizeof(RXData))
-        {
-            RXDataPointer = 0;
-        }
     }
     if (EUSCI_B0->IFG & EUSCI_B_IFG_BCNTIFG)
     {
