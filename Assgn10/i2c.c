@@ -55,9 +55,9 @@ void sendI2C(uint8_t address,uint8_t* payload, size_t size)
     while (EUSCI_B0->CTLW0 & EUSCI_B_CTLW0_TXSTP);
     EUSCI_B0->TXBUF = *payload;
     // I2C stop condition
-    EUSCI_B0->CTLW0 |= EUSCI_B_CTLW0_TXSTP;
+    EUSCI_B0->CTLW0 |= EUSCI_B_CTLW0_TXSTP; //not sure if this should be here, it was in the interrupt
     // Clear USCI_B0 TX int flag
-    EUSCI_B0->IFG &= ~EUSCI_B_IFG_TXIFG;
+    EUSCI_B0->IFG &= ~EUSCI_B_IFG_TXIFG; //ditto here
 }
 
 uint8_t readI2C(uint8_t address, uint8_t* RxData_Ptr)
