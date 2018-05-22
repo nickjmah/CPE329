@@ -18,6 +18,21 @@ void init(void)
 }
 void main(void)
 {
+    P1->DIR |= BIT0;
+    P1->OUT &= BIT0;
+    uint16_t memAddr = 0;
+    uint8_t RxData = 0;
+    uint8_t msgPacket[3] = {((memAddr & 0xFF00)>>8), (memAddr & 0x00FF),0xAA};//write to address 0, send AA
+    uint8_t recAddr[2] = {(((memAddr-1) & 0xFF00)>>8),((memAddr-1) & 0x00FF)};
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 	init();
+
+	sendI2C(EEPROM_I2C_ADDR, msgPacket, sizeof(msgPacket));
+	//receive
+	sendI2C(EEPROM_I2C_ADDR, recAddr, sizeof(recAddr));
+	readI2C(EEPROM_I2C_ADDR, &RxData);
+	if(RxData == 0xAA)
+	{
+	    P1->OUT |= BIT0;
+	}
 }
