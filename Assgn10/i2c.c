@@ -34,12 +34,11 @@ void initI2C(void)
             EUSCI_B_CTLW0_SSEL__SMCLK;      // SMCLK
     EUSCI_B0->CTLW1 |= EUSCI_B_CTLW1_ASTP_2;// Automatic stop generated
                                             // after EUSCI_B0->TBCNT is reached
-    EUSCI_B0->BRW = BAUD_DIV_400KHZ;        // baudrate = SMCLK /120
+    EUSCI_B0->BRW = BAUD_DIV_400KHZ;        // baudrate = SMCLK(48MHz) /120 = 400kHz
     EUSCI_B0->CTLW0 &= ~EUSCI_A_CTLW0_SWRST;// Release eUSCI from reset
 
     EUSCI_B0->IE |= EUSCI_B_IE_TXIE0 |      // Enable transmit interrupt
             EUSCI_B_IE_NACKIE;              // Enable NACK interrupt
-            EUSCI_B_IE_BCNTIE;              // Enable byte counter interrupt
 }
 
 void sendI2C(uint8_t address,uint8_t* payload, size_t size)
@@ -51,7 +50,7 @@ void sendI2C(uint8_t address,uint8_t* payload, size_t size)
             EUSCI_B_CTLW0_TXSTT;        // Start condition
     // Ensure stop condition got sent
     while (EUSCI_B0->CTLW0 & EUSCI_B_CTLW0_TXSTP);
-    EUSCI_B0->TXBUF = payload;
+    EUSCI_B0->TXBUF = *payload;
 }
 
 uint8_t readI2C(uint8_t address, uint8_t* RxData_Ptr)
