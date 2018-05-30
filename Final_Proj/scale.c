@@ -8,10 +8,14 @@
 #include "scale.h"
 
 
-uint32_t height=44444;
+static Measurement currentMeas = {
+                                  Unit{"00",22},//TODO:Figure out what it should be
+                                  0, //height
+                                  0, //weight
+                                  0};//bmi
+}
 void initScale(void)
 {
-    currentUnit = pounds;
     //printing weight
 //    writeString("Weight: 0" + currentUnit.name);
     rowShiftDown();
@@ -23,6 +27,5 @@ void updateHeight(void)
     returnHome();
     clearDisplay();
     writeString("Height('):");
-
-
+    currentMeas.height = 12*2;
 }
