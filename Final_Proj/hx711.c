@@ -95,3 +95,12 @@ uint32_t getOffset(void)
 {
     return offset;
 }
+
+void calibrate(uint32_t weight)
+{
+    uint32_t calVal = 0;
+    setScale();
+    tare();
+    calVal = getUnits(10);
+    setScale(calVal / weight);
+}

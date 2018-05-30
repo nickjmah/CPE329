@@ -63,7 +63,10 @@ void setOffset(uint32_t newOffset);
  *
  */
 uint32_t getOffset(void);
-
+/** \brief calibrates the scale value using a known weight
+ *
+ */
+void calibrate(uint32_t weight);
 
 
 #endif /* HX711_H_ */
