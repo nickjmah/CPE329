@@ -7,8 +7,8 @@
 
 #include "hx711.h"
 
-static uint32_t OFFSET = 0;
-static float SCALE = 1;
+static uint32_t offset = 0;
+static float scale = 1;
 
 void initHX711(void)
 {
@@ -68,30 +68,30 @@ void tare(uint8_t times)
 
 uint32_t getValue(uint8_t times)
 {
-    return readAverage(times) - OFFSET;
+    return readAverage(times) - offset;
 }
 
 float getUnits(uint8_t times)
 {
-    return getValue(times) / SCALE;
+    return getValue(times) / scale;
 }
 
-void setScale(float scale)
+void setScale(float newScale)
 {
-    SCALE = scale;
+    scale = newScale;
 }
 
 float getScale(void)
 {
-    return SCALE;
+    return scale;
 }
 
-void setOffset(uint32_t offset)
+void setOffset(uint32_t newOffset)
 {
-    OFFSET = offset;
+    offset = newOffset;
 }
 
 uint32_t getOffset(void)
 {
-    return OFFSET;
+    return offset;
 }

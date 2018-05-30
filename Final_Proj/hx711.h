@@ -22,9 +22,9 @@ uint32_t readAverage(uint8_t times);
 uint32_t getValue(uint8_t times);
 float getUnits(uint8_t times);
 void tare(uint8_t times);
-void setScale(float scale);
+void setScale(float newScale);
 float getScale(void);
-void setOffset(uint32_t offset);
+void setOffset(uint32_t newOffset);
 uint32_t getOffset(void);
 
 
