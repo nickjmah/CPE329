@@ -29,7 +29,7 @@ void updateHeight(void)
 {
     returnHome();
     clearDisplay();
-    writeString("Height(ft):");
+    writeString("Height('):");
 
 
 }

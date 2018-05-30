@@ -126,8 +126,8 @@ uint8_t checkRow(uint8_t row);
  * \param bitIndex result of checkKP()
  * \return A usable character for printing or comparison
  */
-uint8_t bitConvert(uint16_t bitIndex);//converts 16 bit index into keypad values
-
+char bitConvertChar(uint16_t bitIndex);//converts 16 bit index into keypad values
+uint32_t bitConvertInt(uint16_t bitIndex);//same as above, but for ints
 
 
 #endif /* KEYPAD_H_ */
