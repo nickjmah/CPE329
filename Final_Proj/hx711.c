@@ -9,6 +9,9 @@
 
 static uint32_t offset = 0;
 static float scale = 1;
+Unit pounds = {"lb", 202};
+Unit kilograms = {"kg", 232};
+Unit currentUnit;
 
 void initHX711(void)
 {
@@ -86,6 +89,11 @@ float getScale(void)
     return scale;
 }
 
+void changeUnit(Unit choice)
+{
+    currentUnit = choice;
+}
+
 void setOffset(uint32_t newOffset)
 {
     offset = newOffset;
@@ -99,8 +107,8 @@ uint32_t getOffset(void)
 void calibrate(uint32_t weight)
 {
     uint32_t calVal = 0;
-    setScale();
-    tare();
+    setScale(0);
+    setOffset(0);
     calVal = getUnits(10);
     setScale(calVal / weight);
 }

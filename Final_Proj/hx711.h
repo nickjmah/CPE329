@@ -14,6 +14,13 @@
 #define HX711_CLK BIT4     //""
 #define HX711_DO BIT5      //""
 
+/** \brief struct for convenience to aggregate the scale factor and name
+ *
+ */
+typedef struct Unit{
+    char name[2];//size of the name, must be 2 letters, ex. "lb","kg"
+    float scale; //some divisor to turn into the correct units
+}Unit;
 /** \brief initializes ports for serial communication with HX711
  *  Sets up data input and clock output
  */
@@ -58,6 +65,7 @@ float getScale(void);
 /** \brief sets the offset value
  *
  */
+
 void setOffset(uint32_t newOffset);
 /** \brief returns the offset value
  *
@@ -68,5 +76,9 @@ uint32_t getOffset(void);
  */
 void calibrate(uint32_t weight);
 
+/** \brief changes the units used for printing and math
+ *
+ */
+void changeUnit(Unit choice);
 
 #endif /* HX711_H_ */

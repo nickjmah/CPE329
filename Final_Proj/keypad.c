@@ -53,7 +53,7 @@ uint16_t checkKP(){
     return result; //returns final result
 }
 
-char bitConvert(uint16_t bitIndex){
+char bitConvertChar(uint16_t bitIndex){
     //case statement to convert the bits into chars
     switch(bitIndex){
     case ONE: return '1';
@@ -72,7 +72,7 @@ char bitConvert(uint16_t bitIndex){
     //if the bit encoded value is invalid or more than one key, return ?
     }
 }
-uint32_t bitConvert(uint16_t bitIndex){
+uint32_t bitConvertInt(uint16_t bitIndex){
     //case statement to convert the bits into chars
     switch(bitIndex){
     case ONE: return 1;
