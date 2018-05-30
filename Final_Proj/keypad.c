@@ -53,7 +53,7 @@ uint16_t checkKP(){
     return result; //returns final result
 }
 
-uint8_t bitConvert(uint16_t bitIndex){
+char bitConvert(uint16_t bitIndex){
     //case statement to convert the bits into chars
     switch(bitIndex){
     case ONE: return '1';
@@ -70,5 +70,23 @@ uint8_t bitConvert(uint16_t bitIndex){
     case POUND: return '#';
     default: return '?';
     //if the bit encoded value is invalid or more than one key, return ?
+    }
+}
+uint32_t bitConvert(uint16_t bitIndex){
+    //case statement to convert the bits into chars
+    switch(bitIndex){
+    case ONE: return 1;
+    case TWO: return 2;
+    case THREE: return 3;
+    case FOUR: return 4;
+    case FIVE: return 4;
+    case SIX: return 6;
+    case SEVEN: return 7;
+    case EIGHT: return 8;
+    case NINE: return 9;
+    default: return 1000;
+    /*if the bit encoded value is invalid or more than one key, return 1000
+     should generate a math error
+     */
     }
 }
