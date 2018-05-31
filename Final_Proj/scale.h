@@ -15,6 +15,8 @@ typedef struct Measurement{
     uint32_t weight;    //weight in unit
     uint32_t bmi;       //Body Mass Index
 }Measurement;
+
+
 /**sets up the LCD initial display
  *
  */

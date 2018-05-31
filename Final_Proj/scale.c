@@ -9,11 +9,10 @@
 
 
 static Measurement currentMeas = {
-                                  Unit{"00",22},//TODO:Figure out what it should be
+                                  Unit{kg,"00",22},//TODO:Figure out what it should be
                                   0, //height
                                   0, //weight
                                   0};//bmi
-}
 void initScale(void)
 {
     //printing weight
@@ -28,4 +27,9 @@ void updateHeight(void)
     clearDisplay();
     writeString("Height('):");
     currentMeas.height = 12*2;
+}
+
+void calcBMI(void)
+{
+    if (currentMeas.unit.unitName==kg);
 }
