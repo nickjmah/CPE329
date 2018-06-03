@@ -26,5 +26,8 @@ void initScale(void);
  *
  */
 void updateHeight(void);
+void updateUnits(void);
+void updateScale(void);
 void calcBMI(void);
+void snarkyMeas(void);
 #endif /* SCALE_H_ */

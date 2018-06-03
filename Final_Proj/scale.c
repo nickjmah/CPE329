@@ -24,12 +24,39 @@ void initScale(void)
 void updateHeight(void)
 {
     returnHome();
-    clearDisplay();
+    clearDisplay(); //TODO: Figure out how to only clear the bottom row
     writeString("Height('):");
-    currentMeas.height = 12*2;
+    currentMeas.height = 12*2;//TODO:Figure out how to update this value
+    writeString("Height('):")
+    currentMeas.height += 1;
 }
-
+void updateUnits(void)
+{
+    returnHome();
+    clearDisplay();
+    writeString("Units:")
+    rowShiftDown();
+    writeString("1: SI, 2; Imp");
+}
+void updateScale(void)
+{
+    returnHome();
+    clearDisplay();
+    writeString("Wt("));
+    writeString(currentMeas.unit.name);
+    writeString(")");
+    writeString(atoi(currentMeas.weight*currentMeas.unit.scale));//TODO:make sure that this is correct
+    rowShiftDown();
+    writeString("BMI:")
+    writeString(atoi(currentMeas.bmi));
+    snarkyMeas();
+}
+void snarkyMeas(void)
+{
+    writeString("F A T");
+}
 void calcBMI(void)
 {
     if (currentMeas.unit.unitName==kg);
 }
+
