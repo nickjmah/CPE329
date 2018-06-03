@@ -22,7 +22,7 @@ typedef struct Measurement{
  */
 void initScale(void);
 
-/** \brief promps the user for their height and updates a variable that holds it
+/** \brief prompts the user for their height and updates a variable that holds it
  *
  */
 void updateHeight(void);
