@@ -10,7 +10,7 @@
 #define SCALE_H_
 
 typedef struct Measurement{
-    Unit unit;
+    Unit unit;          //For unit conversion
     uint32_t height;    //height in inches
     uint32_t weight;    //weight in unit
     uint32_t bmi;       //Body Mass Index

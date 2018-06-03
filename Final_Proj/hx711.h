@@ -14,12 +14,12 @@
 #define HX711_CLK BIT4     //""
 #define HX711_DO BIT5      //""
 
-typedef enum unitName {kg,lb}UNIT_NAME;
+typedef enum unitName {kg,lb}unitName_t;
 /** \brief struct for convenience to aggregate the scale factor and name
  *
  */
 typedef struct Unit{
-    UNIT_NAME unitName;
+    unitName_t unitName;
     char name[2];//size of the name, must be 2 letters, ex. "lb","kg"
     float scale; //some divisor to turn into the correct units
 }Unit;

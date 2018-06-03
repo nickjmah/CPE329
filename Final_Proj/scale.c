@@ -9,7 +9,7 @@
 
 
 static Measurement currentMeas = {
-                                  Unit{kg,"00",22},//TODO:Figure out what it should be
+                                  {kg,"00",22},
                                   0, //height
                                   0, //weight
                                   0};//bmi
