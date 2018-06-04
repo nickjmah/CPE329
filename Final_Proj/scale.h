@@ -9,6 +9,9 @@
 #ifndef SCALE_H_
 #define SCALE_H_
 
+#define ITOA_BUF_SIZE 32        //size of the ITOA buffer
+#define ITOA_INDEX_START 30
+
 typedef struct Measurement{
     Unit unit;          //For unit conversion
     uint32_t height;    //height in inches
@@ -30,4 +33,5 @@ void updateUnits(void);
 void updateScale(void);
 void calcBMI(void);
 void snarkyMeas(void);
+char* itoa(int val);
 #endif /* SCALE_H_ */
