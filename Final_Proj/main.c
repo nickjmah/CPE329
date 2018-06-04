@@ -8,8 +8,8 @@
 /**
  * main.c
  */
-//#define devel 1
-#define out 1
+#define devel 1
+//#define out 1
 #define numAvg 20
 uint32_t sysFreq = FREQ_48000_KHZ; //set system frequency to 48MHz
 uint32_t enterSleep = 0;//TODO: change to enum maybe
@@ -30,8 +30,8 @@ void main(void)
 #ifdef devel
     uint32_t data = 0;
     init();
-    while(1){
     tare(20);
+    while(1){
     data = getValue(10);
     }
 #elif out
