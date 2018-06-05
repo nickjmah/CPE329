@@ -76,7 +76,7 @@ uint32_t getOffset(void);
 /** \brief calibrates the scale value using a known weight
  *
  */
-void calibrate(uint32_t weight);
+void calibrate(float weight);
 
 /** \brief changes the units used for printing and math
  *

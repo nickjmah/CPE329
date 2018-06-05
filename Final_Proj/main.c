@@ -5,13 +5,14 @@
 #include "hx711.h"
 #include "timer.h"
 #include "scale.h"
+#include <stdio.h>
 /**
  * main.c
  */
 #define devel 1
 //#define out 1
 #define numAvg 20
-uint32_t sysFreq = FREQ_48000_KHZ; //set system frequency to 48MHz
+uint32_t sysFreq = FREQ_3000_KHZ; //set system frequency to 48MHz
 uint32_t enterSleep = 0;//TODO: change to enum maybe
 void sleep(void);
 void boardInit(void);
@@ -28,11 +29,14 @@ void init(void)
 void main(void)
 {
 #ifdef devel
-    uint32_t data = 0;
+    float data = 0;
     init();
-    tare(20);
+    tare(10);
+    calibrate(23.91);
     while(1){
-    data = getValue(10);
+        data = getUnits(10);
+        powerDown();
+        delay_ms(1000, sysFreq);
     }
 #elif out
     init();
