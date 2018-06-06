@@ -23,7 +23,7 @@ void init(void)
  */
 void main(void)
 {
-    uint16_t checkValue = 0;
+    uint16_t checkValue = 0; //variable initialization
     uint16_t keyPressed = 0;
     uint16_t position = 0;
 	init();
@@ -38,35 +38,45 @@ void main(void)
             switch (keyPressed) //mapping each key pressed to a specific action
             {
             case ONE :
-                position = bitConvertInt(keyPressed) * 10;
-                while(!(P4->IFG & (C0 | C1 | C2)));
-                keyPressed = checkKP();
+                position = bitConvertInt(keyPressed) * 10; //adding initial digit to position
+                while(!(P4->IFG & (C0 | C1 | C2))); //blocking loop for second press
+                keyPressed = checkKP(); //read the  keypad for second digit
                 P4->IFG &= ~(C0 | C1 | C2 );
-                checkValue = bitConvertInt(keyPressed);
+                /*clear any interrupts, including any caused by
+                 *key pressed*/
+                checkValue = bitConvertInt(keyPressed); //convert keypress into integer
                 if(checkValue <= 8)
                 {
-                    position += checkValue;
+                    position += checkValue; //add ones digit to position
                     TIMER_A2 -> CCR[3] = MIN_VAL + (position * INCR);
+                    /*adjusting CCR value to the input number
+                     *multiplied by the increment value
+                     */
                 }
                 break;
             case ZERO :
-                position = 0;
-                while(!(P4->IFG & (C0 | C1 | C2)));
-                keyPressed = checkKP();
+                position = 0; //adding initial digit to position
+                while(!(P4->IFG & (C0 | C1 | C2))); //blocking loop for second press
+                keyPressed = checkKP(); //read the  keypad for second digit
                 P4->IFG &= ~(C0 | C1 | C2 );
+                /*clear any interrupts, including any caused by
+                 *key pressed*/
                 checkValue = bitConvertInt(keyPressed);
                 if(checkValue <= 9)
                 {
-                    position += checkValue;
+                    position += checkValue; //add ones digit to position
                     TIMER_A2 -> CCR[3] = MIN_VAL + (position * INCR);
+                    /*adjusting CCR value to the input number
+                     *multiplied by the increment value
+                     */
                 }
                 break;
             case POUND :
-                if (TIMER_A2 -> CCR[3] < MAX_VAL) //increment if less than 90%
+                if (TIMER_A2 -> CCR[3] < MAX_VAL) //increment if less than 180 degrees
                     TIMER_A2 -> CCR[3] += INCR;
                 break;
             case STAR :
-                if (TIMER_A2 -> CCR[3] > MIN_VAL) //increment if less than 90%
+                if (TIMER_A2 -> CCR[3] > MIN_VAL) //decrement if more than 0 degrees
                     TIMER_A2 -> CCR[3] -= INCR;
             default:
                 break; //do nothing otherwise
