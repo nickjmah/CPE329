@@ -7,6 +7,9 @@
 
 #include "scale.h"
 
+Unit pounds = {lb, "lb", 202};
+Unit kilograms = {kg, "kg", 232};
+Unit currentUnit;
 
 static Measurement currentMeas = {
                                   {lb,"lb",2.2},

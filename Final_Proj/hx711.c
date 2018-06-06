@@ -9,9 +9,6 @@
 
 static uint32_t offset = 0;
 static float scale = 1;
-Unit pounds = {lb, "lb", 202};
-Unit kilograms = {kg, "kg", 232};
-Unit currentUnit;
 
 void initHX711(void)
 {

@@ -12,6 +12,18 @@
 #define ITOA_BUF_SIZE 32        //size of the ITOA buffer
 #define ITOA_INDEX_START 30
 
+typedef enum unitName {kg,lb}unitName_t;
+/** \brief struct for convenience to aggregate the scale factor and name
+ *
+ */
+typedef struct Unit{
+    unitName_t unitName;
+    char name[2];//size of the name, must be 2 letters, ex. "lb","kg"
+    float scale; //some divisor to turn into the correct units
+}Unit;
+/** \brief initializes ports for serial communication with HX711
+ *  Sets up data input and clock output
+ */
 typedef struct Measurement{
     Unit unit;          //For unit conversion
     uint32_t height;    //height in inches
