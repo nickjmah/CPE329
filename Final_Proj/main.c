@@ -117,6 +117,20 @@ void main(void)
             break;
         case units:
             updateUnits();
+            while(!checkPress());
+            keyRecorded = checkKP();
+            switch (keyRecorded)
+            {
+            case ONE :
+                updateSI();
+                break;
+            case TWO :
+                updateImp();
+                break;
+            default:
+                currentMode = units;
+                break;
+            }
             currentMode = weigh;
             break;
         case height:
