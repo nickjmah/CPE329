@@ -19,6 +19,7 @@
 uint32_t sysFreq = FREQ_48000_KHZ; //set system frequency to 48MHz
 volatile uint32_t enterSleep = 0;//TODO: change to enum maybe
 volatile uint32_t timerCounter = 0;
+volatile uint32_t keyPress = 0;
 void sleep(void);
 void boardInit(void);
 void initSleepTimer(void);
@@ -34,6 +35,7 @@ void init(void)
     initScale();
     // Wake up on exit from ISR
     SCB->SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
+    NVIC->ISER[1] = 1 << ((PORT4_IRQn) & 31);
     // Ensures SLEEPONEXIT takes effect immediately
     __DSB();
     __enable_irq();
@@ -70,10 +72,10 @@ void main(void)
     updateScale();
     while(1)
     {
-        if(P4->IFG & (C0 | C1 | C2))
+        if(keyPress)
         {
-            P4->IFG &=~(C0|C1|C2);
-            writeString("i");
+            keyPress = 0;
+            writeData(bitConvertChar(checkKP()));
             sleep();
             writeString("s");
         }
@@ -129,6 +131,14 @@ void TA0_0_IRQHandler(void)
             enterSleep=0;
             timerCounter += 1;
         }
+    }
+}
+void PORT4_IRQHandler(void)
+{
+    if(P4->IFG & (C0|C1|C2))
+    {
+        P4->IFG &= ~(C0|C1|C2);
+        keyPress = 1;
     }
 }
 
