@@ -54,6 +54,14 @@ void updateScale(void)
     writeString(itoa(currentMeas.bmi));
     snarkyMeas();
 }
+void updateSI(void)
+{
+    currentMeas.unit = kilograms;
+}
+void updateImp(void)
+{
+    currentMeas.unit = pounds;
+}
 void snarkyMeas(void)
 {
     writeString("F A T");
