@@ -17,7 +17,7 @@
 #include "delay.h"
 #include "dco.h"
 #include "string.h"
-
+#include "freq.h"
 
 //R/S pin map
 #define RS BIT5

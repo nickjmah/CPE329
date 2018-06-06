@@ -31,7 +31,7 @@ void key_init(){
 
 uint8_t checkRow(uint8_t row){
     //check all columns of a single row
-    delay_us(2, sysFreq);
+    delay_ms(5, sysFreq);
     P2->OUT |= row;//enable the selected row
     uint8_t col = P4->IN;//read all of the columns
     col &= ((C0|C1|C2));//clear everything but the columns of interest
@@ -42,6 +42,7 @@ uint8_t checkRow(uint8_t row){
 uint16_t checkKP(){
     //checks all of the rows and bit shifts them into a 16 bit number
     int i; //init iterator for the for loop
+    P2->OUT &= ~(R0 | R1 | R2 | R3 ); //setting all rows low so a measurement can start
     uint16_t result=0; //init final result
     for(i=0; i<4; i++){//define for loop used to check all of the rows
         result |= checkRow(R0<<i);//checks row at iterator

@@ -16,7 +16,7 @@
 #define test 1
 #define numAvg 20
 #define CCR_INCR 10000000000000000//TODO: change this to be a value that corresponds to the correct freq
-uint32_t sysFreq = FREQ_48000_KHZ; //set system frequency to 48MHz
+uint32_t sysFreq = FREQ_12000_KHZ; //set system frequency to 48MHz
 volatile uint32_t enterSleep = 0;//TODO: change to enum maybe
 volatile uint32_t timerCounter = 0;
 volatile uint32_t keyPress = 0;

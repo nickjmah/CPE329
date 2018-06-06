@@ -16,19 +16,19 @@ void writeCommand(uint8_t cmd)
     P4->OUT = 0x00; //reset output
     P3->OUT |= EN; //set enable
     P4->OUT = cmd & (0xf0); //set output port to cmd
-    delay_us(4, FREQ_48000_KHZ); //delay for 4 microseconds
+    delay_us(4, sysFreq); //delay for 4 microseconds
 
     P3->OUT &= ~EN; //clear enable
     P4->OUT = cmd & (0x00); //set output port to cmd
-    delay_us(4, FREQ_48000_KHZ); //enable pulsewidth
+    delay_us(4, sysFreq); //enable pulsewidth
 
 //  cmd = cmd<<4; //shift over by 4 bits
     P3->OUT |= EN; //set enable
     P4->OUT = (cmd<<4); //set output port to cmd
-    delay_us(4, FREQ_48000_KHZ); //delay for 4 microseconds
+    delay_us(4, sysFreq); //delay for 4 microseconds
     P3->OUT &= ~EN; //clear enable
     P4->OUT = 0x00; //reset output
-    delay_us(1000, FREQ_48000_KHZ); //delay for 1000 microseconds
+    delay_us(1000, sysFreq); //delay for 1000 microseconds
     //sends a command to the lcd
 }
 
@@ -101,19 +101,19 @@ uint8_t readData()
     P3->OUT = RS|RW;//setting RS and RW to read
     P4->OUT = 0x00; //reset output
     P3->OUT |= EN; //set enable
-    delay_us(1, FREQ_48000_KHZ);
+    delay_us(1, sysFreq);
     data = P4->OUT; //set output port to cmd
-    delay_us(4, FREQ_48000_KHZ); //enable pulsewidth
+    delay_us(4, sysFreq); //enable pulsewidth
 
     P3->OUT &= ~EN; //clear enable
     data = data << 4;
-    delay_us(4, FREQ_48000_KHZ); //enable pulsewidth
+    delay_us(4, sysFreq); //enable pulsewidth
 
 //    cmd = cmd<<4; //shift over by 4 bits
     P3->OUT |= EN; //set enable
-    delay_us(1, FREQ_48000_KHZ);
+    delay_us(1, sysFreq);
     data |= P4->OUT;
-    delay_us(2, FREQ_48000_KHZ); //enable pulsewidth
+    delay_us(2, sysFreq); //enable pulsewidth
     P3->OUT &= ~EN; //clear enable
     return data;
 }
@@ -124,24 +124,24 @@ void halfBitInit()
     P4->DIR = 0xf0;                 //set the lcd data pins as outputs
     P3->OUT &= ~(RS|RW|EN);         //clear RS,RW,EN
     //sending func set, in 8 bit mode
-    delay_ms(50, FREQ_48000_KHZ);   //delay of 50ms
+    delay_ms(50, sysFreq);   //delay of 50ms
     P4->OUT = 0x00;                 //reset output
     P3->OUT |= EN;                  //set enable
     P4->OUT = FUNCSET | ENABLE4BIT; //send functionset with 4 bit mode
-    delay_us(4, FREQ_48000_KHZ);    //delay for 4 microseconds
+    delay_us(4, sysFreq);    //delay for 4 microseconds
     P3->OUT &= ~EN;                 //clear enable
     P4->OUT = (0x00);               //clear data pins
-    delay_us(4, FREQ_48000_KHZ);    //delay for 4 microseconds
+    delay_us(4, sysFreq);    //delay for 4 microseconds
     //resending func set, which needs to be sent twice for some reason
     funcSet(ENABLE4BIT,ENABLE2LINE,NORMALFONT);
     funcSet(ENABLE4BIT,ENABLE2LINE,NORMALFONT);
     dispOnSet(DISPLAY_ON, CURSOR_OFF, CURSOR_NO_BLINK); //set display settings
     clearDisplay();                 //clear the display
-    delay_ms(3, FREQ_48000_KHZ);    //delay for 3 ms
+    delay_ms(3, sysFreq);    //delay for 3 ms
     setEntryMode(CURSOR_INCREMENT_RIGHT, 0);
     //set the entry mode with the cursor incrementing right and no display
     //shift
-    delay_ms(1, FREQ_48000_KHZ);    //delay for 1 ms
+    delay_ms(1, sysFreq);    //delay for 1 ms
 }
 
 void writeString(char* string)//takes in a pointer to a string
