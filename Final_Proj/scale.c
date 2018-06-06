@@ -57,7 +57,7 @@ void snarkyMeas(void)
 }
 void calcBMI(void)
 {
-    Measurement.bmi = Measurement.weight/((float)Measurement.height *0.0254);
+    currentMeas.bmi = currentMeas.weight/(currentMeas.height*0.0254);//checkfor float
 }
 char* itoa(int val)
 {

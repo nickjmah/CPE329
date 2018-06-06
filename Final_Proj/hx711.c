@@ -104,11 +104,10 @@ uint32_t getOffset(void)
     return offset;
 }
 
-void calibrate(uint32_t weight)
+void calibrate(float weight)
 {
     uint32_t calVal = 0;
-    setScale(0);
-    setOffset(0);
+    setScale(1.0);
     calVal = getUnits(10);
     setScale(calVal / weight);
 }

@@ -5,9 +5,11 @@
 #include "hx711.h"
 #include "timer.h"
 #include "scale.h"
+#include <stdio.h>
 /**
  * main.c
  */
+#define TEN_SECONDS 10000
 #define devel 1
 //#define out 1
 #define numAvg 20
@@ -32,11 +34,14 @@ void init(void)
 void main(void)
 {
 #ifdef devel
-    uint32_t data = 0;
+    float data = 0;
     init();
-    tare(20);
+    tare(10);
+    calibrate(23.91);
     while(1){
-    data = getValue(10);
+        data = getUnits(10);
+        powerDown();
+        delay_ms(1000, sysFreq);
     }
 #elif out
     init();
