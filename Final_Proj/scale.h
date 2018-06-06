@@ -41,6 +41,8 @@ void initScale(void);
  */
 void updateHeight(void);
 void updateUnits(void);
+void updateSI(void);
+void updateImp(void);
 void updateScale(void);
 void updateWeight(uint8_t numAvg);
 void calcBMI(void);
