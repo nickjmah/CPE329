@@ -9,14 +9,15 @@
 
 
 static Measurement currentMeas = {
-                                  {kg,"00",22},
-                                  0, //height
-                                  0, //weight
+                                  {lb,"lb",2.2},
+                                  60, //height
+                                  71, //weight
                                   0};//bmi
 void initScale(void)
 {
     //printing weight
-//    writeString("Weight: 0" + currentUnit.name);
+    writeString("Weight:  0 ");
+    writeString(currentMeas.unit.name);
     rowShiftDown();
     writeString("BMI: 0");
 }
@@ -44,8 +45,9 @@ void updateScale(void)
     clearDisplay();
     writeString("Wt(");
     writeString(currentMeas.unit.name);
-    writeString(")");
+    writeString("): ");
     writeString(itoa(currentMeas.weight*currentMeas.unit.scale));//TODO:make sure that this is correct
+    calcBMI();
     rowShiftDown();
     writeString("BMI:");
     writeString(itoa(currentMeas.bmi));
@@ -57,7 +59,7 @@ void snarkyMeas(void)
 }
 void calcBMI(void)
 {
-    currentMeas.bmi = currentMeas.weight/(currentMeas.height*0.0254);//checkfor float
+    currentMeas.bmi = currentMeas.weight/(currentMeas.height*currentMeas.height*0.0254*0.0254);//checkfor float
 }
 char* itoa(int val)
 {

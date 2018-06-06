@@ -5,13 +5,15 @@
 #include "hx711.h"
 #include "timer.h"
 #include "scale.h"
-#include <stdio.h>
+#include "lcd.h"
+#include "keypad.h"
 /**
  * main.c
  */
 #define TEN_SECONDS 10000
-#define devel 1
+//#define devel 1
 //#define out 1
+#define test 1
 #define numAvg 20
 #define CCR_INCR 10000000000000000//TODO: change this to be a value that corresponds to the correct freq
 uint32_t sysFreq = FREQ_48000_KHZ; //set system frequency to 48MHz
@@ -26,8 +28,14 @@ void init(void)
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;     // stop watchdog timer
     boardInit();//turn off everything to save power
     set_DCO(sysFreq);
+    key_init();
+    halfBitInit();
     initHX711();
     initScale();
+    // Wake up on exit from ISR
+    SCB->SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
+    // Ensures SLEEPONEXIT takes effect immediately
+    __DSB();
     __enable_irq();
 }
 
@@ -57,6 +65,19 @@ void main(void)
         }
     }
 
+#elif test
+    init();
+    updateScale();
+    while(1)
+    {
+        if(P4->IFG & (C0 | C1 | C2))
+        {
+            P4->IFG &=~(C0|C1|C2);
+            writeString("i");
+            sleep();
+            writeString("s");
+        }
+    }
 
 #endif/*devel*/
 
