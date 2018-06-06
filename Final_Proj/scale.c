@@ -28,6 +28,7 @@ void updateHeight(void)
     clearDisplay(); //TODO: Figure out how to only clear the bottom row
     writeString("Height('):");
     currentMeas.height = 12 * 2; //TODO:Figure out how to update this value
+    rowShiftDown();
     writeString("Height('):");
     currentMeas.height += 1;
 }

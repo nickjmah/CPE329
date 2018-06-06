@@ -11,7 +11,7 @@
  *
  */
 #include "keypad.h"
-
+static volatile uint32_t keyPress = 0;
 void key_init(){
     //initializing columns as pull ups
     P4->DIR &= ~((C0|C1|C2));     //set columns to inputs
@@ -51,6 +51,8 @@ uint16_t checkKP(){
     }
     result = result >> 3;//counteracting the last shift
     P2->OUT |= (R0|R1|R2|R3);//setting all rows high for key interrupt
+    delay_ms(1,sysFreq);
+    keyPress=0;
     return result; //returns final result
 }
 
