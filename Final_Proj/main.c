@@ -71,7 +71,7 @@ void main(void)
 #elif test
     typedef enum mode
     {
-        weigh, units, height, tare
+        weigh, units, height, tare, calibrate
     } mode_t;
 
     uint16_t keyRecorded = 0;
@@ -94,6 +94,9 @@ void main(void)
                     break;
                 case TWO :
                     currentMode = height;
+                    break;
+                case THREE :
+                    currentMode = calibrate;
                     break;
                 case ZERO :
                     currentMode = tare;
@@ -121,7 +124,10 @@ void main(void)
             currentMode = weigh;
             break;
         case tare:
+            tare(10);
             currentMode = weigh;
+            break;
+        case calibrate:
             break;
         }
     }
