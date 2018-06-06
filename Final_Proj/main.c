@@ -11,10 +11,13 @@
 #define devel 1
 //#define out 1
 #define numAvg 20
+#define CCR_INCR 10000000000000000//TODO: change this to be a value that corresponds to the correct freq
 uint32_t sysFreq = FREQ_48000_KHZ; //set system frequency to 48MHz
-uint32_t enterSleep = 0;//TODO: change to enum maybe
+volatile uint32_t enterSleep = 0;//TODO: change to enum maybe
+volatile uint32_t timerCounter = 0;
 void sleep(void);
 void boardInit(void);
+void initSleepTimer(void);
 void init(void)
 {
     //initialize all peripherals
@@ -23,6 +26,7 @@ void init(void)
     set_DCO(sysFreq);
     initHX711();
     initScale();
+    __enable_irq();
 }
 
 void main(void)
@@ -73,3 +77,32 @@ void boardInit(void)
     P10->OUT = 0x00; P10->DIR = 0xFF;
     PJ->OUT = 0x00; PJ->DIR = 0xFF;
 }
+void initSleepTimer(void)
+{
+#ifdef out
+    TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; //enable interrupt
+    TIMER_A0->CCR[0] = CCR_INCR;            //set initial increment
+    //set timer to SMCLK, continuous mode, no prescaler
+    TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK |
+            TIMER_A_CTL_MC__CONTINUOUS;
+    NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);//attach interrupt
+#endif
+}
+void TA0_0_IRQHandler(void)
+{
+    if(TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG)
+    {
+        TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
+        TIMER_A0->CCR[0] += CCR_INCR;
+        if(timerCounter >= TEN_SECONDS)
+        {
+            enterSleep=1; //sleep after 10s of inactivity, otherwise, increment counter
+        }
+        else
+        {
+            enterSleep=0;
+            timerCounter += 1;
+        }
+    }
+}
+
