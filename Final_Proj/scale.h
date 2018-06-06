@@ -42,6 +42,7 @@ void initScale(void);
 void updateHeight(void);
 void updateUnits(void);
 void updateScale(void);
+void updateWeight(uint8_t numAvg);
 void calcBMI(void);
 void snarkyMeas(void);
 char* itoa(int val);

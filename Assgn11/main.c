@@ -6,7 +6,7 @@
 #include "keypad.h"
 #include "servo.h"
 
-uint32_t sysFreq = FREQ_3000_KHZ; //set system frequency to 48MHz
+uint32_t sysFreq = FREQ_3000_KHZ; //set system frequency to 3MHz
 
 
 void init(void)
@@ -23,9 +23,9 @@ void init(void)
  */
 void main(void)
 {
-    uint16_t checkValue = 0; //variable initialization
-    uint16_t keyPressed = 0;
-    uint16_t position = 0;
+    uint16_t checkValue = 0; //second value of position
+    uint16_t keyPressed = 0;//unmapped position of keypad press
+    uint16_t position = 0; //2 digit result of servo desired position from 0 to 18
 	init();
 	while (1)
     {
@@ -82,7 +82,5 @@ void main(void)
                 break; //do nothing otherwise
             }
         }
-
-        P1->OUT &= ~BIT0;//lower the clock sync
     }
 }

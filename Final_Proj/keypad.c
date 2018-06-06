@@ -92,3 +92,17 @@ uint32_t bitConvertInt(uint16_t bitIndex){
      */
     }
 }
+uint32_t checkPress(void)
+{
+    uint32_t result = keyPress;
+    keyPress = 0;
+    return result;
+}
+void PORT4_IRQHandler(void)
+{
+    if (P4->IFG & (C0 | C1 | C2 ))
+    {
+        P4->IFG &= ~(C0 | C1 | C2 );
+        keyPress = 1;
+    }
+}

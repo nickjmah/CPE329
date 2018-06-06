@@ -7,15 +7,12 @@
 
 #include "scale.h"
 
-Unit pounds = {lb, "lb", 202};
-Unit kilograms = {kg, "kg", 232};
-Unit currentUnit;
+Unit pounds = { lb, "lb", 2.2 };
+Unit kilograms = { kg, "kg", 1 };
 
-static Measurement currentMeas = {
-                                  {lb,"lb",2.2},
-                                  60, //height
-                                  71, //weight
-                                  0};//bmi
+static Measurement currentMeas = { { lb, "lb", 2.2 }, 60, //height
+                                   71, //weight
+                                   0 }; //bmi
 void initScale(void)
 {
     //printing weight
@@ -30,7 +27,7 @@ void updateHeight(void)
     returnHome();
     clearDisplay(); //TODO: Figure out how to only clear the bottom row
     writeString("Height('):");
-    currentMeas.height = 12*2;//TODO:Figure out how to update this value
+    currentMeas.height = 12 * 2; //TODO:Figure out how to update this value
     writeString("Height('):");
     currentMeas.height += 1;
 }
@@ -44,12 +41,13 @@ void updateUnits(void)
 }
 void updateScale(void)
 {
+//    updateWeight(10);
     returnHome();
     clearDisplay();
     writeString("Wt(");
     writeString(currentMeas.unit.name);
     writeString("): ");
-    writeString(itoa(currentMeas.weight*currentMeas.unit.scale));//TODO:make sure that this is correct
+    writeString(itoa(currentMeas.weight * currentMeas.unit.scale));
     calcBMI();
     rowShiftDown();
     writeString("BMI:");
@@ -62,7 +60,12 @@ void snarkyMeas(void)
 }
 void calcBMI(void)
 {
-    currentMeas.bmi = currentMeas.weight/(currentMeas.height*currentMeas.height*0.0254*0.0254);//checkfor float
+    currentMeas.bmi = currentMeas.weight
+            / (currentMeas.height * currentMeas.height * 0.0254 * 0.0254); //checkfor float
+}
+void updateWeight(uint8_t numAvg)
+{
+    currentMeas.weight = getUnits(numAvg);
 }
 char* itoa(int val)
 {

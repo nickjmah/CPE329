@@ -86,11 +86,6 @@ float getScale(void)
     return scale;
 }
 
-void changeUnit(Unit choice)
-{
-    currentUnit = choice;
-}
-
 void setOffset(uint32_t newOffset)
 {
     offset = newOffset;

@@ -69,6 +69,4 @@ void calibrate(float weight);
 /** \brief changes the units used for printing and math
  *
  */
-void changeUnit(Unit choice);
-
 #endif /* HX711_H_ */
