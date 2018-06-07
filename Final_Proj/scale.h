@@ -9,8 +9,7 @@
 #ifndef SCALE_H_
 #define SCALE_H_
 
-#define ITOA_BUF_SIZE 32        //size of the ITOA buffer
-#define ITOA_INDEX_START 30
+
 
 typedef enum unitName {kg,lb}unitName_t;
 /** \brief struct for convenience to aggregate the scale factor and name
@@ -39,7 +38,7 @@ void initScale(void);
 /** \brief prompts the user for their height and updates a variable that holds it
  *
  */
-void updateHeight(void);
+void changeHeight(uint32_t height);
 void updateUnits(void);
 void updateSI(void);
 void updateImp(void);
@@ -48,4 +47,8 @@ void updateWeight(uint8_t numAvg);
 void calcBMI(void);
 void snarkyMeas(void);
 char* itoa(int val);
+void updateHeightFt(void);
+void updateHeightIn(void);
+void changeHeight(uint32_t height);
+
 #endif /* SCALE_H_ */

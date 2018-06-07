@@ -71,29 +71,31 @@ void main(void)
 #elif test
     typedef enum mode
     {
-        weigh, units, heightFt, heightIn1, heightIn2, zero, calibrate
+        weigh, weighInit, units, heightFtInit, heightFt, heightInInit, heightIn, zero, calibrate
     } mode_t;
 
-    uint16_t keyRecorded = 0;
+    uint16_t* keyRecorded = 0;
+    uint32_t tmp = 0;
     mode_t currentMode = weigh;
     init();
     updateScale();
     while (1)
     {
-
+        //on keypress
         if (checkPress())
         {
-            keyRecorded = checkKP();
+            keyRecorded = getKeyArr();
             switch (currentMode)
             {
             case weigh: //if weighing, check to see if we need to change modes
-                switch (keyRecorded)
+                switch (*keyRecorded)
                 {
                 case ONE :
                     currentMode = units;
                     break;
                 case TWO :
-                    currentMode = heightFt;
+                    currentMode = heightFtInit;
+                    tmp = 0;
                     break;
                 case THREE :
                     currentMode = calibrate;
@@ -105,28 +107,39 @@ void main(void)
                     currentMode = weigh;
                     break;
                 }
-                case heightFt:
-                    break;
-                case heightIn1:
-                    break;
-                case heightIn2:
-                    break;
+                break;
+            case heightFt:
+                tmp = bitConvertInt(*keyRecorded) * 12;
+                currentMode = heightInInit;
+                delay_ms(100,sysFreq);
+                break;
+            case heightIn:
+                while(getArrSize() < 1);
+                keyRecorded = getKeyArr();
+                tmp+= bitConvertInt(keyRecorded[0])*10;
+                tmp += bitConvertInt(keyRecorded[1]);
+                changeHeight(tmp);
+                currentMode = weighInit;
+                delay_ms(100,sysFreq);
+                break;
             default:
                 break;
             }
-//            sleep();
             writeString("s");
         }
+        //looping
         switch (currentMode)
         {
-        case weigh:
+        case weighInit:
             updateScale();
+            currentMode = weigh;
             break;
         case units:
             updateUnits();
-            while(!checkPress());
-            keyRecorded = checkKP();
-            switch (keyRecorded)
+            while (!checkPress())
+                ;
+            keyRecorded = getKeyArr();
+            switch (*keyRecorded)
             {
             case ONE :
                 updateSI();
@@ -140,19 +153,21 @@ void main(void)
             }
             currentMode = weigh;
             break;
-        case heightFt:
-            updateHeightFt();//prompt for entering feet
+        case heightFtInit:
+            updateHeightFt(); //prompt for entering feet
+            currentMode = heightFt;
             break;
-        case heightIn1:
-            updateHeightIn();//prompt for entering inches
-            break;
-        case heightIn2:
+        case heightInInit:
+            updateHeightIn(); //prompt for entering inches
+            currentMode = heightIn;
             break;
         case zero:
             tare(10);
             currentMode = weigh;
             break;
         case calibrate:
+            break;
+        default:
             break;
         }
     }

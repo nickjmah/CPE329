@@ -22,15 +22,22 @@ void initScale(void)
     writeString("BMI: 0");
 }
 
-void updateHeight(void)
+void updateHeightFt(void)
 {
     returnHome();
     clearDisplay(); //TODO: Figure out how to only clear the bottom row
     writeString("Height('):");
-    currentMeas.height = 12 * 2; //TODO:Figure out how to update this value
-    rowShiftDown();
-    writeString("Height('):");
-    currentMeas.height += 1;
+}
+void updateHeightIn(void)
+{
+    returnHome();
+    clearDisplay();
+    writeString("Height(\")");
+}
+void changeHeight(uint32_t height)
+{
+    currentMeas.height = height;
+    return;
 }
 void updateUnits(void)
 {
@@ -76,17 +83,5 @@ void updateWeight(uint8_t numAvg)
 {
     currentMeas.weight = getUnits(numAvg);
 }
-char* itoa(int val)
-{
-    static char buf[ITOA_BUF_SIZE] = { 0 }; //create a static buffer for string output
-    int i = ITOA_INDEX_START;
-    buf[i + 1] = '\0';              //forcing termination character in the event
-                                    //of unexpected behaviour
-    for (; val != 0; i--)                  //loop until val is 0
-    {
-        buf[i] = "0123456789"[(val) % 10]; //give buf the least significant bit of val
-        val /= 10;                        //decimal shift right val
-    }
-    return &buf[i + 1];                    //return index of beginning of string
-}
+
 
