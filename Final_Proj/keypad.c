@@ -154,7 +154,6 @@ void PORT4_IRQHandler(void)
         keyPressArr[keyArrSize] = checkKP();
         writeString(itoa(bitConvertInt(keyPressArr[keyArrSize])));
         keyArrSize++;
-
 //        P4->IFG &= ~(C0 | C1 | C2 );
         keyPress = 1;
     }

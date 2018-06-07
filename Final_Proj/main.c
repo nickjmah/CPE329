@@ -10,12 +10,12 @@
 /**
  * main.c
  */
-#define TEN_SECONDS 10000
+#define TEN_SECONDS 2
 //#define devel 1
 //#define out 1
 #define test 1
 #define numAvg 20
-#define CCR_INCR 10000000000000000//TODO: change this to be a value that corresponds to the correct freq
+#define CCR_INCR COUNT_10MS_12MHZ//TODO: change this to be a value that corresponds to the correct freq
 uint32_t sysFreq = FREQ_12000_KHZ; //set system frequency to 48MHz
 volatile uint32_t enterSleep = 0; //TODO: change to enum maybe
 volatile uint32_t timerCounter = 0;
@@ -33,6 +33,7 @@ void init(void)
     halfBitInit();
     initHX711();
     initScale();
+    initSleepTimer();
     // Wake up on exit from ISR
     SCB->SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
     NVIC->ISER[1] = 1 << ((PORT4_IRQn) & 31);
@@ -71,7 +72,7 @@ void main(void)
 #elif test
     typedef enum mode
     {
-        weigh, weighInit, units, heightFtInit, heightFt, heightInInit, heightIn, zero, cal
+        weigh, units, height, zero, cal
     } mode_t;
 
     uint16_t* keyRecorded = 0;
@@ -82,9 +83,12 @@ void main(void)
     updateScale();
     while (1)
     {
+        if(enterSleep)//TODO: Reset counters to reenable sleep
+            sleep();
         //on keypress
         if (checkPress())
         {
+            enterSleep = 0;
             keyRecorded = getKeyArr();
             switch (currentMode)
             {
@@ -95,7 +99,7 @@ void main(void)
                     currentMode = units;
                     break;
                 case TWO :
-                    currentMode = heightFtInit;
+                    currentMode = height;
                     tmp = 0;
                     break;
                 case THREE :
@@ -109,22 +113,15 @@ void main(void)
                     break;
                 }
                 break;
-            case heightFt:
-                tmp = bitConvertInt(*keyRecorded) * 12;
-                currentMode = heightInInit;
-                delay_ms(100,sysFreq);
-                break;
             default:
                 break;
             }
-            writeString("s");
         }
         //looping
         switch (currentMode)
         {
-        case weighInit:
+        case weigh:
             updateScale();
-            currentMode = weigh;
             break;
         case units:
             updateUnits();
@@ -143,24 +140,24 @@ void main(void)
                 currentMode = units;
                 break;
             }
-            currentMode = weighInit;
+            currentMode = weigh;
             break;
-        case heightFtInit:
+        case height:
             updateHeightFt(); //prompt for entering feet
-            currentMode = heightFt;
-            break;
-        case heightInInit:
-            updateHeightIn(); //prompt for entering inches
-            currentMode = heightIn;
-            break;
-        case heightIn:
-            while(getArrSize() < 2);
+            while (getArrSize() < 1)
+                ;
             keyRecorded = getKeyArr();
-            tmp+= bitConvertInt(keyRecorded[0])*10;
+            tmp = bitConvertInt(*keyRecorded) * 12;
+            delay_ms(100, sysFreq);
+            updateHeightIn(); //prompt for entering inches
+            while (getArrSize() < 2)
+                ;
+            keyRecorded = getKeyArr();
+            tmp += bitConvertInt(keyRecorded[0]) * 10;
             tmp += bitConvertInt(keyRecorded[1]);
             changeHeight(tmp);
-            currentMode = weighInit;
-            delay_ms(100,sysFreq);
+            currentMode = weigh;
+            delay_ms(100, sysFreq);
             checkPress();
             break;
         case zero:
@@ -169,17 +166,21 @@ void main(void)
             break;
         case cal:
             calScreen();
-            while(getArrSize() < 2);
+            while (getArrSize() < 2)
+                ;
             keyRecorded = getKeyArr();
-            tmp_f = bitConvertInt(keyRecorded[0]) * 10 + bitConvertInt(keyRecorded[1]);
+            tmp_f = bitConvertInt(keyRecorded[0]) * 10
+                    + bitConvertInt(keyRecorded[1]);
             writeData('.');
-            while(getArrSize() < 2);
+            while (getArrSize() < 2)
+                ;
             keyRecorded = getKeyArr();
-            tmp_f = (float)bitConvertInt(keyRecorded[0]) / 10 + (float)bitConvertInt(keyRecorded[1]) / 100;
+            tmp_f += ((float) bitConvertInt(keyRecorded[0])) / 10
+                    + ((float) bitConvertInt(keyRecorded[1])) / 100;
             calibrate(tmp_f);
             checkPress();
-            currentMode = weighInit;
-            delay_ms(100,sysFreq);
+            currentMode = weigh;
+            delay_ms(100, sysFreq);
             break;
         default:
             break;
@@ -223,12 +224,13 @@ void boardInit(void)
 }
 void initSleepTimer(void)
 {
-#ifdef out
+#ifdef test
     TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; //enable interrupt
     TIMER_A0->CCR[0] = CCR_INCR;//set initial increment
     //set timer to SMCLK, continuous mode, no prescaler
-    TIMER_A0->CTL = TIMER_A_CTL_SSEL__SMCLK |
-    TIMER_A_CTL_MC__CONTINUOUS;
+    TIMER_A0->CTL = TIMER_A_CTL_SSEL__ACLK |
+    TIMER_A_CTL_MC__CONTINUOUS | TIMER_A_CTL_ID__8;
+//    TIMER_A0->EX0 |= TIMER_A_EX0_TAIDEX_7;
     NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);//attach interrupt
 #endif
 }
@@ -241,10 +243,10 @@ void TA0_0_IRQHandler(void)
         if (timerCounter >= TEN_SECONDS)
         {
             enterSleep = 1; //sleep after 10s of inactivity, otherwise, increment counter
+            timerCounter = 0;
         }
         else
         {
-            enterSleep = 0;
             timerCounter += 1;
         }
     }

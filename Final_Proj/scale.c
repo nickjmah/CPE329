@@ -49,18 +49,17 @@ void updateUnits(void)
 }
 void updateScale(void)
 {
-//    updateWeight(10);
+    updateWeight(10);
+    calcBMI();
     returnHome();
     clearDisplay();
     writeString("Wt(");
     writeString(currentMeas.unit.name);
     writeString("): ");
     writeString(itoa(currentMeas.weight * currentMeas.unit.scale));
-    calcBMI();
     rowShiftDown();
     writeString("BMI:");
     writeString(itoa(currentMeas.bmi));
-    snarkyMeas();
 }
 void updateSI(void)
 {
@@ -69,10 +68,6 @@ void updateSI(void)
 void updateImp(void)
 {
     currentMeas.unit = pounds;
-}
-void snarkyMeas(void)
-{
-    writeString("F A T");
 }
 void calcBMI(void)
 {
