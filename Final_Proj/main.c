@@ -89,13 +89,11 @@ void main(void)
         if(enterSleep)
             sleep();
         //on keypress
-        if (checkPress())//look to change modes if a keypress occurs
+        if (checkPress()&&currentMode == weigh)//look to change modes if a keypress occurs
         {
             enterSleep = 0;
             keyRecorded = getKeyArr();
-            switch (currentMode)
-            {
-            case weigh: //if weighing, check to see if we need to change modes
+
                 switch (*keyRecorded)
                 {
                 case ONE :
@@ -115,10 +113,6 @@ void main(void)
                     currentMode = weigh;
                     break;
                 }
-                break;
-            default:
-                break;
-            }
         }
         //looping mode changes
         switch (currentMode)
