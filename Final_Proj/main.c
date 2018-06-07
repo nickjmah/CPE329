@@ -71,11 +71,12 @@ void main(void)
 #elif test
     typedef enum mode
     {
-        weigh, weighInit, units, heightFtInit, heightFt, heightInInit, heightIn, zero, calibrate
+        weigh, weighInit, units, heightFtInit, heightFt, heightInInit, heightIn, zero, cal
     } mode_t;
 
     uint16_t* keyRecorded = 0;
     uint32_t tmp = 0;
+    float tmp_f = 0;
     mode_t currentMode = weigh;
     init();
     updateScale();
@@ -98,7 +99,7 @@ void main(void)
                     tmp = 0;
                     break;
                 case THREE :
-                    currentMode = calibrate;
+                    currentMode = cal;
                     break;
                 case ZERO :
                     currentMode = zero;
@@ -111,15 +112,6 @@ void main(void)
             case heightFt:
                 tmp = bitConvertInt(*keyRecorded) * 12;
                 currentMode = heightInInit;
-                delay_ms(100,sysFreq);
-                break;
-            case heightIn:
-                while(getArrSize() < 1);
-                keyRecorded = getKeyArr();
-                tmp+= bitConvertInt(keyRecorded[0])*10;
-                tmp += bitConvertInt(keyRecorded[1]);
-                changeHeight(tmp);
-                currentMode = weighInit;
                 delay_ms(100,sysFreq);
                 break;
             default:
@@ -151,7 +143,7 @@ void main(void)
                 currentMode = units;
                 break;
             }
-            currentMode = weigh;
+            currentMode = weighInit;
             break;
         case heightFtInit:
             updateHeightFt(); //prompt for entering feet
@@ -161,11 +153,33 @@ void main(void)
             updateHeightIn(); //prompt for entering inches
             currentMode = heightIn;
             break;
+        case heightIn:
+            while(getArrSize() < 2);
+            keyRecorded = getKeyArr();
+            tmp+= bitConvertInt(keyRecorded[0])*10;
+            tmp += bitConvertInt(keyRecorded[1]);
+            changeHeight(tmp);
+            currentMode = weighInit;
+            delay_ms(100,sysFreq);
+            checkPress();
+            break;
         case zero:
             tare(10);
             currentMode = weigh;
             break;
-        case calibrate:
+        case cal:
+            calScreen();
+            while(getArrSize() < 2);
+            keyRecorded = getKeyArr();
+            tmp_f = bitConvertInt(keyRecorded[0]) * 10 + bitConvertInt(keyRecorded[1]);
+            writeData('.');
+            while(getArrSize() < 2);
+            keyRecorded = getKeyArr();
+            tmp_f = (float)bitConvertInt(keyRecorded[0]) / 10 + (float)bitConvertInt(keyRecorded[1]) / 100;
+            calibrate(tmp_f);
+            checkPress();
+            currentMode = weighInit;
+            delay_ms(100,sysFreq);
             break;
         default:
             break;

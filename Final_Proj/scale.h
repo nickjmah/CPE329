@@ -50,5 +50,5 @@ char* itoa(int val);
 void updateHeightFt(void);
 void updateHeightIn(void);
 void changeHeight(uint32_t height);
-
+void calScreen(void);
 #endif /* SCALE_H_ */

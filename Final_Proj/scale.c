@@ -83,5 +83,10 @@ void updateWeight(uint8_t numAvg)
 {
     currentMeas.weight = getUnits(numAvg);
 }
-
+void calScreen(void)
+{
+    returnHome();
+    clearDisplay();
+    writeString("Cal Wt(Kg):");
+}
 
