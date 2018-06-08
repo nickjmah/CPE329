@@ -15,7 +15,7 @@
 //#define out 1
 #define test 1
 #define numAvg 20
-#define CCR_INCR COUNT_10MS_12MHZ//TODO: change this to be a value that corresponds to the correct freq
+#define CCR_INCR COUNT_60S_ACLK_32
 uint32_t sysFreq = FREQ_12000_KHZ; //set system frequency to 48MHz
 volatile uint32_t enterSleep = 0; //TODO: change to enum maybe
 volatile uint32_t timerCounter = 0;
@@ -47,72 +47,46 @@ void init(void)
 /** \brief main functions */
 void main(void)
 {
-#ifdef devel
-    float data = 0;
-    init();
-    tare(10);
-    calibrate(23.91);
-    while(1)
-    {
-        data = getUnits(10);
-        powerDown();
-        delay_ms(1000, sysFreq);
-    }
-#elif out
-    init();
-    uint32_t weight = 0;
-    while(1)
-    {
-        tare(numAvg);
-        weight = getValue(numAvg);
-
-        if(enterSleep)
-        {
-            sleep();
-        }
-    }
-
-#elif test
     /** enum to describe the different states of the state machine */
     typedef enum mode
     {
         weigh, units, height, zero, cal
     } mode_t;
-    uint16_t* keyRecorded = 0;//pointer to an array of keypresses
-    uint32_t tmp = 0;//temp variable used for height measurements
-    float tmp_f = 0;//temp variable used for calibration
+    uint16_t* keyRecorded = 0;     //pointer to an array of keypresses
+    uint32_t tmp = 0;     //temp variable used for height measurements
+    float tmp_f = 0;     //temp variable used for calibration
     mode_t currentMode = weigh; //sets the inital state to weight
     init();
     updateScale(); //starts off with an initial weight measurement
     while (1)
     {
-        if(enterSleep)
+        if (enterSleep)
             sleep();
         //on keypress
-        if (checkPress()&&currentMode == weigh)//look to change modes if a keypress occurs
+        if (checkPress() && currentMode == weigh) //look to change modes if a keypress occurs
         {
             enterSleep = 0;
             keyRecorded = getKeyArr();
 
-                switch (*keyRecorded)
-                {
-                case ONE :
-                    currentMode = units;
-                    break;
-                case TWO :
-                    currentMode = height;
-                    tmp = 0;
-                    break;
-                case THREE :
-                    currentMode = cal;
-                    break;
-                case ZERO :
-                    currentMode = zero;
-                    break;
-                default:
-                    currentMode = weigh;
-                    break;
-                }
+            switch (*keyRecorded)
+            {
+            case ONE :
+                currentMode = units;
+                break;
+            case TWO :
+                currentMode = height;
+                tmp = 0;
+                break;
+            case THREE :
+                currentMode = cal;
+                break;
+            case ZERO :
+                currentMode = zero;
+                break;
+            default:
+                currentMode = weigh;
+                break;
+            }
         }
         //looping mode changes
         switch (currentMode)
@@ -122,12 +96,13 @@ void main(void)
             break;
             //update units
         case units:
-            updateUnits();//set display to units menu
-            while (!checkPress())//wait until 1 keypress
+            updateUnits(); //set display to units menu
+            while (!checkPress())
+                //wait until 1 keypress
                 ;
             keyRecorded = getKeyArr();
             switch (*keyRecorded)
-            {//1 puts you in kg, 2 puts you in lbs
+            { //1 puts you in kg, 2 puts you in lbs
             case ONE :
                 updateSI();
                 break;
@@ -135,46 +110,50 @@ void main(void)
                 updateImp();
                 break;
             default:
-                break;//TODO: check to see if you want to talk about invalid keypresses
+                break; //TODO: check to see if you want to talk about invalid keypresses
             }
             currentMode = weigh;
             break;
         case height:
             updateHeightFt(); //prompt for entering feet
-            while (getArrSize() < 1)//getting height in feet
+            while (getArrSize() < 1)
+                //getting height in feet
                 ;
             keyRecorded = getKeyArr();
-            tmp = bitConvertInt(*keyRecorded) * 12;//tmp is in inches so mult by 12
+            tmp = bitConvertInt(*keyRecorded) * 12; //tmp is in inches so mult by 12
             delay_ms(100, sysFreq);
             updateHeightIn(); //prompt for entering inches
             while (getArrSize() < 2)
                 ;
             keyRecorded = getKeyArr();
-            tmp += bitConvertInt(keyRecorded[0]) * 10 + bitConvertInt(keyRecorded[1]);//add in inches
-            changeHeight(tmp);//update height
+            tmp += bitConvertInt(keyRecorded[0]) * 10
+                    + bitConvertInt(keyRecorded[1]); //add in inches
+            changeHeight(tmp); //update height
             currentMode = weigh;
-            delay_ms(100, sysFreq);//add in a delay to see the last typed character
-            checkPress();//clearing the check press since we already cleared the queue
+            delay_ms(100, sysFreq); //add in a delay to see the last typed character
+            checkPress(); //clearing the check press since we already cleared the queue
             break;
         case zero:
-            tare(10);//tare will zero the scale
+            tare(10); //tare will zero the scale
             currentMode = weigh;
             break;
         case cal:
             calScreen();
-            while (getArrSize() < 2)//wait for the first 2 keypresses
+            while (getArrSize() < 2)
+                //wait for the first 2 keypresses
                 ;
             keyRecorded = getKeyArr();
             tmp_f = bitConvertInt(keyRecorded[0]) * 10
-                    + bitConvertInt(keyRecorded[1]);//add the first two presses
-            writeData('.');//print a '.' in order to show that you are now in grams
-            while (getArrSize() < 2)//wait for two presses
+                    + bitConvertInt(keyRecorded[1]); //add the first two presses
+            writeData('.'); //print a '.' in order to show that you are now in grams
+            while (getArrSize() < 2)
+                //wait for two presses
                 ;
             keyRecorded = getKeyArr();
             tmp_f += ((float) bitConvertInt(keyRecorded[0])) / 10
-                    + ((float) bitConvertInt(keyRecorded[1])) / 100;//convert to float and add in grams
-            calibrate(tmp_f);//run calibration calcs
-            checkPress();//clearing check press
+                    + ((float) bitConvertInt(keyRecorded[1])) / 100; //convert to float and add in grams
+            calibrate(tmp_f); //run calibration calcs
+            checkPress(); //clearing check press
             currentMode = weigh;
             delay_ms(100, sysFreq);
             break;
@@ -182,8 +161,6 @@ void main(void)
             break;
         }
     }
-
-#endif/*devel*/
 
 }
 void sleep(void)
@@ -220,15 +197,13 @@ void boardInit(void)
 }
 void initSleepTimer(void)
 {
-#ifdef test
     TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; //enable interrupt
-    TIMER_A0->CCR[0] = CCR_INCR;//set initial increment
+    TIMER_A0->CCR[0] = CCR_INCR; //set initial increment
     //set timer to SMCLK, continuous mode, no prescaler
-    TIMER_A0->CTL = TIMER_A_CTL_SSEL__ACLK |//set timer to ACLK to run even slower
-    TIMER_A_CTL_MC__CONTINUOUS | TIMER_A_CTL_ID__8;
-//    TIMER_A0->EX0 |= TIMER_A_EX0_TAIDEX_7;
-    NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);//attach interrupt
-#endif
+    TIMER_A0->CTL = TIMER_A_CTL_SSEL__ACLK | //set timer to ACLK to run even slower
+            TIMER_A_CTL_MC__CONTINUOUS | TIMER_A_CTL_ID__8;
+    TIMER_A0->EX0 |= TIMER_A_EX0_TAIDEX_3;    //divide by 4
+    NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);    //attach interrupt
 }
 void TA0_0_IRQHandler(void)
 {
