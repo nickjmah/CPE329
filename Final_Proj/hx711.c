@@ -31,7 +31,6 @@ uint32_t readCount(void)
 {
     uint32_t count;                         //data input variable
     uint8_t i;                              //init iterator for the loop
-//    HX711_STRUCT->IN |= HX711_DO; //this is probably wrong and might not need to be here
     HX711_STRUCT->OUT &= ~HX711_CLK;        //set clock low for normal operation
     count = 0;                              //clear data variable
     while(HX711_STRUCT->IN & HX711_DO);    //block loop until HX711 is ready to send
@@ -44,7 +43,7 @@ uint32_t readCount(void)
             count++;                        //increment data variable if data input was high
     }
     HX711_STRUCT->OUT |= HX711_CLK;         //25th clock cycle to end data transmission
-    count = count ^ 0x800000;               //two's complement conversion I think?
+    count = count ^ 0x800000;               //two's complement edit
     HX711_STRUCT->OUT &= ~HX711_CLK;
     return count;
 }

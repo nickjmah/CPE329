@@ -66,7 +66,4 @@ uint32_t getOffset(void);
  */
 void calibrate(float weight);
 
-/** \brief changes the units used for printing and math
- *
- */
 #endif /* HX711_H_ */
