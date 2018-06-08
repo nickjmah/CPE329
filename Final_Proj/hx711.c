@@ -7,8 +7,8 @@
 
 #include "hx711.h"
 
-static uint32_t offset = 0;
-static float scale = 1;
+static uint32_t offset = 8533654;
+static float scale = 19654.166;
 
 void initHX711(void)
 {

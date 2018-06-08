@@ -5,6 +5,7 @@
 #include "hx711.h"
 #include "timer.h"
 #include "scale.h"
+#include "helper.h"
 #include "lcd.h"
 #include "keypad.h"
 /**
@@ -40,6 +41,8 @@ void init(void)
     // Wake up on exit from ISR
     SCB->SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
     NVIC->ISER[1] = 1 << ((PORT4_IRQn) & 31);
+    P6->DIR |= BIT4;
+    P6->OUT &= ~BIT4;
     // Ensures SLEEPONEXIT takes effect immediately
     __DSB();
     __enable_irq();
@@ -66,6 +69,7 @@ void main(void)
         if (checkPress() && currentMode == weigh) //look to change modes if a keypress occurs
         {
             enterSleep = 0;
+            timerCounter= 0;
             keyRecorded = getKeyArr();
 
             switch (*keyRecorded)
@@ -83,6 +87,11 @@ void main(void)
             case ZERO :
                 currentMode = zero;
                 break;
+            case FOUR :
+                returnHome();
+                clearDisplay();
+                writeString(itoa(getScale()));
+                delay_ms(1000,sysFreq);
             default:
                 currentMode = weigh;
                 break;
@@ -166,8 +175,15 @@ void main(void)
 void sleep(void)
 {
     // Enter LPM0
+    TIMER_A0->CTL = TIMER_A_CTL_MC__STOP;
+    P6->OUT |= BIT4;
     __sleep();
     __no_operation();
+    P6->OUT &= ~BIT4;
+    TIMER_A0->CTL = TIMER_A_CTL_SSEL__ACLK | //set timer to ACLK to run even slower
+                TIMER_A_CTL_MC__CONTINUOUS | TIMER_A_CTL_ID__8;
+    halfBitInit();
+    updateScale();
 }
 void boardInit(void)
 {
@@ -202,7 +218,7 @@ void initSleepTimer(void)
     //set timer to SMCLK, continuous mode, no prescaler
     TIMER_A0->CTL = TIMER_A_CTL_SSEL__ACLK | //set timer to ACLK to run even slower
             TIMER_A_CTL_MC__CONTINUOUS | TIMER_A_CTL_ID__8;
-    TIMER_A0->EX0 |= TIMER_A_EX0_TAIDEX_3;    //divide by 4
+//    TIMER_A0->EX0 |= TIMER_A_EX0_TAIDEX_2;    //divide by 4
     NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);    //attach interrupt
 }
 void TA0_0_IRQHandler(void)
