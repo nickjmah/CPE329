@@ -129,8 +129,20 @@ uint8_t checkRow(uint8_t row);
  */
 char bitConvertChar(uint16_t bitIndex);//converts 16 bit index into keypad values
 uint32_t bitConvertInt(uint16_t bitIndex);//same as above, but for ints
+/**
+ * returns a keyPress variable and clears the check
+ * @return  a boolean representing whether or a not a key has been pressed
+ */
 uint32_t checkPress(void);
+/**
+ * Gets all logged keypresses since the last read and clears the queue
+ * @return  A pointer to the first logged keypress
+ */
 uint16_t* getKeyArr(void);
+/**
+ * Returns the size of the array of valid keypresses
+ * @return  number of keys pressed since last read
+ */
 uint32_t getArrSize(void);
 
 #endif /* KEYPAD_H_ */
