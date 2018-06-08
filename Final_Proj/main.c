@@ -41,6 +41,7 @@ void init(void)
     // Wake up on exit from ISR
     SCB->SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
     NVIC->ISER[1] = 1 << ((PORT4_IRQn) & 31);
+    //initializing and configuring LCD power bit
     P6->DIR |= BIT4;
     P6->OUT &= ~BIT4;
     // Ensures SLEEPONEXIT takes effect immediately
