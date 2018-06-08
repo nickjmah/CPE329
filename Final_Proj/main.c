@@ -87,11 +87,6 @@ void main(void)
             case ZERO :
                 currentMode = zero;
                 break;
-            case FOUR :
-                returnHome();
-                clearDisplay();
-                writeString(itoa(getScale()));
-                delay_ms(1000,sysFreq);
             default:
                 currentMode = weigh;
                 break;

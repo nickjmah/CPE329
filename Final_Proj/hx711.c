@@ -27,7 +27,7 @@ void powerDown(void)
     HX711_STRUCT->OUT |= HX711_CLK;     //hold clock out high (for at least 60us)
 }
 
-uint32_t readCount(void)
+uint32_t readCount(void)//TOOD: Check to see if int32_t fixes overflow
 {
     uint32_t count;                         //data input variable
     uint8_t i;                              //init iterator for the loop
@@ -72,7 +72,12 @@ uint32_t getValue(uint8_t times)
 
 float getUnits(uint8_t times)
 {
-    return getValue(times) / scale;
+    float tmp = getValue(times) / scale;
+    if(tmp >500)
+    {
+        return 0;
+    }
+    return tmp;
 }
 
 void setScale(float newScale)

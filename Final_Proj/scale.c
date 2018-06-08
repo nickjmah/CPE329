@@ -17,7 +17,6 @@ void initScale(void)
 {
     //printing weight
     writeString("Weight:  0 ");
-    writeString(currentMeas.unit.name);
     rowShiftDown();
     writeString("BMI: 0");
 }
@@ -49,6 +48,7 @@ void updateUnits(void)
 }
 void updateScale(void)
 {
+    static char buf[50];
     updateWeight(10);
     calcBMI();
     returnHome();
@@ -56,7 +56,8 @@ void updateScale(void)
     writeString("Wt(");
     writeString(currentMeas.unit.name);
     writeString("): ");
-    writeString(itoa(currentMeas.weight * currentMeas.unit.scale));
+    sprintf(buf, "%.2f",currentMeas.weight * currentMeas.unit.scale);
+    writeString(buf);
     rowShiftDown();
     writeString("BMI:");
     writeString(itoa(currentMeas.bmi));
