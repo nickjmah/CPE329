@@ -48,7 +48,7 @@ void updateUnits(void)
 }
 void updateScale(void)
 {
-    static char buf[50];//init static buffer to hold string
+    static char buf[50]; //init static buffer to hold string
     updateWeight(10); //calculating weight through strain gauges
     calcBMI();
     returnHome();
@@ -57,8 +57,8 @@ void updateScale(void)
     writeString(currentMeas.unit.name);
     writeString("): ");
     //formatting string to to be 2sigfig format
-    sprintf(buf, "%.2f",currentMeas.weight * currentMeas.unit.scale);
-    writeString(buf);//printing out calculated string
+    sprintf(buf, "%.2f", currentMeas.weight * currentMeas.unit.scale);
+    writeString(buf); //printing out calculated string
     rowShiftDown();
     writeString("BMI:");
     writeString(itoa(currentMeas.bmi));
@@ -72,7 +72,7 @@ void updateImp(void)
     currentMeas.unit = pounds;
 }
 void calcBMI(void)
-{//calculating bmi by weight in kg divided by height in m squared
+{ //calculating bmi by weight in kg divided by height in m squared
     currentMeas.bmi = currentMeas.weight
             / (currentMeas.height * currentMeas.height * 0.0254 * 0.0254); //checkfor float
 }
@@ -86,4 +86,3 @@ void calScreen(void)
     clearDisplay();
     writeString("Cal Wt(Kg):");
 }
-

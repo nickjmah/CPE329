@@ -11,9 +11,9 @@
  *
  */
 #include "keypad.h"
-static volatile uint32_t keyPress = 0;//boolean representing a keypress
-static volatile uint16_t keyPressArr[20] = { 0 };//array of keypresses
-static volatile uint32_t keyArrSize = 0;//number of elements used
+static volatile uint32_t keyPress = 0; //boolean representing a keypress
+static volatile uint16_t keyPressArr[20] = { 0 }; //array of keypresses
+static volatile uint32_t keyArrSize = 0; //number of elements used
 void key_init()
 {
     //initializing columns as pull ups
@@ -132,9 +132,9 @@ uint32_t bitConvertInt(uint16_t bitIndex)
 }
 uint32_t checkPress(void)
 {
-    __disable_irq();//disabling IRQ's to prevent a false report
+    __disable_irq(); //disabling IRQ's to prevent a false report
     uint32_t result = keyPress;
-    keyPress = 0;//clearing keyPress since it's been read
+    keyPress = 0; //clearing keyPress since it's been read
     __enable_irq();
     return result;
 }
@@ -149,11 +149,11 @@ uint32_t getArrSize(void)
 }
 void PORT4_IRQHandler(void)
 {
-    if (P4->IFG & (C0 | C1 | C2 ))//check if a key has been pressed that we care about
+    if (P4->IFG & (C0 | C1 | C2 )) //check if a key has been pressed that we care about
     {
-        keyPressArr[keyArrSize] = checkKP();//read the keypad and insert it into the queue
-        writeString(itoa(bitConvertInt(keyPressArr[keyArrSize])));//echo
-        keyArrSize++;//increment the array size
-        keyPress = 1;//raise the keyPress flag
+        keyPressArr[keyArrSize] = checkKP(); //read the keypad and insert it into the queue
+        writeString(itoa(bitConvertInt(keyPressArr[keyArrSize]))); //echo
+        keyArrSize++; //increment the array size
+        keyPress = 1; //raise the keyPress flag
     }
 }

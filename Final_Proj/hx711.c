@@ -24,25 +24,26 @@ void powerUp(void)
 
 void powerDown(void)
 {
-    HX711_STRUCT->OUT |= HX711_CLK;     //hold clock out high (for at least 60us)
+    HX711_STRUCT->OUT |= HX711_CLK;    //hold clock out high (for at least 60us)
 }
 
-uint32_t readCount(void)//TODO: Check to see if int32_t fixes overflow
+uint32_t readCount(void)     //TODO: Check to see if int32_t fixes overflow
 {
     uint32_t count;                         //data input variable
     uint8_t i;                              //init iterator for the loop
     HX711_STRUCT->OUT &= ~HX711_CLK;        //set clock low for normal operation
     count = 0;                              //clear data variable
-    while(HX711_STRUCT->IN & HX711_DO);    //block loop until HX711 is ready to send
-    for(i=0; i<24; i++)                     //define loop to check data with gain of 128
+    while (HX711_STRUCT->IN & HX711_DO )
+        ;    //block loop until HX711 is ready to send
+    for (i = 0; i < 24; i++)        //define loop to check data with gain of 128
     {
         HX711_STRUCT->OUT |= HX711_CLK;     //set clock high to output data
         count = count << 1;                 //shift count
-        HX711_STRUCT->OUT &= ~HX711_CLK;    //set clock low to finish output data instruction
-        if(HX711_STRUCT->IN & HX711_DO)
-            count++;                        //increment data variable if data input was high
+        HX711_STRUCT->OUT &= ~HX711_CLK; //set clock low to finish output data instruction
+        if (HX711_STRUCT->IN & HX711_DO)
+            count++;            //increment data variable if data input was high
     }
-    HX711_STRUCT->OUT |= HX711_CLK;         //25th clock cycle to end data transmission
+    HX711_STRUCT->OUT |= HX711_CLK;  //25th clock cycle to end data transmission
     count = count ^ 0x800000;               //two's complement edit
     HX711_STRUCT->OUT &= ~HX711_CLK;
     return count;
@@ -73,7 +74,7 @@ uint32_t getValue(uint8_t times)
 float getUnits(uint8_t times)
 {
     float tmp = getValue(times) / scale;
-    if(tmp >500)
+    if (tmp > 500)
     {
         return 0;
     }

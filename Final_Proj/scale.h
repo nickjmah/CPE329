@@ -10,26 +10,29 @@
 #ifndef SCALE_H_
 #define SCALE_H_
 
-
-
-typedef enum unitName {kg,lb}unitName_t;
+typedef enum unitName
+{
+    kg, lb
+} unitName_t;
 /** \brief struct for convenience to aggregate the scale factor and name
  *
  */
-typedef struct Unit{
+typedef struct Unit
+{
     unitName_t unitName;
-    char name[2];//size of the name, must be 2 letters, ex. "lb","kg"
+    char name[2]; //size of the name, must be 2 letters, ex. "lb","kg"
     float scale; //some divisor to turn into the correct units
-}Unit;
+} Unit;
 /** \brief initializes ports for serial communication with HX711
  *  Sets up data input and clock output
  */
-typedef struct Measurement{
+typedef struct Measurement
+{
     Unit unit;          //For unit conversion
     uint32_t height;    //height in inches
     float weight;    //weight in kg
     float bmi;       //Body Mass Index
-}Measurement;
+} Measurement;
 
 /**sets up the LCD initial display
  *
