@@ -7,7 +7,7 @@
 
 #include "hx711.h"
 //initialize offset and scale to pretermined "good values"
-static uint32_t offset = 8533654;
+static int32_t offset = 8533654;
 static float scale = 19654.166;
 
 void initHX711(void)
@@ -27,9 +27,9 @@ void powerDown(void)
     HX711_STRUCT->OUT |= HX711_CLK;    //hold clock out high (for at least 60us)
 }
 
-uint32_t readCount(void)     //TODO: Check to see if int32_t fixes overflow
+int32_t readCount(void)     //TODO: Check to see if int32_t fixes overflow
 {
-    uint32_t count;                         //data input variable
+    int32_t count;                         //data input variable
     uint8_t i;                              //init iterator for the loop
     HX711_STRUCT->OUT &= ~HX711_CLK;        //set clock low for normal operation
     count = 0;                              //clear data variable
@@ -49,9 +49,9 @@ uint32_t readCount(void)     //TODO: Check to see if int32_t fixes overflow
     return count;
 }
 
-uint32_t readAverage(uint8_t times)
+int32_t readAverage(uint8_t times)
 {
-    uint32_t sum = 0;
+    int32_t sum = 0;
     uint8_t i;
     for (i = 0; i < times; i++)
     {
@@ -62,11 +62,11 @@ uint32_t readAverage(uint8_t times)
 
 void tare(uint8_t times)
 {
-    uint32_t sum = readAverage(times);
+    int32_t sum = readAverage(times);
     setOffset(sum);
 }
 
-uint32_t getValue(uint8_t times)
+int32_t getValue(uint8_t times)
 {
     return readAverage(times) - offset;
 }
@@ -91,19 +91,19 @@ float getScale(void)
     return scale;
 }
 
-void setOffset(uint32_t newOffset)
+void setOffset(int32_t newOffset)
 {
     offset = newOffset;
 }
 
-uint32_t getOffset(void)
+int32_t getOffset(void)
 {
     return offset;
 }
 
 void calibrate(float weight)
 {
-    uint32_t calVal = 0;
+    int32_t calVal = 0;
     setScale(1.0);
     calVal = getUnits(10);
     setScale(calVal / weight);

@@ -26,15 +26,15 @@ void powerDown(void);
 /** \brief reads in clocked bits from the HX711
  *
  */
-uint32_t readCount(void);
+int32_t readCount(void);
 /** \brief calls readCount and averages over a number of times
  *
  */
-uint32_t readAverage(uint8_t times);
+int32_t readAverage(uint8_t times);
 /** \brief returns readAverage with the offset subtracted
  *
  */
-uint32_t getValue(uint8_t times);
+int32_t getValue(uint8_t times);
 /** \brief returns getValue divided by the scale factor
  *
  */
@@ -56,11 +56,11 @@ float getScale(void);
  *
  */
 
-void setOffset(uint32_t newOffset);
+void setOffset(int32_t newOffset);
 /** \brief returns the offset value
  *
  */
-uint32_t getOffset(void);
+int32_t getOffset(void);
 /** \brief calibrates the scale value using a known weight
  *
  */

@@ -12,7 +12,8 @@
  * main.c
  */
 #define ONE_MIN 4
-#define numAvg 20# define CCR_INCR COUNT_60S_ACLK_32
+#define numAvg 20
+#define CCR_INCR COUNT_15S_ACLK_32
 uint32_t sysFreq = FREQ_12000_KHZ; //set system frequency to 48MHz
 volatile uint32_t enterSleep = 0;
 volatile uint32_t timerCounter = 0;
@@ -26,7 +27,7 @@ void initSleepTimer(void);
 void init(void)
 {
     //initialize all peripherals
-    WDT_A - > CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;// stop watchdog timer
+    WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD; // stop watchdog timer
     boardInit(); //turn off everything to save power
     set_DCO(sysFreq);
     key_init();
@@ -35,11 +36,11 @@ void init(void)
     initScale();
     initSleepTimer();
     // Wake up on exit from ISR
-    SCB - > SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
-    NVIC - > ISER[1] = 1 << ((PORT4_IRQn) & 31);
+    SCB->SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
+    NVIC->ISER[1] = 1 << ((PORT4_IRQn) & 31);
     //initializing and configuring LCD power bit
-    P6 - > DIR |= BIT4;
-    P6 - > OUT &= ~BIT4;
+    P6->DIR |= BIT4;
+    P6->OUT &= ~BIT4;
     // Ensures SLEEPONEXIT takes effect immediately
     __DSB();
     __enable_irq();
@@ -167,14 +168,14 @@ void main(void)
 void sleep(void)
 {
     // Enter LPM0
-    TIMER_A0 - > CTL = TIMER_A_CTL_MC__STOP;//disable clock
+    TIMER_A0->CTL = TIMER_A_CTL_MC__STOP; //disable clock
     //disabling clock will prevent timer interrupts from occuring
-    P6 - > OUT |= BIT4;//turning off LCD
+    P6->OUT |= BIT4;    //turning off LCD
     __sleep(); //entering sleep
     __no_operation();
-    P6 - > OUT &= ~BIT4; //re-enable LCD
-    TIMER_A0 - > CTL = TIMER_A_CTL_SSEL__ACLK |//set timer to ACLK to run even slower
-    TIMER_A_CTL_MC__CONTINUOUS | TIMER_A_CTL_ID__8;
+    P6->OUT &= ~BIT4; //re-enable LCD
+    TIMER_A0->CTL = TIMER_A_CTL_SSEL__ACLK | //set timer to ACLK to run even slower
+            TIMER_A_CTL_MC__CONTINUOUS | TIMER_A_CTL_ID__8;
     //reenable timer
     halfBitInit(); //reenable LCD
     updateScale(); //display home screen
@@ -182,52 +183,52 @@ void sleep(void)
 void boardInit(void)
 {
     // GPIO Port Configuration for lowest power configuration
-P1 - > OUT = 0x00;
-P1 - > DIR = 0xFF;
-P2 - > OUT = 0x00;
-P2 - > DIR = 0xFF;
-P3 - > OUT = 0x00;
-P3 - > DIR = 0xFF;
-P4 - > OUT = 0x00;
-P4 - > DIR = 0xFF;
-P5 - > OUT = 0x00;
-P5 - > DIR = 0xFF;
-P6 - > OUT = 0x00;
-P6 - > DIR = 0xFF;
-P7 - > OUT = 0x00;
-P7 - > DIR = 0xFF;
-P8 - > OUT = 0x00;
-P8 - > DIR = 0xFF;
-P9 - > OUT = 0x00;
-P9 - > DIR = 0xFF;
-P10 - > OUT = 0x00;
-P10 - > DIR = 0xFF;
-PJ - > OUT = 0x00;
-PJ - > DIR = 0xFF;
+    P1->OUT = 0x00;
+    P1->DIR = 0xFF;
+    P2->OUT = 0x00;
+    P2->DIR = 0xFF;
+    P3->OUT = 0x00;
+    P3->DIR = 0xFF;
+    P4->OUT = 0x00;
+    P4->DIR = 0xFF;
+    P5->OUT = 0x00;
+    P5->DIR = 0xFF;
+    P6->OUT = 0x00;
+    P6->DIR = 0xFF;
+    P7->OUT = 0x00;
+    P7->DIR = 0xFF;
+    P8->OUT = 0x00;
+    P8->DIR = 0xFF;
+    P9->OUT = 0x00;
+    P9->DIR = 0xFF;
+    P10->OUT = 0x00;
+    P10->DIR = 0xFF;
+    PJ->OUT = 0x00;
+    PJ->DIR = 0xFF;
 }
 void initSleepTimer(void)
 {
-TIMER_A0 - > CCTL[0] = TIMER_A_CCTLN_CCIE; //enable interrupt
-TIMER_A0 - > CCR[0] = CCR_INCR;//set initial increment
+    TIMER_A0->CCTL[0] = TIMER_A_CCTLN_CCIE; //enable interrupt
+    TIMER_A0->CCR[0] = CCR_INCR; //set initial increment
 //set timer to SMCLK, continuous mode, no prescaler
-TIMER_A0 - > CTL = TIMER_A_CTL_SSEL__ACLK |//set timer to ACLK to run even slower
-TIMER_A_CTL_MC__CONTINUOUS | TIMER_A_CTL_ID__8;
-NVIC - > ISER[0] = 1 << ((TA0_0_IRQn) & 31);//attach interrupt
+    TIMER_A0->CTL = TIMER_A_CTL_SSEL__ACLK | //set timer to ACLK to run even slower
+            TIMER_A_CTL_MC__CONTINUOUS | TIMER_A_CTL_ID__8;
+    NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31); //attach interrupt
 }
 void TA0_0_IRQHandler(void)
 {
-if (TIMER_A0 - > CCTL[0] & TIMER_A_CCTLN_CCIFG)
-{
-TIMER_A0 - > CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
-TIMER_A0 - > CCR[0] += CCR_INCR;
-if (timerCounter >= ONE_MIN) //wait for a minute's worth of counts
-{
-    enterSleep = 1; //sleep after 10s of inactivity, otherwise, increment counter
-    timerCounter = 0;
-}
-else
-{
-    timerCounter += 1;
-}
-}
+    if (TIMER_A0->CCTL[0] & TIMER_A_CCTLN_CCIFG)
+    {
+        TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
+        TIMER_A0->CCR[0] += CCR_INCR;
+        if (timerCounter >= ONE_MIN) //wait for a minute's worth of counts
+        {
+            enterSleep = 1; //sleep after 10s of inactivity, otherwise, increment counter
+            timerCounter = 0;
+        }
+        else
+        {
+            timerCounter += 1;
+        }
+    }
 }

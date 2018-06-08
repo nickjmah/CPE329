@@ -7,6 +7,7 @@
 #include "lcd.h"
 #include "hx711.h"
 #include "stdio.h"
+#include "helper.h"
 #ifndef SCALE_H_
 #define SCALE_H_
 
