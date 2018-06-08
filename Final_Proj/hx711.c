@@ -6,7 +6,7 @@
  */
 
 #include "hx711.h"
-
+//initialize offset and scale to pretermined "good values"
 static uint32_t offset = 8533654;
 static float scale = 19654.166;
 
@@ -27,7 +27,7 @@ void powerDown(void)
     HX711_STRUCT->OUT |= HX711_CLK;     //hold clock out high (for at least 60us)
 }
 
-uint32_t readCount(void)//TOOD: Check to see if int32_t fixes overflow
+uint32_t readCount(void)//TODO: Check to see if int32_t fixes overflow
 {
     uint32_t count;                         //data input variable
     uint8_t i;                              //init iterator for the loop
