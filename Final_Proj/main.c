@@ -11,9 +11,8 @@
 /**
  * main.c
  */
-#
-define ONE_MIN 4
-# define numAvg 20# define CCR_INCR COUNT_60S_ACLK_32
+#define ONE_MIN 4
+#define numAvg 20# define CCR_INCR COUNT_60S_ACLK_32
 uint32_t sysFreq = FREQ_12000_KHZ; //set system frequency to 48MHz
 volatile uint32_t enterSleep = 0;
 volatile uint32_t timerCounter = 0;
@@ -152,7 +151,8 @@ void main(void)
                 ;
             keyRecorded = getKeyArr();
             tmp_f += ((float) bitConvertInt(keyRecorded[0])) / 10
-                    + ((float) bitConvertInt(keyRecorded[1])) / 100; //convert to float and add in grams
+                    + ((float) bitConvertInt(keyRecorded[1])) / 100;
+            //convert to float and add in grams
             calibrate(tmp_f); //run calibration calcs
             checkPress(); //clearing check press
             currentMode = weigh;
