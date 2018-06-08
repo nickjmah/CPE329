@@ -11,10 +11,7 @@
 /**
  * main.c
  */
-#define TEN_SECONDS 2
-//#define devel 1
-//#define out 1
-#define test 1
+#define ONE_MIN 4
 #define numAvg 20
 #define CCR_INCR COUNT_60S_ACLK_32
 uint32_t sysFreq = FREQ_12000_KHZ; //set system frequency to 48MHz
@@ -171,15 +168,17 @@ void main(void)
 void sleep(void)
 {
     // Enter LPM0
-    TIMER_A0->CTL = TIMER_A_CTL_MC__STOP;
-    P6->OUT |= BIT4;
-    __sleep();
+    TIMER_A0->CTL = TIMER_A_CTL_MC__STOP;//disable clock
+    //disabling clock will prevent timer interrupts from occuring
+    P6->OUT |= BIT4;//turning off LCD
+    __sleep();//entering sleep
     __no_operation();
-    P6->OUT &= ~BIT4;
+    P6->OUT &= ~BIT4;//re-enable LCD
     TIMER_A0->CTL = TIMER_A_CTL_SSEL__ACLK | //set timer to ACLK to run even slower
                 TIMER_A_CTL_MC__CONTINUOUS | TIMER_A_CTL_ID__8;
-    halfBitInit();
-    updateScale();
+                //reenable timer
+    halfBitInit();//reenable LCD
+    updateScale();//display home screen
 }
 void boardInit(void)
 {
@@ -214,7 +213,6 @@ void initSleepTimer(void)
     //set timer to SMCLK, continuous mode, no prescaler
     TIMER_A0->CTL = TIMER_A_CTL_SSEL__ACLK | //set timer to ACLK to run even slower
             TIMER_A_CTL_MC__CONTINUOUS | TIMER_A_CTL_ID__8;
-//    TIMER_A0->EX0 |= TIMER_A_EX0_TAIDEX_2;    //divide by 4
     NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);    //attach interrupt
 }
 void TA0_0_IRQHandler(void)
@@ -223,7 +221,7 @@ void TA0_0_IRQHandler(void)
     {
         TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG;
         TIMER_A0->CCR[0] += CCR_INCR;
-        if (timerCounter >= TEN_SECONDS)
+        if (timerCounter >= ONE_MIN)//wait for a minute's worth of counts
         {
             enterSleep = 1; //sleep after 10s of inactivity, otherwise, increment counter
             timerCounter = 0;

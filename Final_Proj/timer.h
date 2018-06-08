@@ -35,7 +35,7 @@
 #define COUNT_50US_12MHZ (uint32_t)150
 
 ///60s with ACLK divided by 32
-#define COUNT_60S_ACLK_32 (uint16_t)61440
+#define COUNT_15S_ACLK_32 (uint16_t)61440
 #define COUNT_10MS_3MHZ (uint16_t)120000
 
 ///100us count at 48MHz DCO frequency
