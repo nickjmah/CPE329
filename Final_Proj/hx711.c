@@ -74,10 +74,6 @@ int32_t getValue(uint8_t times)
 float getUnits(uint8_t times)
 {
     float tmp = getValue(times) / scale;
-    if (tmp > 500)
-    {
-        return 0;
-    }
     return tmp;
 }
 
@@ -103,7 +99,7 @@ int32_t getOffset(void)
 
 void calibrate(float weight)
 {
-    int32_t calVal = 0;
+    float calVal = 0;
     setScale(1.0);
     calVal = getUnits(10);
     setScale(calVal / weight);
