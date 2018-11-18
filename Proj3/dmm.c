@@ -7,6 +7,7 @@
 
 #include "dmm.h"
 #include "msp.h"
+#include "lcd.h"
 
 volatile static uint32_t captureValue[2] = { 0 };
 volatile static uint16_t captureFlag = 0;
@@ -34,10 +35,20 @@ void initFreqMeas(void)
     NVIC->ISER[0] = 1 << ((TA0_N_IRQn) & 31);
 }
 
+void updateFreqMeas(uint32_t val)
+{
+    returnHome();
+    writeString("Freq: ");
+    writeString(itoa(val));
+    writeString("Hz   ");
+}
+
 uint32_t calcFreq(void)
 {
-    uint32_t temp = sysFreq * UNITS_KILO / readPeriod(); //frequency/cycle = freq
-    return temp + temp / 200 + 1;
+    uint64_t temp = (uint64_t)(sysFreq) * (uint64_t)(UNITS_KILO) * 100;
+    temp = temp / (uint64_t)(readPeriod()); //frequency/cycle = freq
+    uint32_t trunc = temp;
+    return trunc + trunc / 200 + 1;
     //temp / 200 + 1 is a calibration slope derived from experimentation
 }
 
@@ -168,11 +179,19 @@ void TA0_N_IRQHandler(void)
     //check if rising edge detected
     if (TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG)
     {
+        uint32_t riseEdge = TIMER_A0->CCR[1];
+        delay_us(2500, sysFreq);
+        if (P2->IN & BIT4)
+        {
+            captureValue[captureCount] = riseEdge; //store rising edge
+            captureCount++;
+        }
         TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;
-        captureValue[captureCount] = TIMER_A0->CCR[1]; //store rising edge
-        captureCount++;
         if (captureCount == 1)
+        {
             overflow = 0; //first index of buffer means start measurement
+        }
+
         if (captureCount == 2)
         {
             //calculate number of cycles by getting difference and adding in
@@ -181,8 +200,6 @@ void TA0_N_IRQHandler(void)
             captureCount = 0;
             captureFlag = 1;            //raise a flag to service
         }
-
     }
-
 }
 

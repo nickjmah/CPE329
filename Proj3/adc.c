@@ -23,8 +23,17 @@ char* itoa(int val)
                                     //of unexpected behaviour
     for (; val != 0; i--)                  //loop until val is 0
     {
-        buf[i] = "0123456789"[(val) % 10]; //give buf the least significant bit of val
-        val /= 10;                        //decimal shift right val
+        if(i==ITOA_INDEX_START - 2)
+        {
+            buf[i] = '.';
+        }
+        else
+        {
+            buf[i] = "0123456789"[(val) % 10]; //give buf the least significant bit of val
+            val /= 10;                        //decimal shift right val
+
+        }
+
     }
     return &buf[i + 1];                    //return index of beginning of string
 }

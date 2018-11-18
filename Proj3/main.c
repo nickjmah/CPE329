@@ -6,6 +6,8 @@
 #include "dmm.h"
 #include "vt100.h"
 #include "math.h"
+#include "pwm.h"
+#include "lcd.h"
 /**
  * main.c
  */
@@ -16,31 +18,38 @@ void init(void)
     //initialize all peripherals
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;     // stop watchdog timer
     set_DCO(sysFreq);
+    halfBitInit();
     initUART();
     initADC();
     initGUI();
+    pwmInit();
     initFreqMeas();
 }
 
 void main(void)
 {
-    uint16_t receive = 0;   //holds the number a key press on the UART Terminal
-    uint32_t offset = 0;    //The DC offset of an AC wave
-    uint32_t vpp = 0;       //The peak-peak voltage
-    uint32_t rms = 0;       //The RMS voltage
-    uint32_t prev;          //The previous result
-    uint32_t ACVals[3] = { 0 };    //An array that holds all of the initial meas
+//    uint16_t receive = 0;   //holds the number a key press on the UART Terminal
+//    uint32_t offset = 0;    //The DC offset of an AC wave
+//    uint32_t vpp = 0;       //The peak-peak voltage
+//    uint32_t rms = 0;       //The RMS voltage
+//    uint32_t prev;          //The previous result
+//    uint32_t ACVals[3] = { 0 };    //An array that holds all of the initial meas
     /*ACVal[0] is the sum of squares of our measurements
      * ACVal[1] is the minimum value
      * ACVal[2] is the maximum value
      */
-    uint32_t* ACVal_ptr = &(ACVals[0]); //creating a pointer to the first element of ACVals
+//    uint32_t* ACVal_ptr = &(ACVals[0]); //creating a pointer to the first element of ACVals
     init();
     __enable_irq();
 
     while (1)
     {
-
+        if(readFreqFlag())
+        {
+            updateFreqMeas(calcFreq());
+            delay_ms(100, sysFreq);
+        }
+/*
         if (readUARTRxFlag()) //check for a keyPress
         {
             prev = receive;
@@ -78,7 +87,7 @@ void main(void)
             updateRMS(rms);
             updateWave(waveDetect(rms, vpp, offset)); //check waveform and update
         }
-
+*/
     }
 }
 

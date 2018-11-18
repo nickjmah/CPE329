@@ -31,6 +31,9 @@ void initFreqMeas(void);
 /** \brief returns the frequency measurement complete flag
  *
  */
+
+void updateFreqMeas(uint32_t val);
+
 uint16_t readFreqFlag(void);
 /** \brief reads the cycle between the two capture flags
  *
