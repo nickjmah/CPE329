@@ -45,10 +45,20 @@ void updateFreqMeas(uint32_t val)
 
 uint32_t calcFreq(void)
 {
+    static uint32_t prev = 8000000;
+    static uint32_t counter = 0;
     uint64_t temp = (uint64_t)(sysFreq) * (uint64_t)(UNITS_KILO) * 100;
     temp = temp / (uint64_t)(readPeriod()); //frequency/cycle = freq
     uint32_t trunc = temp;
-    return trunc + trunc / 200 + 1;
+    uint32_t result = trunc + trunc / 200 + 1;
+    if(result <= (prev *15)/10 || counter > 10){
+        prev = result;
+        counter = 0;
+    }
+    else{
+        counter++;
+    }
+    return prev;
     //temp / 200 + 1 is a calibration slope derived from experimentation
 }
 
@@ -179,19 +189,11 @@ void TA0_N_IRQHandler(void)
     //check if rising edge detected
     if (TIMER_A0->CCTL[1] & TIMER_A_CCTLN_CCIFG)
     {
-        uint32_t riseEdge = TIMER_A0->CCR[1];
-        delay_us(2500, sysFreq);
-        if (P2->IN & BIT4)
-        {
-            captureValue[captureCount] = riseEdge; //store rising edge
-            captureCount++;
-        }
         TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;
+        captureValue[captureCount] = TIMER_A0->CCR[1]; //store rising edge
+        captureCount++;
         if (captureCount == 1)
-        {
             overflow = 0; //first index of buffer means start measurement
-        }
-
         if (captureCount == 2)
         {
             //calculate number of cycles by getting difference and adding in
@@ -200,6 +202,7 @@ void TA0_N_IRQHandler(void)
             captureCount = 0;
             captureFlag = 1;            //raise a flag to service
         }
-    }
-}
 
+    }
+
+}

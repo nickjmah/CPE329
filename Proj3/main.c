@@ -47,7 +47,7 @@ void main(void)
         if(readFreqFlag())
         {
             updateFreqMeas(calcFreq());
-            delay_ms(100, sysFreq);
+            delay_ms(150, sysFreq);
         }
 /*
         if (readUARTRxFlag()) //check for a keyPress
