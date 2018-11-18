@@ -43,6 +43,16 @@ void updateFreqMeas(uint32_t val)
     writeString("Hz   ");
 }
 
+void updateLux(uint32_t val)
+{
+    scale = 1;
+    offset = 1;
+    returnHome();
+    writeString("Lux: ");
+    val = val * scale + offset;
+    writeString(itoa(val));
+    writeString("fc          ");'
+}
 uint32_t calcFreq(void)
 {
     static uint32_t prev = 8000000;
